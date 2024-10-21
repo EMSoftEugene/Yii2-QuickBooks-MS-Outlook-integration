@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="cc66266e-6f69-4fda-adf9-2630599b2b5e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/intempus/.bowerrc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/LICENSE.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/Vagrantfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/assets/AppAsset.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/codeception.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/commands/HelloController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/composer.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/config/__autocomplete.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/config/console.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/config/db.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/config/params.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/config/test.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/config/test_db.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/config/web.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/controllers/MicrosoftController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/controllers/SiteController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/controllers/UserController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/jobs/getLocationsJob.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/mail/layouts/html.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/mail/layouts/text.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/models/ContactForm.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/models/LoginForm.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/models/User.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/requirements.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/runtime/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/_bootstrap.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/_data/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/_output/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/_support/AcceptanceTester.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/_support/FunctionalTester.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/_support/UnitTester.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/acceptance.suite.yml.example" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/acceptance/AboutCest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/acceptance/ContactCest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/acceptance/HomeCest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/acceptance/LoginCest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/acceptance/_bootstrap.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/bin/yii" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/bin/yii.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/functional.suite.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/functional/ContactFormCest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/functional/LoginFormCest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/functional/_bootstrap.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/unit.suite.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/unit/_bootstrap.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/unit/models/ContactFormTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/unit/models/LoginFormTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/unit/models/UserTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/tests/unit/widgets/AlertTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/vagrant/config/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/vagrant/config/vagrant-local.example.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/vagrant/nginx/app.conf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/vagrant/nginx/log/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/vagrant/provision/always-as-root.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/vagrant/provision/once-as-root.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/vagrant/provision/once-as-vagrant.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/vagrant/provision/provision.awk" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/views/layouts/main.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/views/site/about.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/views/site/contact.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/views/site/error.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/views/site/index.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/views/site/login.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/web/.htaccess" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/web/assets/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/web/css/site.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/web/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/web/index-test.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/web/index.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/web/robots.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/widgets/Alert.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/yii" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/yii.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerConfigs">
+    <option name="configs">
+      <option value="$PROJECT_DIR$/intempus/web/assets/e7e23c79/composer.json" />
+    </option>
+  </component>
+  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/intempus/composer.json</pharConfigPath>
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/intempus" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/intempus/vendor/league/oauth2-client/src/Provider/AbstractProvider.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php">
+    <include_path>
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/mime" />
+      <path value="$PROJECT_DIR$/intempus/vendor/sebastian/lines-of-code" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/service-contracts" />
+      <path value="$PROJECT_DIR$/intempus/vendor/sebastian/diff" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/string" />
+      <path value="$PROJECT_DIR$/intempus/vendor/sebastian/cli-parser" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/intempus/vendor/sebastian/object-enumerator" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/console" />
+      <path value="$PROJECT_DIR$/intempus/vendor/sebastian/object-reflector" />
+      <path value="$PROJECT_DIR$/intempus/vendor/sebastian/recursion-context" />
+      <path value="$PROJECT_DIR$/intempus/vendor/sebastian/complexity" />
+      <path value="$PROJECT_DIR$/intempus/vendor/sebastian/global-state" />
+      <path value="$PROJECT_DIR$/intempus/vendor/myclabs/deep-copy" />
+      <path value="$PROJECT_DIR$/intempus/vendor/ezyang/htmlpurifier" />
+      <path value="$PROJECT_DIR$/intempus/vendor/yiisoft/yii2-bootstrap5" />
+      <path value="$PROJECT_DIR$/intempus/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/intempus/vendor/yiisoft/yii2-gii" />
+      <path value="$PROJECT_DIR$/intempus/vendor/composer" />
+      <path value="$PROJECT_DIR$/intempus/vendor/yiisoft/yii2-composer" />
+      <path value="$PROJECT_DIR$/intempus/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/intempus/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/yaml" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/polyfill-intl-grapheme" />
+      <path value="$PROJECT_DIR$/intempus/vendor/psr/container" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/event-dispatcher-contracts" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/css-selector" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/event-dispatcher" />
+      <path value="$PROJECT_DIR$/intempus/vendor/fakerphp/faker" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/dom-crawler" />
+      <path value="$PROJECT_DIR$/intempus/vendor/sebastian/code-unit-reverse-lookup" />
+      <path value="$PROJECT_DIR$/intempus/vendor/behat/gherkin" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/finder" />
+      <path value="$PROJECT_DIR$/intempus/vendor/sebastian/resource-operations" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/intempus/vendor/sebastian/code-unit" />
+      <path value="$PROJECT_DIR$/intempus/vendor/phpspec/php-diff" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/mailer" />
+      <path value="$PROJECT_DIR$/intempus/vendor/sebastian/environment" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/browser-kit" />
+      <path value="$PROJECT_DIR$/intempus/vendor/sebastian/exporter" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/polyfill-php73" />
+      <path value="$PROJECT_DIR$/intempus/vendor/sebastian/comparator" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/polyfill-intl-idn" />
+      <path value="$PROJECT_DIR$/intempus/vendor/sebastian/version" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/intempus/vendor/sebastian/type" />
+      <path value="$PROJECT_DIR$/intempus/vendor/phpunit/phpunit" />
+      <path value="$PROJECT_DIR$/intempus/vendor/phpunit/php-code-coverage" />
+      <path value="$PROJECT_DIR$/intempus/vendor/phpunit/php-invoker" />
+      <path value="$PROJECT_DIR$/intempus/vendor/phpunit/php-text-template" />
+      <path value="$PROJECT_DIR$/intempus/vendor/phpunit/php-timer" />
+      <path value="$PROJECT_DIR$/intempus/vendor/phpunit/php-file-iterator" />
+      <path value="$PROJECT_DIR$/intempus/vendor/psr/event-dispatcher" />
+      <path value="$PROJECT_DIR$/intempus/vendor/egulias/email-validator" />
+      <path value="$PROJECT_DIR$/intempus/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/intempus/vendor/phar-io/version" />
+      <path value="$PROJECT_DIR$/intempus/vendor/phar-io/manifest" />
+      <path value="$PROJECT_DIR$/intempus/vendor/cebe/markdown" />
+      <path value="$PROJECT_DIR$/intempus/vendor/codeception/lib-innerbrowser" />
+      <path value="$PROJECT_DIR$/intempus/vendor/codeception/lib-asserts" />
+      <path value="$PROJECT_DIR$/intempus/vendor/theseer/tokenizer" />
+      <path value="$PROJECT_DIR$/intempus/vendor/codeception/phpunit-wrapper" />
+      <path value="$PROJECT_DIR$/intempus/vendor/codeception/module-yii2" />
+      <path value="$PROJECT_DIR$/intempus/vendor/nikic/php-parser" />
+      <path value="$PROJECT_DIR$/intempus/vendor/yiisoft/yii2-debug" />
+      <path value="$PROJECT_DIR$/intempus/vendor/yiisoft/yii2-faker" />
+      <path value="$PROJECT_DIR$/intempus/vendor/yiisoft/yii2-symfonymailer" />
+      <path value="$PROJECT_DIR$/intempus/vendor/yiisoft/yii2" />
+      <path value="$PROJECT_DIR$/intempus/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/intempus/vendor/bower-asset/yii2-pjax" />
+      <path value="$PROJECT_DIR$/intempus/vendor/bower-asset/punycode" />
+      <path value="$PROJECT_DIR$/intempus/vendor/bower-asset/jquery" />
+      <path value="$PROJECT_DIR$/intempus/vendor/paragonie/random_compat" />
+      <path value="$PROJECT_DIR$/intempus/vendor/doctrine/lexer" />
+      <path value="$PROJECT_DIR$/intempus/vendor/codeception/codeception" />
+      <path value="$PROJECT_DIR$/intempus/vendor/doctrine/deprecations" />
+      <path value="$PROJECT_DIR$/intempus/vendor/codeception/module-asserts" />
+      <path value="$PROJECT_DIR$/intempus/vendor/doctrine/instantiator" />
+      <path value="$PROJECT_DIR$/intempus/vendor/bower-asset/inputmask" />
+      <path value="$PROJECT_DIR$/intempus/vendor/codeception/verify" />
+      <path value="$PROJECT_DIR$/intempus/vendor/codeception/stub" />
+      <path value="$PROJECT_DIR$/intempus/vendor/bower-asset/bootstrap" />
+      <path value="$PROJECT_DIR$/intempus/vendor/codeception/module-filesystem" />
+      <path value="$PROJECT_DIR$/intempus/vendor/doctrine/annotations" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/polyfill-php81" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/polyfill-php82" />
+      <path value="$PROJECT_DIR$/intempus/vendor/league/oauth2-client" />
+      <path value="$PROJECT_DIR$/intempus/vendor/php-http/promise" />
+      <path value="$PROJECT_DIR$/intempus/vendor/php-http/discovery" />
+      <path value="$PROJECT_DIR$/intempus/vendor/phpoption/phpoption" />
+      <path value="$PROJECT_DIR$/intempus/vendor/microsoft/kiota-authentication-phpleague" />
+      <path value="$PROJECT_DIR$/intempus/vendor/microsoft/kiota-http-guzzle" />
+      <path value="$PROJECT_DIR$/intempus/vendor/microsoft/kiota-serialization-multipart" />
+      <path value="$PROJECT_DIR$/intempus/vendor/vlucas/phpdotenv" />
+      <path value="$PROJECT_DIR$/intempus/vendor/graham-campbell/result-type" />
+      <path value="$PROJECT_DIR$/intempus/vendor/stduritemplate/stduritemplate" />
+      <path value="$PROJECT_DIR$/intempus/vendor/microsoft/kiota-serialization-json" />
+      <path value="$PROJECT_DIR$/intempus/vendor/microsoft/kiota-abstractions" />
+      <path value="$PROJECT_DIR$/intempus/vendor/microsoft/microsoft-graph" />
+      <path value="$PROJECT_DIR$/intempus/vendor/brick/math" />
+      <path value="$PROJECT_DIR$/intempus/vendor/microsoft/kiota-serialization-text" />
+      <path value="$PROJECT_DIR$/intempus/vendor/microsoft/microsoft-graph-core" />
+      <path value="$PROJECT_DIR$/intempus/vendor/microsoft/kiota-serialization-form" />
+      <path value="$PROJECT_DIR$/intempus/vendor/ramsey/uuid" />
+      <path value="$PROJECT_DIR$/intempus/vendor/ramsey/collection" />
+      <path value="$PROJECT_DIR$/intempus/vendor/firebase/php-jwt" />
+      <path value="$PROJECT_DIR$/intempus/vendor/psr/cache" />
+      <path value="$PROJECT_DIR$/intempus/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/intempus/vendor/open-telemetry/sdk" />
+      <path value="$PROJECT_DIR$/intempus/vendor/open-telemetry/sem-conv" />
+      <path value="$PROJECT_DIR$/intempus/vendor/open-telemetry/context" />
+      <path value="$PROJECT_DIR$/intempus/vendor/open-telemetry/api" />
+      <path value="$PROJECT_DIR$/intempus/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/intempus/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/intempus/vendor/symfony/process" />
+      <path value="$PROJECT_DIR$/intempus/vendor/yiisoft/yii2-queue" />
+    </include_path>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2nTHBnQEy9F2hg5S9L561ooL5GN" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/oleg/www/stargate/mobileapp&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/intempus" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="CodeceptionConfigurationType" factoryName="Codeception">
+      <PhpTestRunnerSettings configuration_file="$PROJECT_DIR$/intempus/codeception.yml" scope="ConfigurationFile" use_alternative_configuration_file="true" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-PS-242.21829.154" />
+        <option value="bundled-php-predefined-a98d8de5180a-4d9f4c849d09-com.jetbrains.php.sharedIndexes-PS-242.21829.154" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="cc66266e-6f69-4fda-adf9-2630599b2b5e" name="Changes" comment="" />
+      <created>1728990013001</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1728990013001</updated>
+      <workItem from="1728990014099" duration="878000" />
+      <workItem from="1728992671114" duration="5699000" />
+      <workItem from="1729018211449" duration="5134000" />
+      <workItem from="1729060852852" duration="629000" />
+      <workItem from="1729065297743" duration="312000" />
+      <workItem from="1729066740958" duration="598000" />
+      <workItem from="1729080940024" duration="3466000" />
+      <workItem from="1729089189382" duration="789000" />
+      <workItem from="1729103015642" duration="12010000" />
+      <workItem from="1729173179405" duration="924000" />
+      <workItem from="1729196219288" duration="3212000" />
+      <workItem from="1729250276112" duration="8713000" />
+      <workItem from="1729275486180" duration="10639000" />
+      <workItem from="1729377546200" duration="958000" />
+      <workItem from="1729425313570" duration="5446000" />
+      <workItem from="1729468780382" duration="310000" />
+      <workItem from="1729471429943" duration="3733000" />
+      <workItem from="1729525683121" duration="307000" />
+      <workItem from="1729529549773" duration="1437000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

@@ -1,0 +1,93 @@
+
+services:
+
+  # Nginx Service
+  webserver:
+    build: docker/nginx
+    container_name: webserver
+    volumes:
+      - ./intempus:/var/www/intempus
+    ports:
+      - "80:80"
+    environment:
+      NGINX_PORT: 80
+    command: [ "nginx", "-g", "daemon off;" ]
+    depends_on:
+      - mysql-db
+      - php-fpm
+      - phpmyadmin
+    networks:
+      app-network:
+        aliases:
+          - intempus.local
+
+  # MySQL Service
+  mysql-db:
+    image: mysql:5.7
+    ulimits:
+      nofile: # Fix memory leak issue on some systems when LimitCORE=infinity (containerd)
+        soft: 1048576
+        hard: 1048576
+    container_name: mysql
+    restart: always
+    # command: --init-file /db_data/application/init.sql
+    #working_dir: /application
+    volumes:
+      - mysql-data:/var/lib/mysql
+    command: [ 'mysqld', '--sql_mode=' ]
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: intempus_api
+      MYSQL_USER: intempus_user
+      MYSQL_PASSWORD: 123
+    ports:
+      - "33061:3306"
+    networks:
+      app-network:
+        aliases:
+          - db
+
+  # PHP Service
+  php-fpm:
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
+    container_name: php-fpm
+    working_dir: /var/www/intempus
+    volumes:
+      - ./intempus:/var/www/intempus
+      - ./docker/php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ./docker/php-fpm/phpSettings.conf:/usr/local/etc/php-fpm.d/zzz-phpSettings.conf
+    environment:
+      - PHP_ENABLE_XDEBUG=1
+    depends_on:
+      - mysql-db
+    networks:
+      - app-network
+
+  # PhpMyAdmin
+  phpmyadmin:
+    container_name: pma
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - mysql-db
+    ports:
+      - '8081:80'
+    environment:
+      PMA_HOST: mysql-db
+      MYSQL_ROOT_PASSWORD: 123
+    networks:
+      - app-network
+
+# Docker Networks
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local
+
+
+
