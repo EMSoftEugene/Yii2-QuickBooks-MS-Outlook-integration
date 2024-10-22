@@ -13,7 +13,6 @@
       <change afterPath="$PROJECT_DIR$/intempus/Vagrantfile" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/intempus/assets/AppAsset.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/intempus/codeception.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/commands/HelloController.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/intempus/composer.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/intempus/config/__autocomplete.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/intempus/config/console.php" afterDir="false" />
@@ -24,9 +23,8 @@
       <change afterPath="$PROJECT_DIR$/intempus/config/web.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/intempus/controllers/MicrosoftController.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/intempus/controllers/SiteController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/controllers/UserController.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/intempus/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/jobs/getLocationsJob.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/jobs/EventLocationsJob.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/intempus/mail/layouts/html.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/intempus/mail/layouts/text.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/intempus/models/ContactForm.php" afterDir="false" />
@@ -102,6 +100,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/intempus" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/intempus/migrations/m241022_103201_create_user_table.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/intempus/migrations/m241022_120309_create_microsoft_event.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/intempus/migrations/m241022_121949_create_queue.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/intempus/vendor/league/oauth2-client/src/Provider/AbstractProvider.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php">
@@ -264,8 +265,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-PS-242.21829.154" />
-        <option value="bundled-php-predefined-a98d8de5180a-4d9f4c849d09-com.jetbrains.php.sharedIndexes-PS-242.21829.154" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PS-242.23339.16" />
+        <option value="bundled-php-predefined-a98d8de5180a-90914f2295cb-com.jetbrains.php.sharedIndexes-PS-242.23339.16" />
       </set>
     </attachedChunks>
   </component>
@@ -295,7 +296,10 @@
       <workItem from="1729468780382" duration="310000" />
       <workItem from="1729471429943" duration="3733000" />
       <workItem from="1729525683121" duration="307000" />
-      <workItem from="1729529549773" duration="1437000" />
+      <workItem from="1729529549773" duration="3504000" />
+      <workItem from="1729539592662" duration="8557000" />
+      <workItem from="1729584541951" duration="15000" />
+      <workItem from="1729584628459" duration="16990000" />
     </task>
     <servers />
   </component>

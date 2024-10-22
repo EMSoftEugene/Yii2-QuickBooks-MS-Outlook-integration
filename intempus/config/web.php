@@ -5,6 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'name' => 'outlook',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -66,6 +67,10 @@ $config = [
 //                        'PUT {id}' => 'update'
 //                    ]
 //                ],
+                [
+                    'pattern' => '',
+                    'route' => 'site/index',
+                ],
                 [
                     'pattern' => 'microsoft',
                     'route' => 'microsoft/index',
