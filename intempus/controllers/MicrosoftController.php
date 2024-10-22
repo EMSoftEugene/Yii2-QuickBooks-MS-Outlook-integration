@@ -107,10 +107,15 @@ class MicrosoftController extends Controller
         $groupIds = [];
         $groups = $graphClient->groups()->get($requestConfigurationGroup)->wait();
         foreach ($groups->getValue() as $group) {
-            $microsoftGroup = new MicrosoftGroup();
-            $microsoftGroup->name = $group->getDisplayName() ?? '-';
-            $microsoftGroup->microsoft_id = $group->getId() ?? '-';
-            $microsoftGroup->save();
+            $eventLocation = $event['location'] ?? null;
+            $existingEvent = MicrosoftEvent::findOne(['location' => $eventLocation]);
+            if (!$existingEvent) {
+                $microsoftGroup = new MicrosoftGroup();
+                $microsoftGroup->name = $group->getDisplayName() ?? '-';
+                $microsoftGroup->microsoft_id = $group->getId() ?? '-';
+                $microsoftGroup->save();
+            }
+
             $groupIds[] = $group->getId();
         }
 
@@ -201,11 +206,6 @@ class MicrosoftController extends Controller
     public function actionLocations()
     {
         $events = MicrosoftEvent::find()->select(['id', 'subject', 'eventStartTime', 'location'])->orderBy(['eventStartTime' => SORT_ASC])->asArray()->all();
-        $groups = MicrosoftGroup::find()->select(['id', 'name'])->asArray()->all();
-
-        echo "Groups: <pre>";
-        print_r($groups);
-        echo "</pre><br/><br/>";
 
         $result = [];
         foreach ($events as $event) {
@@ -224,6 +224,17 @@ class MicrosoftController extends Controller
             }
             echo "</pre>";
         }
+        die;
+    }
+
+    public function actionGroups()
+    {
+        $groups = MicrosoftGroup::find()->select(['id', 'name'])->asArray()->all();
+
+        echo "Groups: <pre>";
+        print_r($groups);
+        echo "</pre><br/><br/>";
+
         die;
     }
 
