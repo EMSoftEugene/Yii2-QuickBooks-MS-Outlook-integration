@@ -152,6 +152,7 @@ class MicrosoftController extends Controller
                     $locationString = $location->getDisplayName();
                     if ($locationString) {
                         $location = $locationString;
+                        break;
                     }
                 }
                 if ($location){
