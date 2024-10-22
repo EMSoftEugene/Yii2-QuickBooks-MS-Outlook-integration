@@ -107,8 +107,7 @@ class MicrosoftController extends Controller
         $groupIds = [];
         $groups = $graphClient->groups()->get($requestConfigurationGroup)->wait();
         foreach ($groups->getValue() as $group) {
-            $eventLocation = $event['location'] ?? null;
-            $existingEvent = MicrosoftEvent::findOne(['location' => $eventLocation]);
+            $existingEvent = MicrosoftGroup::findOne(['microsoft_id' => $group->getId()]);
             if (!$existingEvent) {
                 $microsoftGroup = new MicrosoftGroup();
                 $microsoftGroup->name = $group->getDisplayName() ?? '-';
@@ -119,7 +118,7 @@ class MicrosoftController extends Controller
             $groupIds[] = $group->getId();
         }
 
-        $result = [];
+
         $format = 'Y-m-d H:i:s';
         $date = new \DateTime();
         $date->modify('first day of this month');
@@ -146,6 +145,13 @@ class MicrosoftController extends Controller
                 continue;
             }
 
+            sleep(1);
+//            if ($groupId == 'e5bcd331-c6c5-47e9-b863-4ffb61eace00'){
+//                print_r($events->getValue());
+//                die;
+//            }
+
+            $result = [];
             foreach ($events->getValue() as $event) {
                 $eventId = $event->getId();
                 $eventSubject = $event->getSubject();
@@ -168,20 +174,23 @@ class MicrosoftController extends Controller
                     ];
                 }
             }
+
+            foreach ($result as $event) {
+                $eventLocation = $event['location'] ?? null;
+                $existingEvent = MicrosoftEvent::findOne(['location' => $eventLocation]);
+                if ($existingEvent) {
+                    continue;
+                }
+                $microsoftEvent = new MicrosoftEvent();
+                $microsoftEvent->subject = $event['eventSubject'] ?? '';
+                $microsoftEvent->eventStartTime = $event['eventStartTime'] ?? '';
+                $microsoftEvent->location = $event['location'] ?? '';
+                $microsoftEvent->save();
+            }
+
         }
 
-        foreach ($result as $event) {
-            $eventLocation = $event['location'] ?? null;
-            $existingEvent = MicrosoftEvent::findOne(['location' => $eventLocation]);
-            if ($existingEvent) {
-                continue;
-            }
-            $microsoftEvent = new MicrosoftEvent();
-            $microsoftEvent->subject = $event['eventSubject'] ?? '';
-            $microsoftEvent->eventStartTime = $event['eventStartTime'] ?? '';
-            $microsoftEvent->location = $event['location'] ?? '';
-            $microsoftEvent->save();
-        }
+
 
         echo "!Ok";
         die;
