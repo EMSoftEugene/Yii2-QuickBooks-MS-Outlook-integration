@@ -229,7 +229,7 @@ class MicrosoftController extends Controller
 
     public function actionGroups()
     {
-        $groups = MicrosoftGroup::find()->select(['id', 'name'])->asArray()->all();
+        $groups = MicrosoftGroup::find()->select(['id', 'name', 'microsoft_id'])->asArray()->all();
 
         echo "Groups: <pre>";
         print_r($groups);
