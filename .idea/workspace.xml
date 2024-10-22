@@ -103,6 +103,7 @@
     <setting file="file://$PROJECT_DIR$/intempus/migrations/m241022_103201_create_user_table.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/intempus/migrations/m241022_120309_create_microsoft_event.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/intempus/migrations/m241022_121949_create_queue.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/intempus/migrations/m241022_173930_create_group.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/intempus/vendor/league/oauth2-client/src/Provider/AbstractProvider.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php">
@@ -299,7 +300,7 @@
       <workItem from="1729529549773" duration="3504000" />
       <workItem from="1729539592662" duration="8557000" />
       <workItem from="1729584541951" duration="15000" />
-      <workItem from="1729584628459" duration="17429000" />
+      <workItem from="1729584628459" duration="33644000" />
     </task>
     <servers />
   </component>

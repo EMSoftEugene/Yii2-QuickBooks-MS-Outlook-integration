@@ -14,6 +14,7 @@ use Microsoft\Kiota\Authentication\Oauth\AuthorizationCodeContext;
 
 class MicrosoftService implements MicrosoftInterface
 {
+    private $client = null;
     public array $groupsEventScopes = [
         'User.Read',
         'Group.Read.All',
@@ -28,7 +29,8 @@ class MicrosoftService implements MicrosoftInterface
             $code,
             $_ENV['REDIRECT_URI'],
         );
-        return new GraphServiceClient($tokenRequestContext, $this->groupsEventScopes);
+        $this->client = $this->client ?: new GraphServiceClient($tokenRequestContext, $this->groupsEventScopes);
+        return $this->client;
     }
 
     public function getGroups(User $user): array

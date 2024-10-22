@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\MicrosoftEvent;
+use app\models\MicrosoftGroup;
 use app\models\User;
 use app\services\MicrosoftService;
 use Microsoft\Graph\Generated\Groups\GroupsRequestBuilderGetRequestConfiguration;
@@ -34,10 +35,10 @@ class MicrosoftController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['index', 'locations'],
+                'only' => ['index'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'locations'],
+                        'actions' => ['index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -106,16 +107,18 @@ class MicrosoftController extends Controller
         $groupIds = [];
         $groups = $graphClient->groups()->get($requestConfigurationGroup)->wait();
         foreach ($groups->getValue() as $group) {
+            $microsoftGroup = new MicrosoftGroup();
+            $microsoftGroup->name = $group->getDisplayName() ?? '-';
+            $microsoftGroup->microsoft_id = $group->getId() ?? '-';
+            $microsoftGroup->save();
             $groupIds[] = $group->getId();
         }
-
 
         $result = [];
         $format = 'Y-m-d H:i:s';
         $date = new \DateTime();
         $date->modify('first day of this month');
-        $startDate = $date->format($format);
-
+        $startDate = $date->format('Y-m-d') . ' 00:00:00';
         $date->add(new \DateInterval('P30D'));
         $endDate = $date->format($format);
 
@@ -123,7 +126,7 @@ class MicrosoftController extends Controller
         $queryParameters = EventsRequestBuilderGetRequestConfiguration::createQueryParameters();
         $queryParameters->orderby = ["start/dateTime"];
         $queryParameters->select = ["subject", "locations", "start"];
-        $queryParameters->top = 100;
+        $queryParameters->top = 200;
 //        $queryParameters->filter = "start/dateTime gt '$startDate' and start/dateTime lt '$endDate'";
         $queryParameters->filter = "start/dateTime gt '$startDate'";
         $requestConfiguration->queryParameters = $queryParameters;
@@ -151,11 +154,13 @@ class MicrosoftController extends Controller
                         $location = $locationString;
                     }
                 }
-                $result[] = [
-                    'eventSubject' => $eventSubject,
-                    'eventStartTime' => $eventTime,
-                    'location' => $location,
-                ];
+                if ($location){
+                    $result[] = [
+                        'eventSubject' => $eventSubject,
+                        'eventStartTime' => $eventTime,
+                        'location' => $location,
+                    ];
+                }
             }
         }
 
@@ -194,9 +199,30 @@ class MicrosoftController extends Controller
 
     public function actionLocations()
     {
-        $events = MicrosoftEvent::find()->select(['id', 'subject', 'eventStartTime', 'location'])->asArray()->all();
-        echo "Locations: <pre>";
-        print_r($events);
+        $events = MicrosoftEvent::find()->select(['id', 'subject', 'eventStartTime', 'location'])->orderBy(['eventStartTime' => SORT_ASC])->asArray()->all();
+        $groups = MicrosoftGroup::find()->select(['id', 'name'])->asArray()->all();
+
+        echo "Groups: <pre>";
+        print_r($groups);
+        echo "</pre><br/><br/>";
+
+        $result = [];
+        foreach ($events as $event) {
+            $date = new \DateTime($event['eventStartTime']);
+            if (!isset($result[$date->format('Y-m-d')])) {
+                $result[$date->format('Y-m-d')] = [];
+            }
+            $result[$date->format('Y-m-d')][] = $event;
+        }
+
+        foreach ($result as $key => $item)
+        {
+            echo "$key: <pre>";
+            foreach ($item as $event) {
+                print_r($event);
+            }
+            echo "</pre>";
+        }
         die;
     }
 
