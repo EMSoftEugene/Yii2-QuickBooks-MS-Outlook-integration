@@ -33,7 +33,7 @@ class MicrosoftService implements MicrosoftInterface
 
     public function getGroups(User $user): array
     {
-        return ['02a468f2-ad50-46a8-9b00-146814791243', '502a6a6e-4ae4-47e2-bd54-f70a41f623dd', 'ed295d4e-2392-480f-b6ba-3f8479612706'];
+//        return ['02a468f2-ad50-46a8-9b00-146814791243', '502a6a6e-4ae4-47e2-bd54-f70a41f623dd', 'ed295d4e-2392-480f-b6ba-3f8479612706'];
         $graphClient = $this->getGraphClient($user->microsoft_auth);
 
         $groupIds = [];
@@ -46,16 +46,14 @@ class MicrosoftService implements MicrosoftInterface
 
     public function getEventsByGroupId(User $user, string $groupId): array
     {
-
-
         $graphClient = $this->getGraphClient($user->microsoft_auth);
-        $result = [];
-        $result[] = [
-            'eventSubject' => 'asd',
-            'eventStartTime' => '2020-12-12',
-            'location' => 'asd',
-        ];
-        return $result;
+//        $result = [];
+//        $result[] = [
+//            'eventSubject' => 'asd',
+//            'eventStartTime' => '2020-12-12',
+//            'location' => 'asd',
+//        ];
+//        return $result;
 
         $result = [];
         $format = 'Y-m-d H:i:s';
