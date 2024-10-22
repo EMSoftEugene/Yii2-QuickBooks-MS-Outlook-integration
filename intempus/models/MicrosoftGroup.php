@@ -22,7 +22,7 @@ class MicrosoftGroup extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%microsoft_event}}';
+        return '{{%microsoft_group}}';
     }
 
     /**
