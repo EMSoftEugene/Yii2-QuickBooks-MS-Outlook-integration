@@ -72,6 +72,10 @@ $config = [
                     'route' => 'site/index',
                 ],
                 [
+                    'pattern' => 'intuit',
+                    'route' => 'intuit/index',
+                ],
+                [
                     'pattern' => 'microsoft',
                     'route' => 'microsoft/index',
                 ],

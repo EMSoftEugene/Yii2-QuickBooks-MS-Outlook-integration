@@ -6,8 +6,12 @@ $dotenv->load();
 
 \Yii::$container->set('app\services\interfaces\MicrosoftInterface', 'app\services\MicrosoftService');
 
+$intuit = require __DIR__ . '/intuit.php';
+
+
 return [
     'adminEmail' => 'admin@example.com',
     'senderEmail' => 'noreply@example.com',
     'senderName' => 'Example.com mailer',
+    'intuit' => $intuit
 ];

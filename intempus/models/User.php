@@ -19,7 +19,10 @@ use yii\web\IdentityInterface;
  * @property string $auth_key
  * @property string $microsoft_auth
  * @property boolean $is_admin
- * @property integer $status
+ * @property string $intuit_access_token
+ * @property string $intuit_refresh_token
+ * @property string $intuit_x_refresh_token_expires_in
+ * @property string $intuit_expires_in
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
