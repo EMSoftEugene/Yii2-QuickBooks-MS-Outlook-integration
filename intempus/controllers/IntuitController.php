@@ -94,9 +94,9 @@ class IntuitController extends Controller
 
         $user = User::findOne(['is_admin' => 1]);
         $user->intuit_access_token = $accessToken->getAccessToken();
-        $user->refresh_token = $accessToken->getRefreshToken();
-        $user->x_refresh_token_expires_in = $accessToken->getRefreshTokenExpiresAt();
-        $user->expires_in = $accessToken->getAccessTokenExpiresAt();
+        $user->intuit_refresh_token = $accessToken->getRefreshToken();
+        $user->intuit_x_refresh_token_expires_in = $accessToken->getRefreshTokenExpiresAt();
+        $user->intuit_expires_in = $accessToken->getAccessTokenExpiresAt();
         $user->save();
 
         $session->set('sessionAccessToken', $accessToken);

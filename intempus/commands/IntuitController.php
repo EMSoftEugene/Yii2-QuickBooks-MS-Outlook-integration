@@ -21,9 +21,9 @@ class IntuitController extends Controller
         $clientID = $intuitConfig['client_id'];
         $clientSecret = $intuitConfig['client_secret'];
         $accessTokenKey = $user->intuit_access_token;
-        $refresh_token = $user->refresh_token;
-        $accessTokenExpiresAt = $user->expires_in;
-        $refreshTokenExpiresAt = $user->x_refresh_token_expires_in;
+        $refresh_token = $user->intuit_refresh_token;
+        $accessTokenExpiresAt = $user->intuit_expires_in;
+        $refreshTokenExpiresAt = $user->intuit_x_refresh_token_expires_in;
         $tokenType = "bearer";
 
         $token = new OAuth2AccessToken($clientID,$clientSecret,$accessTokenKey,$refresh_token,$accessTokenExpiresAt,$refreshTokenExpiresAt, $tokenType);
