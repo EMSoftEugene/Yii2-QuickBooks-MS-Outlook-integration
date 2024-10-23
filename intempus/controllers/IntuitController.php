@@ -97,6 +97,7 @@ class IntuitController extends Controller
         $user->intuit_refresh_token = $accessToken->getRefreshToken();
         $user->intuit_x_refresh_token_expires_in = $accessToken->getRefreshTokenExpiresAt();
         $user->intuit_expires_in = $accessToken->getAccessTokenExpiresAt();
+        $user->intuit_realm_id = $realmId;
         $user->save();
 
         $session->set('sessionAccessToken', $accessToken);

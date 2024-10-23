@@ -23,6 +23,7 @@ use yii\web\IdentityInterface;
  * @property string $intuit_refresh_token
  * @property string $intuit_x_refresh_token_expires_in
  * @property string $intuit_expires_in
+ * @property string $intuit_realm_id
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
