@@ -73,7 +73,7 @@ class TsheetController extends Controller
         $state = \Yii::$app->request->get('state');
 
         $client = new Client();
-        $response = $client->request('GET', 'authorize', [
+        $response = $client->request('POST', $tsheetConfig['tokenEndPointUrl'], [
             'form_params' => [
                 'grant_type' => 'authorization_code',
                 'client_id' => $tsheetConfig['client_id'],
@@ -83,21 +83,14 @@ class TsheetController extends Controller
             ]
         ]);
 
-        $result = $response->getBody();
-        $result2 = $response->getBody()->getContents();
-        $result3 = json_decode($response->getBody()->getContents(), true);
-
-        \Yii::info('result= ' . print_r($result, true));
-        \Yii::info('result2= ' . print_r($result2, true));
-        \Yii::info('result3= ' . print_r($result3, true));
-
-        echo "<pre>:";
-        print_r($result);
-        print_r($result2);
-        print_r($result3);
-        echo "!"; die;
+        $result = $response->getBody()->getContents();
+        $result = json_decode($result, true);
 
         $user = User::findOne(['is_admin' => 1]);
+        $user->tsheets_access_token = $result['access_token'];
+        $user->tsheets_refresh_token = $result['refresh_token'];
+        $user->tsheets_expires_in = $result['expires_in'];
+        $user->tsheets_realm_id = $result['company_id'];
         $user->save();
 
         return $this->redirect('/');
