@@ -77,7 +77,7 @@ class TsheetController extends Controller
             'form_params' => [
                 'grant_type' => 'authorization_code',
                 'client_id' => $tsheetConfig['client_id'],
-                'client_secret' => $tsheetConfig['client_id'],
+                'client_secret' => $tsheetConfig['client_secret'],
                 'code' => $code,
                 'redirect_uri' => $tsheetConfig['oauth_redirect_uri'],
             ]
