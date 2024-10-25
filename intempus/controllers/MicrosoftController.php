@@ -129,7 +129,7 @@ class MicrosoftController extends Controller
         $requestConfiguration = new EventsRequestBuilderGetRequestConfiguration();
         $queryParameters = EventsRequestBuilderGetRequestConfiguration::createQueryParameters();
         $queryParameters->orderby = ["start/dateTime"];
-        $queryParameters->select = ["subject", "locations", "start"];
+        $queryParameters->select = ["subject", "locations", "address", "start"];
         $queryParameters->top = 200;
 //        $queryParameters->filter = "start/dateTime gt '$startDate' and start/dateTime lt '$endDate'";
         $queryParameters->filter = "start/dateTime gt '$startDate'";
@@ -145,27 +145,37 @@ class MicrosoftController extends Controller
                 continue;
             }
 
-            sleep(1);
-//            if ($groupId == 'e5bcd331-c6c5-47e9-b863-4ffb61eace00'){
-//                print_r($events->getValue());
-//                die;
-//            }
-
             $result = [];
             foreach ($events->getValue() as $event) {
+
                 $eventId = $event->getId();
                 $eventSubject = $event->getSubject();
                 $eventTime = $event->getStart()->getDateTime();
                 $tmpLocations = $event->getLocations();
 
+
                 $location = '';
                 foreach ($tmpLocations as $location) {
+
+                    $city = $location->getAddress()->getCity();
+                    $state = $location->getAddress()->getState();
+                    $street = $location->getAddress()->getStreet();
+                    $postalCode = $location->getAddress()->getPostalCode();
+                    $countryOrRegion = $location->getAddress()->getCountryOrRegion();
+
+                    if (empty($city) || empty($state) || empty($street) || empty($postalCode) || empty($countryOrRegion) ){
+                        print_r($event->getLocation());
+                        die;
+                    }
+
+
                     $locationString = $location->getDisplayName();
                     if ($locationString) {
                         $location = $locationString;
                         break;
                     }
                 }
+
                 if ($location){
                     $result[] = [
                         'eventSubject' => $eventSubject,
@@ -188,22 +198,6 @@ class MicrosoftController extends Controller
                 $microsoftEvent->save();
             }
 
-        }
-
-
-
-        echo "!Ok";
-        die;
-
-        //////////////////////////
-
-
-        $microsoftService = new \app\services\MicrosoftService();
-
-        $groups = $microsoftService->getGroups($user);
-        foreach ($groups as $groupId) {
-            $result = $microsoftService->getEventsByGroupId($user, $groupId);
-            $microsoftService->saveEvents($result);
         }
 
         echo "!Ok";

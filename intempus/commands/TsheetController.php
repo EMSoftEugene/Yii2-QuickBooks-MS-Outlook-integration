@@ -10,33 +10,38 @@ use yii\console\ExitCode;
 
 class TsheetController extends Controller
 {
+    private Client $client;
+    private array $headers;
 
     public function __construct($id, $module, $config = [])
     {
         parent::__construct($id, $module, $config);
+        $this->auth();
     }
 
-    public function actionIndex()
+    private function auth()
     {
         $user = User::findOne(['is_admin' => 1]);
-        $tsheetConfig = \Yii::$app->params['tsheet'];
-
         $baseUri = 'https://rest.tsheets.com/api/v1/';
-        $client = new Client(['base_uri' => $baseUri]);
-        $headers = [
+        $this->client = new Client(['base_uri' => $baseUri]);
+        $this->headers = [
             'Authorization' => 'Bearer ' . $user->tsheets_access_token,
             'Accept' => 'application/json',
         ];
+    }
+
+    public function actionTimeEntries()
+    {
+        $date = date('Y-m-d');
 
         $queryParams = [
+            'date' => '2020-01-06,'
         ];
-        $response = $client->request('GET', 'locations', [
-            'headers' => $headers,
+        $response = $this->client->request('GET', 'time_off_request_entries', [
+            'headers' => $this->headers,
             'query' => $queryParams
         ]);
-
-        $result = $response->getBody()->getContents();
-        $result = json_decode($result, true);
+        $result = json_decode($response->getBody()->getContents(), true);
 
         print_r($result);
         die;
@@ -44,34 +49,40 @@ class TsheetController extends Controller
 
     }
 
+    public function actionIndex()
+    {
+        $queryParams = [
+        ];
+        $response = $this->client->request('GET', 'locations', [
+            'headers' => $this->headers,
+            'query' => $queryParams
+        ]);
+
+        $result = json_decode($response->getBody()->getContents(), true);
+
+        print_r($result);
+        die;
+    }
+
     public function actionAdd()
     {
-        $user = User::findOne(['is_admin' => 1]);
-        $baseUri = 'https://rest.tsheets.com/api/v1/';
-        $client = new Client(['base_uri' => $baseUri]);
-        $headers = [
-            'Authorization' => 'Bearer ' . $user->tsheets_access_token,
-            'Accept' => 'application/json',
-        ];
-
         $params = [];
         $params['data'] = [];
         $params['data'][] = (object)[
-            'addr1' => '1170 FOSTER CITY Blvd #302, Foster City, CA, 94404',
+            'addr1' => '14833 Hillside Trl',
             'addr2' => '',
-            'city' => 'FOSTER CITY',
-            'state' => 'CA',
-            'zip' => '94404',
+            'city' => 'Savage',
+            'state' => 'MN',
+            'zip' => '55378',
             'country' => 'USA',
         ];
 
-        $response = $client->request('POST', 'locations', [
-            'headers' => $headers,
+        $response = $this->client->request('POST', 'locations', [
+            'headers' => $this->headers,
             'form_params' => $params
         ]);
 
-        $result = $response->getBody()->getContents();
-        $result = json_decode($result, true);
+        $result = json_decode($response->getBody()->getContents(), true);
 
         print_r($result);
         die;
