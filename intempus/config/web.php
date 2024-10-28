@@ -83,6 +83,10 @@ $config = [
                     'pattern' => 'tsheet',
                     'route' => 'tsheet/index',
                 ],
+                [
+                    'pattern' => 'tsheet/time-entries',
+                    'route' => 'tsheet/time-entries',
+                ],
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',

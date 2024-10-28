@@ -60,6 +60,10 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    public static function getMainUser(): ?User
+    {
+        return self::findOne(['is_admin' => 1]);
+    }
 
     /**
      * @inheritdoc

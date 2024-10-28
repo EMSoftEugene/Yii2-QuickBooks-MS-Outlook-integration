@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use app\models\MicrosoftGroup;
 use app\models\User;
+use app\services\interfaces\TsheetInterface;
+use app\services\TsheetService;
 use GuzzleHttp\Client;
 use QuickBooksOnline\API\Core\OAuth\OAuth2\OAuth2AccessToken;
 use QuickBooksOnline\API\DataService\DataService;
@@ -15,10 +17,7 @@ use yii\web\Response;
 
 class TsheetController extends Controller
 {
-    public array $groupsEventScopes = [
-        'User.Read',
-        'Group.Read.All',
-    ];
+    private TsheetInterface $tsheetService;
 
     /**
      * {@inheritdoc}
@@ -40,67 +39,55 @@ class TsheetController extends Controller
         ];
     }
 
+    public function init()
+    {
+        parent::init();
+        $this->tsheetService = new TsheetService();
+    }
+
     /**
-     * Displays homepage.
+     * Redirect to Tsheet Auth page
      *
      * @return Response
      */
     public function actionIndex()
     {
-        $tsheetConfig = \Yii::$app->params['tsheet'];
-
-        $authUrl = substr(Url::toRoute([$tsheetConfig['authorizationRequestUrl'],
-                'response_type' => 'code',
-                'client_id' => $tsheetConfig['client_id'],
-                'redirect_uri' => $tsheetConfig['oauth_redirect_uri'],
-                'state' => '12345',
-            ]
-        ), 1);
-
-        return $this->redirect($authUrl);
+        return $this->redirect($this->tsheetService->getAuthUrl());
     }
 
 
     /**
-     * Displays homepage.
+     * Handle callback request
      *
      * @return Response
      */
     public function actionCallback()
     {
-        $tsheetConfig = \Yii::$app->params['tsheet'];
-        $code = \Yii::$app->request->get('code');
-        $state = \Yii::$app->request->get('state');
-
-        $client = new Client();
-        $response = $client->request('POST', $tsheetConfig['tokenEndPointUrl'], [
-            'form_params' => [
-                'grant_type' => 'authorization_code',
-                'client_id' => $tsheetConfig['client_id'],
-                'client_secret' => $tsheetConfig['client_secret'],
-                'code' => $code,
-                'redirect_uri' => $tsheetConfig['oauth_redirect_uri'],
-            ]
-        ]);
-
-        $result = $response->getBody()->getContents();
-        $result = json_decode($result, true);
-
-        $user = User::findOne(['is_admin' => 1]);
-        $user->tsheets_access_token = $result['access_token'];
-        $user->tsheets_refresh_token = $result['refresh_token'];
-        $user->tsheets_expires_in = $result['expires_in'];
-        $user->tsheets_realm_id = $result['company_id'];
-        $user->save();
+        try {
+            $code = \Yii::$app->request->get('code');
+            $result = $this->tsheetService->exchangeAuthCode($code);
+            $this->tsheetService->updateUserAuth($result);
+            \Yii::$app->session->setFlash('success','Successful authentication');
+        } catch (\Exception $e) {
+            \Yii::info('tsheet auth error: ' . $e->getMessage() . ' | ' . $e->getTraceAsString());
+        }
 
         return $this->redirect('/');
     }
 
-    public function actionLocations()
+    public function actionTimeEntries()
     {
-
-
-        die;
+        $date = \Yii::$app->request->post('date');
+        try {
+            $queryParams = [
+                'date' => $date
+            ];
+            $result = $this->tsheetService->requestGet('time_off_request_entries', $queryParams);
+            $imported = $this->tsheetService->handleTimeEntries($result);
+            \Yii::$app->session->setFlash('success', 'Success. Imported time entries: ' . count($imported));
+        } catch (\Exception $e) {
+            \Yii::info('tsheet auth error: ' . $e->getMessage() . ' | ' . $e->getTraceAsString());
+        }
+        $this->redirect('/');
     }
-
 }

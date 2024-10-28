@@ -2,7 +2,10 @@
 
 namespace app\commands;
 
+use app\models\TimeEntries;
 use app\models\User;
+use app\services\interfaces\TsheetInterface;
+use app\services\TsheetService;
 use GuzzleHttp\Client;
 use yii\console\Controller;
 use yii\console\ExitCode;
@@ -10,61 +13,46 @@ use yii\console\ExitCode;
 
 class TsheetController extends Controller
 {
-    private Client $client;
-    private array $headers;
+    private TsheetInterface $tsheetService;
 
     public function __construct($id, $module, $config = [])
     {
         parent::__construct($id, $module, $config);
-        $this->auth();
-    }
-
-    private function auth()
-    {
-        $user = User::findOne(['is_admin' => 1]);
-        $baseUri = 'https://rest.tsheets.com/api/v1/';
-        $this->client = new Client(['base_uri' => $baseUri]);
-        $this->headers = [
-            'Authorization' => 'Bearer ' . $user->tsheets_access_token,
-            'Accept' => 'application/json',
-        ];
+        $this->tsheetService = new TsheetService();
     }
 
     public function actionTimeEntries()
     {
         $date = date('Y-m-d');
+        $date = '2020-01-06';
 
         $queryParams = [
-            'date' => '2020-01-06,'
+            'date' => $date
         ];
-        $response = $this->client->request('GET', 'time_off_request_entries', [
-            'headers' => $this->headers,
-            'query' => $queryParams
-        ]);
-        $result = json_decode($response->getBody()->getContents(), true);
+        $result = $this->tsheetService->requestGet('time_off_request_entries', $queryParams);
+        $imported = $this->tsheetService->handleTimeEntries($result);
 
-        print_r($result);
-        die;
-
-
+        echo "Imported count: " . count($imported) . PHP_EOL;
+        return ExitCode::OK;
     }
 
-    public function actionIndex()
+    /**
+     * Locations list
+     */
+    public function actionIndex(): int
     {
-        $queryParams = [
-        ];
-        $response = $this->client->request('GET', 'locations', [
-            'headers' => $this->headers,
-            'query' => $queryParams
-        ]);
-
-        $result = json_decode($response->getBody()->getContents(), true);
-
+        $result = $this->tsheetService->requestGet('locations');
         print_r($result);
-        die;
+
+        return ExitCode::OK;
     }
 
-    public function actionAdd()
+    /**
+     * Add location to tsheets.com
+     *
+     * @return int
+     */
+    public function actionAdd(): int
     {
         $params = [];
         $params['data'] = [];
@@ -77,16 +65,18 @@ class TsheetController extends Controller
             'country' => 'USA',
         ];
 
-        $response = $this->client->request('POST', 'locations', [
-            'headers' => $this->headers,
-            'form_params' => $params
-        ]);
-
-        $result = json_decode($response->getBody()->getContents(), true);
-
+        $result = $this->tsheetService->requestPost('locations', $params);
         print_r($result);
-        die;
 
-
+        return ExitCode::OK;
     }
+
+    public function actionRefreshToken()
+    {
+        $this->tsheetService->refreshToken();
+
+        echo "Ok." . PHP_EOL;
+        return ExitCode::OK;
+    }
+
 }

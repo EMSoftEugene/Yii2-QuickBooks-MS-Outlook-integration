@@ -81,13 +81,14 @@ class MicrosoftController extends Controller
      */
     public function actionCallback()
     {
+        $imported = [];
         $code = \Yii::$app->request->get('code');
 
         $user = User::findOne(['is_admin' => 1]);
         if ($user) {
             $user->microsoft_auth = $code;
             $user->save();
-            \Yii::$app->session->setFlash('Token updated');
+            \Yii::$app->session->setFlash('success', 'Token updated');
         }
 
         $tokenRequestContext = new AuthorizationCodeContext(
@@ -196,12 +197,12 @@ class MicrosoftController extends Controller
                 $microsoftEvent->eventStartTime = $event['eventStartTime'] ?? '';
                 $microsoftEvent->location = $event['location'] ?? '';
                 $microsoftEvent->save();
+                $imported[] = $microsoftEvent->id;
             }
 
         }
 
-        echo "!Ok";
-        die;
+        \Yii::$app->session->setFlash('success', 'Success. Imported locations: ' . count($imported));
 
         return $this->redirect('/');
     }

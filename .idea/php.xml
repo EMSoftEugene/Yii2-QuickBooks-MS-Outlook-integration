@@ -131,6 +131,9 @@
       <path value="$PROJECT_DIR$/intempus/vendor/guzzlehttp/guzzle" />
       <path value="$PROJECT_DIR$/intempus/vendor/symfony/process" />
       <path value="$PROJECT_DIR$/intempus/vendor/yiisoft/yii2-queue" />
+      <path value="$PROJECT_DIR$/intempus/vendor/quickbooks/v3-php-sdk" />
+      <path value="$PROJECT_DIR$/intempus/vendor/bower-asset/jquery-ui" />
+      <path value="$PROJECT_DIR$/intempus/vendor/yiisoft/yii2-jui" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4">
