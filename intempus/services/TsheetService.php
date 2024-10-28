@@ -117,13 +117,13 @@ class TsheetService implements TsheetInterface
         $imported = [];
         $time_off_request_entries = $data['results']['time_off_request_entries'];
         $supplemental_data = $data['supplemental_data'];
-        $users = $supplemental_data['users'];
+        $users = $supplemental_data['users'] ?? null;
         $timesheets = $supplemental_data['timesheets'] ?? null;
         $jobcodes = $supplemental_data['jobcodes'] ?? null;
         foreach ($time_off_request_entries as $time_off_request_entry) {
             $time_off_request_id = $time_off_request_entry['time_off_request_id'];
             $existsRow = TimeEntries::findOne(['time_off_request_id' => $time_off_request_id]);
-            if ($existsRow) {
+            if ($existsRow || !$users) {
                 continue;
             }
 
