@@ -117,7 +117,7 @@ class TsheetService implements TsheetInterface
     public function handleTimeSheet($data): array
     {
         $imported = [];
-        $timesheets = $data['results']['time_off_request_entries'] ?? [];
+        $timesheets = $data['results']['timesheets'] ?? [];
 
         foreach ($timesheets as $timesheet) {
             $timesheet_id = $timesheet['id'];

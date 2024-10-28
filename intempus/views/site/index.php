@@ -74,12 +74,6 @@ $outlookLocations = MicrosoftEvent::find();
                             },
                         ],
                         [
-                            'label' => 'Approver',
-                            'value' => function ($data) {
-                                return $data->getApprover();
-                            },
-                        ],
-                        [
                             'label' => 'User',
                             'value' => function ($data) {
                                 return $data->getUser();
