@@ -24,12 +24,56 @@ class TsheetController extends Controller
     public function actionTimeEntries()
     {
         $date = date('Y-m-d');
-        $date = '2020-01-06';
+        $date = '2024-10-28';
 
         $queryParams = [
-            'date' => $date
+            'start_date' => $date,
+//            'end_date' => $date,
         ];
-        $result = $this->tsheetService->requestGet('time_off_request_entries', $queryParams);
+        $result = $this->tsheetService->requestGet('timesheets', $queryParams);
+
+        foreach($result['results']['timesheets'] as $timesheet){
+            $state = $timesheet['state'] ?? '';
+            $jobcode_id = $timesheet['jobcode_id'] ?? '';
+            $user_id = $timesheet['user_id'] ?? '';
+            $notes = $timesheet['notes'] ?? '';
+            if ($state == 'SUBMITTED'){
+                $queryParams = [
+                    'ids' => $user_id,
+                ];
+                $usersData = $this->tsheetService->requestGet('users', $queryParams);
+                $user = $usersData['results']['users'][$user_id];
+                $first_name = $user['first_name'] ?? '';
+                $last_name = $user['last_name'] ?? '';
+
+
+                $queryParams = [
+                    'ids' => $jobcode_id,
+                ];
+                $jobsData = $this->tsheetService->requestGet('jobcodes', $queryParams);
+                $job = $jobsData['results']['jobcodes'][$jobcode_id];
+                $locations = $job['locations'] ?? '';
+                $location_id = $locations[0] ?? '';
+
+                if ($location_id){
+                    $queryParams = [
+                        'ids' => $location_id,
+                    ];
+                    $locationsData = $this->tsheetService->requestGet('locations', $queryParams);
+                    $location = $locationsData['results']['locations'][$location_id];
+
+                }
+
+                print_r($timesheet);
+                print_r($user);
+                print_r($job);
+                print_r($location);
+                die;
+            }
+        }
+        print_r($result);
+        die;
+        
         $imported = $this->tsheetService->handleTimeEntries($result);
 
         echo "Imported count: " . count($imported) . PHP_EOL;

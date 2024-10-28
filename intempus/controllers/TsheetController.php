@@ -80,15 +80,15 @@ class TsheetController extends Controller
         $date = \Yii::$app->request->post('date');
         try {
             $queryParams = [
-                'date' => $date ?: date('Y-m-d'),
+                'start_date' => $date ?: date('Y-m-d'),
             ];
-            $result = $this->tsheetService->requestGet('time_off_request_entries', $queryParams);
-            $imported = $this->tsheetService->handleTimeEntries($result);
-            \Yii::$app->session->setFlash('success', 'Success. Imported time entries: ' . count($imported));
+            $result = $this->tsheetService->requestGet('timesheets', $queryParams);
+            $imported = $this->tsheetService->handleTimeSheet($result);
+            \Yii::$app->session->setFlash('success', 'Success. Imported time sheets: ' . count($imported));
         } catch (\Exception $e) {
             $err = $e->getMessage() . ' | ' . $e->getLine() . ' | ' . $e->getFile();
             \Yii::$app->session->setFlash('error', $err);
-            \Yii::info('tsheet auth error: ' . $e->getMessage() . ' | ' . $e->getTraceAsString());
+            \Yii::info('tsheet error: ' . $e->getMessage() . ' | ' . $e->getTraceAsString());
         }
         $this->redirect('/');
     }

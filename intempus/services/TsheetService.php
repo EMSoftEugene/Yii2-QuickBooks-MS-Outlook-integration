@@ -112,6 +112,78 @@ class TsheetService implements TsheetInterface
         return json_decode($response->getBody()->getContents(), true);
     }
 
+
+
+    public function handleTimeSheet($data): array
+    {
+        $imported = [];
+        $timesheets = $data['results']['time_off_request_entries'] ?? [];
+
+        foreach ($timesheets as $timesheet) {
+            $timesheet_id = $timesheet['id'];
+            $existsRow = TimeEntries::findOne(['time_off_request_id' => $timesheet_id]);
+            if ($existsRow) {
+                continue;
+            }
+            $state = $timesheet['state'] ?? '';
+            $jobcode_id = $timesheet['jobcode_id'] ?? '';
+            $user_id = $timesheet['user_id'] ?? '';
+            $notes = $timesheet['notes'] ?? '';
+            $duration = $timesheet['duration'] ?? '';
+            $date = $timesheet['date'] ?? '';
+
+            if ($state == 'SUBMITTED'){
+                $queryParams = [
+                    'ids' => $user_id,
+                ];
+                $usersData = $this->requestGet('users', $queryParams);
+                $tUser = $usersData['results']['users'][$user_id];
+                $first_name = $tUser['first_name'] ?? '';
+                $last_name = $tUser['last_name'] ?? '';
+
+                $queryParams = [
+                    'ids' => $jobcode_id,
+                ];
+                $jobsData = $this->requestGet('jobcodes', $queryParams);
+                $job = $jobsData['results']['jobcodes'][$jobcode_id];
+                $locations = $job['locations'] ?? '';
+                $location_id = $locations[0] ?? '';
+                $location = null;
+
+                if ($location_id){
+                    $queryParams = [
+                        'ids' => $location_id,
+                    ];
+                    $locationsData = $this->requestGet('locations', $queryParams);
+                    $location = $locationsData['results']['locations'][$location_id];
+                }
+
+                $timeEntries = new TimeEntries();
+                $timeEntries->time_off_request_id = $timesheet_id;
+                $timeEntries->date = $date;
+                $timeEntries->duration = $duration;
+                $timeEntries->approver_id = 1;
+                $timeEntries->approver_last_name = '-';
+                $timeEntries->approver_first_name = '-';
+                $timeEntries->user_id = $user_id;
+                $timeEntries->user_last_name = $last_name;
+                $timeEntries->user_first_name = $first_name;
+                $timeEntries->timesheet_notes = $notes;
+                $timeEntries->location_addr = $location ? trim($location['addr1'] . ' ' . $location['addr2']) : '';
+                $timeEntries->location_city = $location ? $location['city'] : '';
+                $timeEntries->location_state = $location ? $location['state'] : '';
+                $timeEntries->location_zip = $location ? $location['zip'] : '';
+                $timeEntries->location_country = $location ? $location['country'] : '';
+
+                if ($timeEntries->save()) {
+                    $imported[] = $timesheet_id;
+                }
+            }
+        }
+
+        return $imported;
+    }
+
     public function handleTimeEntries($data): array
     {
         $imported = [];
