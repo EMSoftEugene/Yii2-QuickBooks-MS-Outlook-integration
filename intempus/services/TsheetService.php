@@ -113,7 +113,6 @@ class TsheetService implements TsheetInterface
     }
 
 
-
     public function handleTimeSheet($data): array
     {
         $imported = [];
@@ -132,25 +131,29 @@ class TsheetService implements TsheetInterface
             $duration = $timesheet['duration'] ?? '';
             $date = $timesheet['date'] ?? '';
 
-            if ($state == 'SUBMITTED'){
-                $queryParams = [
-                    'ids' => $user_id,
-                ];
-                $usersData = $this->requestGet('users', $queryParams);
-                $tUser = $usersData['results']['users'][$user_id];
-                $first_name = $tUser['first_name'] ?? '';
-                $last_name = $tUser['last_name'] ?? '';
+            if ($state == 'SUBMITTED') {
+                if ($user_id) {
+                    $queryParams = [
+                        'ids' => $user_id,
+                    ];
+                    $usersData = $this->requestGet('users', $queryParams);
+                    $tUser = $usersData['results']['users'][$user_id];
+                    $first_name = $tUser['first_name'] ?? '';
+                    $last_name = $tUser['last_name'] ?? '';
+                }
 
-                $queryParams = [
-                    'ids' => $jobcode_id,
-                ];
-                $jobsData = $this->requestGet('jobcodes', $queryParams);
-                $job = $jobsData['results']['jobcodes'][$jobcode_id];
-                $locations = $job['locations'] ?? '';
+                if ($jobcode_id) {
+                    $queryParams = [
+                        'ids' => $jobcode_id,
+                    ];
+                    $jobsData = $this->requestGet('jobcodes', $queryParams);
+                    $job = $jobsData['results']['jobcodes'][$jobcode_id];
+                    $locations = $job['locations'] ?? '';
+                }
                 $location_id = $locations[0] ?? '';
                 $location = null;
 
-                if ($location_id){
+                if ($location_id) {
                     $queryParams = [
                         'ids' => $location_id,
                     ];
