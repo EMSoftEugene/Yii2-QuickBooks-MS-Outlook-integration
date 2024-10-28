@@ -137,7 +137,7 @@ class TsheetService implements TsheetInterface
                         'ids' => $user_id,
                     ];
                     $usersData = $this->requestGet('users', $queryParams);
-                    $tUser = $usersData['results']['users'][$user_id];
+                    $tUser = $usersData['results']['users'][$user_id] ?? null;
                     $first_name = $tUser['first_name'] ?? '';
                     $last_name = $tUser['last_name'] ?? '';
                 }
@@ -147,7 +147,7 @@ class TsheetService implements TsheetInterface
                         'ids' => $jobcode_id,
                     ];
                     $jobsData = $this->requestGet('jobcodes', $queryParams);
-                    $job = $jobsData['results']['jobcodes'][$jobcode_id];
+                    $job = $jobsData['results']['jobcodes'][$jobcode_id] ?? null;
                     $locations = $job['locations'] ?? '';
                 }
                 $location_id = $locations[0] ?? '';
@@ -158,7 +158,7 @@ class TsheetService implements TsheetInterface
                         'ids' => $location_id,
                     ];
                     $locationsData = $this->requestGet('locations', $queryParams);
-                    $location = $locationsData['results']['locations'][$location_id];
+                    $location = $locationsData['results']['locations'][$location_id] ?? null;
                 }
 
                 $timeEntries = new TimeEntries();
