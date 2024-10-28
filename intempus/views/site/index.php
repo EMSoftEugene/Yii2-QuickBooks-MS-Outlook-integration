@@ -49,7 +49,7 @@ $outlookLocations = MicrosoftEvent::find();
                 $timeEntriesProvider = new ActiveDataProvider([
                     'query' => $timeEntries,
                     'pagination' => [
-                        'pageSize' => 10,
+                        'pageSize' => 50,
                     ],
                 ]);
                 $timeEntriesProvider->pagination->pageParam = 'time-page';
