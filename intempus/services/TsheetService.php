@@ -118,8 +118,8 @@ class TsheetService implements TsheetInterface
         $time_off_request_entries = $data['results']['time_off_request_entries'];
         $supplemental_data = $data['supplemental_data'];
         $users = $supplemental_data['users'];
-        $timesheets = $supplemental_data['timesheets'];
-        $jobcodes = $supplemental_data['jobcodes'];
+        $timesheets = $supplemental_data['timesheets'] ?? null;
+        $jobcodes = $supplemental_data['jobcodes'] ?? null;
         foreach ($time_off_request_entries as $time_off_request_entry) {
             $time_off_request_id = $time_off_request_entry['time_off_request_id'];
             $existsRow = TimeEntries::findOne(['time_off_request_id' => $time_off_request_id]);
@@ -138,9 +138,9 @@ class TsheetService implements TsheetInterface
             if ($status == 'approved') {
                 $approver = $users[$approver_user_id];
                 $tUser = $users[$user_id];
-                $timesheet = $timesheets[$approved_timesheet_id];
-                $jobcode = $jobcodes[$jobcode_id];
-                $locations = $jobcode['locations'];
+                $timesheet = $timesheets[$approved_timesheet_id] ?? null;
+                $jobcode = $jobcodes[$jobcode_id] ?? null;
+                $locations = $jobcode['locations'] ?? null;
                 $location = $locations[0] ?? null;
 
                 $timeEntries = new TimeEntries();
@@ -153,12 +153,12 @@ class TsheetService implements TsheetInterface
                 $timeEntries->user_id = $tUser['id'];
                 $timeEntries->user_last_name = $tUser['last_name'];
                 $timeEntries->user_first_name = $tUser['first_name'];
-                $timeEntries->timesheet_notes = $timesheet['notes'];
-                $timeEntries->location_addr = $location ?: trim($location['addr1'] . ' ' . $location['addr2']);
-                $timeEntries->location_city = $location ?: $location['city'];
-                $timeEntries->location_state = $location ?: $location['state'];
-                $timeEntries->location_zip = $location ?: $location['zip'];
-                $timeEntries->location_country = $location ?: $location['country'];
+                $timeEntries->timesheet_notes = $timesheet['notes'] ?? '';
+                $timeEntries->location_addr = $location ? trim($location['addr1'] . ' ' . $location['addr2']) : '';
+                $timeEntries->location_city = $location ? $location['city'] : '';
+                $timeEntries->location_state = $location ? $location['state'] : '';
+                $timeEntries->location_zip = $location ? $location['zip'] : '';
+                $timeEntries->location_country = $location ? $location['country'] : '';
 
                 if ($timeEntries->save()) {
                     $imported[] = $time_off_request_id;
