@@ -1,5 +1,7 @@
 <?php
 
+namespace app\migrations;
+
 use yii\db\Migration;
 
 /**
@@ -19,8 +21,6 @@ class m241022_103201_create_user_table extends Migration
             'password_hash' => $this->string()->notNull(),
             'password_reset_token' => $this->string()->unique(),
             'email' => $this->string()->notNull()->unique(),
-            'is_admin' => $this->boolean()->null()->defaultValue(0),
-            'microsoft_auth' => $this->string()->null(),
 
             'created_at' => $this->timestamp()->notNull(),
             'updated_at' => $this->timestamp()->null()

@@ -5,80 +5,46 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc66266e-6f69-4fda-adf9-2630599b2b5e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/intempus/.bowerrc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/LICENSE.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/Vagrantfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/assets/AppAsset.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/codeception.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/composer.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/config/__autocomplete.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/config/console.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/config/db.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/config/params.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/config/test.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/config/test_db.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/config/web.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/controllers/SiteController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/mail/layouts/html.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/mail/layouts/text.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/models/ContactForm.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/models/LoginForm.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/models/User.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/requirements.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/runtime/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/_bootstrap.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/_data/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/_output/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/_support/AcceptanceTester.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/_support/FunctionalTester.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/_support/UnitTester.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/acceptance.suite.yml.example" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/acceptance/AboutCest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/acceptance/ContactCest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/acceptance/HomeCest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/acceptance/LoginCest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/acceptance/_bootstrap.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/bin/yii" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/bin/yii.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/functional.suite.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/functional/ContactFormCest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/functional/LoginFormCest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/functional/_bootstrap.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/unit.suite.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/unit/_bootstrap.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/unit/models/ContactFormTest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/unit/models/LoginFormTest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/unit/models/UserTest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/tests/unit/widgets/AlertTest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/vagrant/config/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/vagrant/config/vagrant-local.example.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/vagrant/nginx/app.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/vagrant/nginx/log/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/vagrant/provision/always-as-root.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/vagrant/provision/once-as-root.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/vagrant/provision/once-as-vagrant.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/vagrant/provision/provision.awk" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/views/layouts/main.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/views/site/contact.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/views/site/error.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/views/site/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/views/site/login.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/web/.htaccess" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/web/assets/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/web/css/site.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/web/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/web/index-test.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/web/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/web/robots.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/widgets/Alert.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/yii" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/yii.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/models/AuthApi.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/models/Data.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/models/Data2.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/Module.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/assets/js/client-bonus-handler.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/commands/ScoreController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/DefaultController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/MicrosoftController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/TsheetController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241103_170424_create_api_auth.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/models/ApiAuth.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/MicrosoftService.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/views/default/index.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/views/report/report1.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/views/report/report2.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/commands/MicrosoftController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/commands/MicrosoftController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/commands/TsheetController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/commands/TsheetController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/commands/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/commands/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/config/console.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/config/console.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/config/params.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/config/params.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/config/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/config/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/controllers/IntuitController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/controllers/MicrosoftController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/controllers/MicrosoftController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/controllers/TsheetController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/controllers/ReportController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/jobs/EventLocationsJob.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/jobs/EventLocationsJob.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/migrations/m241022_103201_create_user_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/migrations/m241022_103201_create_user_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/migrations/m241022_120309_create_microsoft_event.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241022_120309_create_microsoft_event.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/migrations/m241022_121949_create_queue.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/migrations/m241022_173930_create_group.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/migrations/m241023_140023_update_user_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/migrations/m241024_170559_add_tsheet_auth_to_user.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/migrations/m241027_153352_create_time_entries.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241027_153352_create_time_entries.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/services/MicrosoftService.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/MicrosoftServiceArchive.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/services/TsheetService.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TsheetService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/services/interfaces/MicrosoftInterface.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/services/interfaces/TsheetInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/interfaces/ApiInterface.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +61,7 @@
     <execution />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/intempus" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/intempus/migrations/m241022_103201_create_user_table.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
@@ -106,6 +72,7 @@
     <setting file="file://$PROJECT_DIR$/intempus/migrations/m241024_170559_add_tsheet_auth_to_user.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/intempus/migrations/m241027_153352_create_time_entries.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/intempus/vendor/league/oauth2-client/src/Provider/AbstractProvider.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/intempus/vendor/yiisoft/yii2/web/GroupUrlRule.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php">
     <include_path>
@@ -237,32 +204,41 @@
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="2nTHBnQEy9F2hg5S9L561ooL5GN" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/oleg/www/docker/intempus/intempus/views/site&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.stylelint&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/oleg/www/docker/intempus/intempus/modules/timeTracker/migrations",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.stylelint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.stylelint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/intempus/views/site" />
+      <recent name="$PROJECT_DIR$/intempus/modules/timeTracker/migrations" />
+      <recent name="$PROJECT_DIR$/intempus/modules/timeTracker" />
       <recent name="$PROJECT_DIR$/intempus/config" />
-      <recent name="$PROJECT_DIR$/intempus/controllers" />
+      <recent name="$PROJECT_DIR$/intempus/modules" />
+      <recent name="$PROJECT_DIR$/intempus/views/report" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/intempus/modules/timeTracker/controllers" />
+      <recent name="$PROJECT_DIR$/intempus/config" />
+      <recent name="$PROJECT_DIR$/intempus/modules/timeTracker" />
       <recent name="$PROJECT_DIR$/intempus" />
     </key>
   </component>
@@ -320,11 +296,24 @@
       <workItem from="1729880749467" duration="5753000" />
       <workItem from="1729941365005" duration="631000" />
       <workItem from="1730035693558" duration="25301000" />
-      <workItem from="1730110118908" duration="5888000" />
+      <workItem from="1730110118908" duration="7911000" />
+      <workItem from="1730144545966" duration="6123000" />
+      <workItem from="1730204239527" duration="760000" />
+      <workItem from="1730392974247" duration="5791000" />
+      <workItem from="1730474265159" duration="24000" />
+      <workItem from="1730618569028" duration="2936000" />
+      <workItem from="1730647414979" duration="7339000" />
+      <workItem from="1730716791944" duration="3903000" />
+      <workItem from="1730728062449" duration="10385000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/intempus" />
+    </ignored-roots>
   </component>
 </project>

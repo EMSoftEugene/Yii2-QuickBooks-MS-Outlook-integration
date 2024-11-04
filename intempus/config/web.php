@@ -2,6 +2,7 @@
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
+$timeTrackerConfig = require __DIR__ . '/timeTrackerConfig.php';
 
 $config = [
     'id' => 'basic',
@@ -10,7 +11,12 @@ $config = [
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
+    ],
+    'modules' => [
+        'timeTracker' => [
+            'class' => \app\modules\timeTracker\Module::class,
+        ],
     ],
     'components' => [
         'request' => [
@@ -26,9 +32,6 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
-            // fo restfull api
-//            'enableSession' => false,
-//            'loginUrl' => null,
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -48,45 +51,14 @@ $config = [
                 ],
             ],
         ],
+
         'db' => $db,
         'urlManager' => [
             'enablePrettyUrl' => true,
             'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
-//                ['class' => 'yii\rest\UrlRule', 'controller' => 'calendar'],
-//                ['class' => 'yii\rest\UrlRule', 'controller' => 'user'],
-//                [
-//                    'class' => 'yii\rest\UrlRule',
-//                    'controller' => [
-//                        'api/v1/calendar'
-//                    ],
-//                    'patterns' => [
-//                        'GET {id}' => 'view',
-//                        'POST' => 'create',
-//                        'PUT {id}' => 'update'
-//                    ]
-//                ],
-                [
-                    'pattern' => '',
-                    'route' => 'site/index',
-                ],
-                [
-                    'pattern' => 'intuit',
-                    'route' => 'intuit/index',
-                ],
-                [
-                    'pattern' => 'microsoft',
-                    'route' => 'microsoft/index',
-                ],
-                [
-                    'pattern' => 'tsheet',
-                    'route' => 'tsheet/index',
-                ],
-                [
-                    'pattern' => 'tsheet/time-entries',
-                    'route' => 'tsheet/time-entries',
-                ],
+                $timeTrackerConfig['rules'],
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',

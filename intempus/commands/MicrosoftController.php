@@ -4,7 +4,7 @@ namespace app\commands;
 
 use app\jobs\EventLocationsJob;
 use app\models\User;
-use app\services\interfaces\MicrosoftInterface;
+use app\modules\timeTracker\services\interfaces\MicrosoftInterface;
 use yii\console\Controller;
 use yii\console\ExitCode;
 

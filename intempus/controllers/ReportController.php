@@ -2,22 +2,12 @@
 
 namespace app\controllers;
 
-use app\models\MicrosoftGroup;
-use app\models\User;
-use app\services\interfaces\TsheetInterface;
-use app\services\TsheetService;
-use GuzzleHttp\Client;
-use QuickBooksOnline\API\Core\OAuth\OAuth2\OAuth2AccessToken;
-use QuickBooksOnline\API\DataService\DataService;
 use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
-use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
 
-class TsheetController extends Controller
+class ReportController extends Controller
 {
-    private TsheetInterface $tsheetService;
 
     /**
      * {@inheritdoc}
@@ -39,20 +29,33 @@ class TsheetController extends Controller
         ];
     }
 
-    public function init()
-    {
-        parent::init();
-        $this->tsheetService = new TsheetService();
-    }
-
     /**
      * Redirect to Tsheet Auth page
      *
-     * @return Response
+     * @return string
      */
-    public function actionIndex()
+    public function actionReport1()
     {
-        return $this->redirect($this->tsheetService->getAuthUrl());
+        $data = new \app\models\Data();
+        $provider = $data->search(\Yii::$app->request->get());
+
+        return $this->render('report1', [
+            'provider' => $provider,
+            'filter' => $data,
+        ]);
+
+    }
+
+    public function actionReport2()
+    {
+        $data = new \app\models\Data2();
+        $provider = $data->search(\Yii::$app->request->get());
+
+        return $this->render('report2', [
+            'provider' => $provider,
+            'filter' => $data,
+        ]);
+
     }
 
 

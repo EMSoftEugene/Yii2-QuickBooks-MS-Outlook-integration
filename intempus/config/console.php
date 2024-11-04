@@ -13,6 +13,21 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
         '@tests' => '@app/tests',
     ],
+    'modules' => [
+        'timeTracker' => [
+            'class' => \app\modules\timeTracker\Module::class,
+        ],
+    ],
+    'controllerMap' => [
+        'migrate' => [
+            'class' => 'yii\console\controllers\MigrateController',
+            'migrationPath' => null, // disable non-namespaced migrations if app\migrations is listed below
+            'migrationNamespaces' => [
+                'app\migrations', // Common migrations for the whole application
+                'app\modules\timeTracker\migrations', // Migrations for the specific project's module
+            ],
+        ],
+    ],
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',

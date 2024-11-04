@@ -5,20 +5,14 @@ namespace app\controllers;
 use app\models\MicrosoftEvent;
 use app\models\MicrosoftGroup;
 use app\models\User;
-use app\services\MicrosoftService;
 use Microsoft\Graph\Generated\Groups\GroupsRequestBuilderGetRequestConfiguration;
 use Microsoft\Graph\Generated\Groups\Item\Events\EventsRequestBuilderGetRequestConfiguration;
 use Microsoft\Graph\GraphServiceClient;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
-use yii\web\Controller;
-use yii\web\Response;
 use Microsoft\Kiota\Authentication\Oauth\AuthorizationCodeContext;
 use Microsoft\Kiota\Authentication\Oauth\ProviderFactory;
-use Microsoft\Graph\Core\Requests\BatchRequestContent;
-use Microsoft\Graph\BatchRequestBuilder;
-use Microsoft\Graph\Core\Requests\BatchResponseItem;
-use app\services\interfaces\MicrosoftInterface;
+use yii\filters\AccessControl;
+use yii\web\Controller;
+use yii\web\Response;
 
 class MicrosoftController extends Controller
 {

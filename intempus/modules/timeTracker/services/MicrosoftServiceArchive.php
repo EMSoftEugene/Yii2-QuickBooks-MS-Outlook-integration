@@ -1,18 +1,18 @@
 <?php
 
 
-namespace app\services;
+namespace app\modules\timeTracker\services;
 
 use app\models\MicrosoftEvent;
 use app\models\User;
-use app\services\interfaces\MicrosoftInterface;
+use app\modules\timeTracker\services\interfaces\MicrosoftInterface;
 use Microsoft\Graph\BatchRequestBuilder;
 use Microsoft\Graph\Core\Requests\BatchRequestContent;
 use Microsoft\Graph\Generated\Groups\Item\Events\EventsRequestBuilderGetRequestConfiguration;
 use Microsoft\Graph\GraphServiceClient;
 use Microsoft\Kiota\Authentication\Oauth\AuthorizationCodeContext;
 
-class MicrosoftService implements MicrosoftInterface
+class MicrosoftServiceArchive implements MicrosoftInterface
 {
     private $client = null;
     public array $groupsEventScopes = [

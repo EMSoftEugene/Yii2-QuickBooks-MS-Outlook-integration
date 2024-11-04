@@ -1,50 +1,54 @@
 <?php
 
 
-namespace app\services;
+namespace app\modules\timeTracker\services;
 
+use app\models\AuthApi;
 use app\models\TimeEntries;
 use app\models\User;
-use app\services\interfaces\TsheetInterface;
+use app\modules\timeTracker\services\interfaces\ApiInterface;
 use GuzzleHttp\Client;
 use yii\db\Exception;
 use yii\helpers\Url;
 
-class TsheetService implements TsheetInterface
+class TsheetService implements ApiInterface
 {
-    const BASE_URI = 'https://rest.tsheets.com/api/v1/';
-
-    private ?Client $client;
+    const NAME = 'tsheet';
+    private ?Client $client = null;
     private array $headers = [];
-    private $tsheetConfig;
+    private array $params = [];
+    private AuthApi $authApi;
 
     public function __construct()
     {
+        $module = \Yii::$app->getModule('timeTracker');
+        $this->params = $module->params['tsheet'];
+        $this->authApi = AuthApi::getOrSetAuthApi(self::NAME);
         $this->client = $this->getClient();
-        $this->tsheetConfig = \Yii::$app->params['tsheet'];
     }
 
     public function getAuthUrl(): string
     {
-        return substr(Url::toRoute([$this->tsheetConfig['authorizationRequestUrl'],
+        return $this->params['authorizationRequestUrl'] .
+            str_replace('/'. $this->params['moduleUrl'] . '/'.self::NAME, '', Url::toRoute(['',
                 'response_type' => 'code',
-                'client_id' => $this->tsheetConfig['client_id'],
-                'redirect_uri' => $this->tsheetConfig['oauth_redirect_uri'],
+                'client_id' => $this->params['client_id'],
+                'redirect_uri' => $this->params['redirect_uri'],
                 'state' => '12345',
             ]
-        ), 1);
+        ));
     }
 
     public function exchangeAuthCode(string $code)
     {
         $client = new Client();
-        $response = $client->request('POST', $this->tsheetConfig['tokenEndPointUrl'], [
+        $response = $client->request('POST', $this->params['tokenEndPointUrl'], [
             'form_params' => [
                 'grant_type' => 'authorization_code',
-                'client_id' => $this->tsheetConfig['client_id'],
-                'client_secret' => $this->tsheetConfig['client_secret'],
+                'client_id' => $this->params['client_id'],
+                'client_secret' => $this->params['client_secret'],
                 'code' => $code,
-                'redirect_uri' => $this->tsheetConfig['oauth_redirect_uri'],
+                'redirect_uri' => $this->params['redirect_uri'],
             ]
         ]);
         return json_decode($response->getBody()->getContents(), true);
@@ -55,24 +59,24 @@ class TsheetService implements TsheetInterface
      */
     public function updateUserAuth($data): bool
     {
-        $user = User::getMainUser();
-        $user->tsheets_access_token = $data['access_token'] ?? '';
-        $user->tsheets_refresh_token = $data['refresh_token'] ?? '';
-        $user->tsheets_expires_in = $data['expires_in'] ?? '';
-        $user->tsheets_realm_id = $data['company_id'] ?? '';
-        return $user->save();
+        $this->authApi->access_token = $data['access_token'] ?? '';
+        $this->authApi->refresh_token = $data['refresh_token'] ?? '';
+        $this->authApi->expires_in = $data['expires_in'] ?? '';
+        $this->authApi->realm_id = $data['company_id'] ?? '';
+        $result = $this->authApi->save();
+        $this->authApi = AuthApi::getOrSetAuthApi(self::NAME);
+        return $result;
     }
 
     public function refreshToken(): bool
     {
-        $user = User::getMainUser();
-        $response = $this->client->request('POST', $this->tsheetConfig['tokenEndPointUrl'], [
+        $response = $this->client->request('POST', $this->params['tokenEndPointUrl'], [
             'headers' => $this->headers,
             'form_params' => [
                 'grant_type' => 'refresh_token',
-                'client_id' => $this->tsheetConfig['client_id'],
-                'client_secret' => $this->tsheetConfig['client_secret'],
-                'refresh_token' => $user->tsheets_refresh_token,
+                'client_id' => $this->params['client_id'],
+                'client_secret' => $this->params['client_secret'],
+                'refresh_token' => $this->authApi->refresh_token,
             ]
         ]);
 
@@ -81,15 +85,20 @@ class TsheetService implements TsheetInterface
         return $this->updateUserAuth($result);
     }
 
-    public function getClient(): Client
+    public function getClient(): ?Client
     {
-        $user = User::getMainUser();
-        $this->client = new Client(['base_uri' => self::BASE_URI]);
-        $this->headers = [
-            'Authorization' => 'Bearer ' . $user->tsheets_access_token,
-            'Accept' => 'application/json',
-        ];
-        return $this->client;
+        if ($this->client) {
+            return $this->client;
+        }
+        if ($this->authApi->access_token) {
+            $this->client = new Client(['base_uri' => $this->params['base_api_url']]);
+            $this->headers = [
+                'Authorization' => 'Bearer ' . $this->authApi->access_token,
+                'Accept' => 'application/json',
+            ];
+            return $this->client;
+        }
+        return null;
     }
 
     public function requestGet($url, $queryParams = [])

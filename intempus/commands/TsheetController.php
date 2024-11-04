@@ -2,18 +2,15 @@
 
 namespace app\commands;
 
-use app\models\TimeEntries;
-use app\models\User;
-use app\services\interfaces\TsheetInterface;
-use app\services\TsheetService;
-use GuzzleHttp\Client;
+use app\modules\timeTracker\services\interfaces\AuthInterface;
+use app\modules\timeTracker\services\TsheetService;
 use yii\console\Controller;
 use yii\console\ExitCode;
 
 
 class TsheetController extends Controller
 {
-    private TsheetInterface $tsheetService;
+    private AuthInterface $tsheetService;
 
     public function __construct($id, $module, $config = [])
     {

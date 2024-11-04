@@ -19,7 +19,6 @@ class UserController extends Controller
         $user->email = 'admin@admin.admin';
         $user->setPassword('adminqwe123');
         $user->generateAuthKey();
-        $user->is_admin = true;
         $user->save();
 
         return ExitCode::OK;

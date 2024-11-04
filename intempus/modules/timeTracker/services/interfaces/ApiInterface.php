@@ -1,12 +1,11 @@
 <?php
 
 
-namespace app\services\interfaces;
+namespace app\modules\timeTracker\services\interfaces;
 
-use app\models\User;
 use GuzzleHttp\Client;
 
-interface TsheetInterface
+interface ApiInterface
 {
     public function getAuthUrl(): string;
 
@@ -16,7 +15,7 @@ interface TsheetInterface
 
     public function refreshToken(): bool;
 
-    public function getClient(): Client;
+    public function getClient(): ?Client;
 
     public function requestGet(string $url, array $queryParams = []);
 

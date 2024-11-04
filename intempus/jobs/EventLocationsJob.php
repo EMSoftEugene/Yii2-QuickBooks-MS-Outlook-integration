@@ -3,7 +3,7 @@
 namespace app\jobs;
 
 use app\models\User;
-use app\services\MicrosoftService;
+use app\modules\timeTracker\services\MicrosoftServiceФксршму;
 use yii\base\BaseObject;
 
 class EventLocationsJob extends BaseObject implements \yii\queue\JobInterface
@@ -13,7 +13,7 @@ class EventLocationsJob extends BaseObject implements \yii\queue\JobInterface
 
     public function execute($queue)
     {
-        $microsoftService = new MicrosoftService();
+        $microsoftService = new MicrosoftServiceФксршму();
         $events = $microsoftService->getEventsByGroupId($this->user, $this->groupId);
         $microsoftService->saveEvents($events);
     }
