@@ -1,5 +1,7 @@
 <?php
 
+namespace app\modules\timeTracker\migrations;
+
 use yii\db\Migration;
 
 /**

@@ -1,6 +1,9 @@
 <?php
 
+namespace app\modules\timeTracker\migrations;
+
 use yii\db\Migration;
+
 
 /**
  * Class m241027_153352_create_time_entries
