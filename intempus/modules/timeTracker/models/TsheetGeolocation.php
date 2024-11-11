@@ -1,5 +1,6 @@
 <?php
-namespace app\models;
+
+namespace app\modules\timeTracker\models;
 
 use Yii;
 use yii\base\NotSupportedException;
@@ -9,22 +10,27 @@ use yii\db\Expression;
 use yii\web\IdentityInterface;
 
 /**
- * User model
+ * Geolocation model
  *
  * @property integer $id
- * @property string $subject
- * @property string $eventStartTime
- * @property string $location
- * @property integer synchronized
+ * @property integer $tsheet_user_id
+ * @property integer $tsheet_id
+ * @property string $lat
+ * @property string $lon
+ * @property string $speed
+ * @property timestamp $tsheet_created
+ *
+ * @property timestamp $created_at
+ * @property timestamp $updated_at
  */
-class MicrosoftEvent extends ActiveRecord
+class TsheetGeolocation extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%microsoft_event}}';
+        return '{{%tsheet_geolocation}}';
     }
 
     /**

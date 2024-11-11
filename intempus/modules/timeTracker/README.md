@@ -30,3 +30,14 @@ Configuration:
     ]
 ```
 
+
+Console Configuration:
+---------------------------------
+
+```
+    'bootstrap' => ['timeTracker'],
+
+```
+
+
+

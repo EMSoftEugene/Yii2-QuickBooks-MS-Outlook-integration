@@ -16,13 +16,15 @@
     "require": {
         "php": ">=7.4.0",
         "yiisoft/yii2": "~2.0.45",
-        "yiisoft/yii2-bootstrap5": "~2.0.2",
+        "yiisoft/yii2-bootstrap5": "^2.0",
         "yiisoft/yii2-symfonymailer": "~2.0.3",
         "microsoft/microsoft-graph": "^2.16",
         "vlucas/phpdotenv": "^5.6",
         "yiisoft/yii2-queue": "^2.3",
         "quickbooks/v3-php-sdk": "^6.1",
-        "yiisoft/yii2-jui": "^2.0"
+        "yiisoft/yii2-jui": "^2.0",
+        "kartik-v/yii2-grid": "dev-master",
+        "kartik-v/yii2-widget-select2": "^2.2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

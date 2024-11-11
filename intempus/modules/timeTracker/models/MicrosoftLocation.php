@@ -1,31 +1,32 @@
 <?php
+
 namespace app\modules\timeTracker\models;
 
+use Yii;
+use yii\base\NotSupportedException;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use yii\web\IdentityInterface;
 
 /**
- * Auth model
+ * Microsoft Location model
  *
  * @property integer $id
- * @property string $name
- * @property string $date
- * @property string $access_token
- * @property string $refresh_token
- * @property string $expires_in
- * @property string $refresh_token_expires_in
- * @property string $realm_id
+ * @property string $displayName
+ * @property string $lat
+ * @property string $lon
  * @property timestamp $created_at
  * @property timestamp $updated_at
  */
-class ApiAuth extends ActiveRecord
+class MicrosoftLocation extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%api_auth}}';
+        return '{{%microsoft_location}}';
     }
 
     /**
@@ -43,17 +44,6 @@ class ApiAuth extends ActiveRecord
                 'value' => new Expression('NOW()')
             ],
         ];
-    }
-
-    public static function getOrSetApiAuth(string $name): ?ApiAuth
-    {
-        $apiAuth = self::findOne(['name' => $name]);
-        if (!$apiAuth) {
-            $apiAuth = new self();
-            $apiAuth->name = $name;
-            $apiAuth->save();
-        }
-        return $apiAuth;
     }
 
 }

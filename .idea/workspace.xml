@@ -5,46 +5,53 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc66266e-6f69-4fda-adf9-2630599b2b5e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/intempus/models/AuthApi.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/models/Data.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/models/Data2.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/Module.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/assets/js/client-bonus-handler.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/commands/ScoreController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/DefaultController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/MicrosoftController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/TsheetController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241103_170424_create_api_auth.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/models/ApiAuth.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/MicrosoftService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/views/default/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/views/report/report1.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/intempus/views/report/report2.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/commands/AuthController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/commands/MicrosoftController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/commands/TimeTrackerController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/commands/TsheetController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/ReportController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/M241104215931CreateTimeTracker.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241022_173930_create_group.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241105_170424_update_api_auth.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241106_170424_create_microsoft_location.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241107_170424_update_group.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241108_170424_create_tsheet_user.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241109_170424_create_geolocation.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/models/MicrosoftGroup.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/models/TimeTracker.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/models/TsheetUser.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/MicrosoftDataService.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TimeTrackerService.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TsheetDataService.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/traits/CoordinateTrait.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/location.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/locationItem.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/report2.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/commands/MicrosoftController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/commands/MicrosoftController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/commands/IntuitController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/commands/MicrosoftController.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/intempus/commands/TsheetController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/commands/TsheetController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/intempus/commands/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/commands/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/composer.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/intempus/config/console.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/config/console.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/config/intuit.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/intempus/config/params.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/config/params.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/config/tsheet.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/intempus/config/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/config/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/controllers/IntuitController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/controllers/MicrosoftController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/controllers/MicrosoftController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/controllers/TsheetController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/controllers/ReportController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/jobs/EventLocationsJob.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/jobs/EventLocationsJob.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/migrations/m241022_103201_create_user_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/migrations/m241022_103201_create_user_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/migrations/m241022_120309_create_microsoft_event.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241022_120309_create_microsoft_event.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/migrations/m241022_121949_create_queue.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/migrations/m241022_173930_create_group.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/migrations/m241023_140023_update_user_table.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/migrations/m241024_170559_add_tsheet_auth_to_user.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/migrations/m241027_153352_create_time_entries.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241027_153352_create_time_entries.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/services/MicrosoftService.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/MicrosoftServiceArchive.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/services/TsheetService.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TsheetService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/services/interfaces/MicrosoftInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/services/interfaces/TsheetInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/interfaces/ApiInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/controllers/MicrosoftController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/jobs/EventLocationsJob.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/models/AuthApi.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/models/TsheetGeolocation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/models/MicrosoftEvent.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/models/MicrosoftEvent.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/models/MicrosoftGroup.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/models/MicrosoftLocation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/Module.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/Module.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/assets/js/client-bonus-handler.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/commands/ScoreController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241022_120309_create_microsoft_event.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241022_120309_create_microsoft_event.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/models/ApiAuth.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/models/ApiAuth.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/services/MicrosoftService.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/MicrosoftService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TsheetService.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TsheetService.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,6 +205,11 @@
       <path value="$PROJECT_DIR$/intempus/vendor/quickbooks/v3-php-sdk" />
       <path value="$PROJECT_DIR$/intempus/vendor/bower-asset/jquery-ui" />
       <path value="$PROJECT_DIR$/intempus/vendor/yiisoft/yii2-jui" />
+      <path value="$PROJECT_DIR$/intempus/vendor/kartik-v/yii2-krajee-base" />
+      <path value="$PROJECT_DIR$/intempus/vendor/kartik-v/yii2-dialog" />
+      <path value="$PROJECT_DIR$/intempus/vendor/kartik-v/yii2-grid" />
+      <path value="$PROJECT_DIR$/intempus/vendor/select2/select2" />
+      <path value="$PROJECT_DIR$/intempus/vendor/kartik-v/yii2-widget-select2" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -211,35 +223,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/oleg/www/docker/intempus/intempus/modules/timeTracker/migrations",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.stylelint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.stylelint": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/oleg/www/docker/intempus/intempus/modules/timeTracker/migrations&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/intempus/modules/timeTracker/migrations" />
+      <recent name="$PROJECT_DIR$/intempus/modules/timeTracker/views/report" />
+      <recent name="$PROJECT_DIR$/intempus/modules/timeTracker/views" />
       <recent name="$PROJECT_DIR$/intempus/modules/timeTracker" />
       <recent name="$PROJECT_DIR$/intempus/config" />
-      <recent name="$PROJECT_DIR$/intempus/modules" />
-      <recent name="$PROJECT_DIR$/intempus/views/report" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/intempus/modules/timeTracker/models" />
+      <recent name="$PROJECT_DIR$/intempus/modules/timeTracker/migrations" />
       <recent name="$PROJECT_DIR$/intempus/modules/timeTracker/controllers" />
       <recent name="$PROJECT_DIR$/intempus/config" />
       <recent name="$PROJECT_DIR$/intempus/modules/timeTracker" />
-      <recent name="$PROJECT_DIR$/intempus" />
     </key>
   </component>
   <component name="RunManager">
@@ -304,7 +317,15 @@
       <workItem from="1730618569028" duration="2936000" />
       <workItem from="1730647414979" duration="7339000" />
       <workItem from="1730716791944" duration="3903000" />
-      <workItem from="1730728062449" duration="10385000" />
+      <workItem from="1730728062449" duration="24483000" />
+      <workItem from="1730815838114" duration="13853000" />
+      <workItem from="1730879167756" duration="15067000" />
+      <workItem from="1731056553064" duration="12326000" />
+      <workItem from="1731139632615" duration="5848000" />
+      <workItem from="1731174705903" duration="4987000" />
+      <workItem from="1731232881822" duration="9616000" />
+      <workItem from="1731305116111" duration="1344000" />
+      <workItem from="1731354729458" duration="6021000" />
     </task>
     <servers />
   </component>

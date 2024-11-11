@@ -5,19 +5,20 @@ namespace app\modules\timeTracker\migrations;
 use yii\db\Migration;
 
 /**
- * Class m241022_120309_create_microsoft_event
+ * Class m241103_170424_create_api_auth
  */
-class m241022_120309_create_microsoft_event extends Migration
+class m241106_170424_create_microsoft_location extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%microsoft_event}}', [
+        $this->createTable('{{%microsoft_location}}', [
             'id' => $this->primaryKey(),
-            'subject' => $this->string()->null(),
-            'microsoft_id' => $this->string()->null(),
+            'displayName' => $this->string()->notNull(),
+            'lat' => $this->string()->null(),
+            'lon' => $this->string()->null(),
 
             'created_at' => $this->timestamp()->notNull(),
             'updated_at' => $this->timestamp()->null()
@@ -29,6 +30,6 @@ class m241022_120309_create_microsoft_event extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%microsoft_event}}');
+        $this->dropTable('{{%microsoft_location}}');
     }
 }

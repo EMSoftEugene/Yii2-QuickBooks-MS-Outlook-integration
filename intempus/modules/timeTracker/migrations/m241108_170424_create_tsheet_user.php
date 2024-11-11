@@ -5,19 +5,21 @@ namespace app\modules\timeTracker\migrations;
 use yii\db\Migration;
 
 /**
- * Class m241022_120309_create_microsoft_event
+ * Class m241103_170424_create_api_auth
  */
-class m241022_120309_create_microsoft_event extends Migration
+class m241108_170424_create_tsheet_user extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%microsoft_event}}', [
+        $this->createTable('{{%tsheet_user}}', [
             'id' => $this->primaryKey(),
-            'subject' => $this->string()->null(),
-            'microsoft_id' => $this->string()->null(),
+            'first_name' => $this->string()->null(),
+            'last_name' => $this->string()->null(),
+            'email' => $this->string()->null(),
+            'external_id' => $this->integer()->null(),
 
             'created_at' => $this->timestamp()->notNull(),
             'updated_at' => $this->timestamp()->null()
@@ -29,6 +31,6 @@ class m241022_120309_create_microsoft_event extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%microsoft_event}}');
+        $this->dropTable('{{%tsheet_user}}');
     }
 }

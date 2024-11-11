@@ -1,6 +1,5 @@
 <?php
-
-namespace app\models;
+namespace app\modules\timeTracker\models;
 
 use Yii;
 use yii\base\NotSupportedException;
@@ -10,27 +9,22 @@ use yii\db\Expression;
 use yii\web\IdentityInterface;
 
 /**
- * User model
+ * Microsoft Event model
  *
  * @property integer $id
- * @property string $name
- * @property string $date
- * @property string $access_token
- * @property string $refresh_token
- * @property string $expires_in
- * @property string $refresh_token_expires_in
- * @property string $realm_id
+ * @property string $subject
+ * @property string $microsoft_id
  * @property timestamp $created_at
  * @property timestamp $updated_at
  */
-class AuthApi extends ActiveRecord
+class MicrosoftEvent extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%api_auth}}';
+        return '{{%microsoft_event}}';
     }
 
     /**
@@ -48,17 +42,6 @@ class AuthApi extends ActiveRecord
                 'value' => new Expression('NOW()')
             ],
         ];
-    }
-
-    public static function getOrSetAuthApi(string $name): ?AuthApi
-    {
-        $authApi = self::findOne(['name' => $name]);
-        if (!$authApi) {
-            $authApi = new AuthApi();
-            $authApi->name = $name;
-            $authApi->save();
-        }
-        return $authApi;
     }
 
 }

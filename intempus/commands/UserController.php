@@ -14,6 +14,8 @@ class UserController extends Controller
      */
     public function actionIndex()
     {
+        echo "!"; die;
+
         $user = new User();
         $user->username = 'admin';
         $user->email = 'admin@admin.admin';

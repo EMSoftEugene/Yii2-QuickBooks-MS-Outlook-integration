@@ -1,0 +1,159 @@
+<?php
+
+
+namespace app\modules\timeTracker\services;
+
+use app\modules\timeTracker\models\MicrosoftLocation;
+use app\modules\timeTracker\models\TimeTracker;
+use app\modules\timeTracker\models\TsheetGeolocation;
+use app\modules\timeTracker\models\TsheetUser;
+use app\modules\timeTracker\traits\CoordinateTrait;
+use SebastianBergmann\CodeCoverage\Report\PHP;
+
+class TimeTrackerService
+{
+    use CoordinateTrait;
+
+    const DEFAULT_DISTANCE = 100;
+
+
+    public function create($date): int
+    {
+        $startDate = $date . ' 00:00:00';
+        $endDate = $date . ' 23:59:59';
+        $userIds = TsheetGeolocation::find()
+            ->select('tsheet_user_id')
+            ->where(['between', 'tsheet_created', $startDate, $endDate])
+            ->groupBy('tsheet_user_id')
+            ->column();
+
+        foreach ($userIds as $userId) {
+            if ($userId == 748553) continue;
+            $places = [];
+            $placeIndex = 0;
+            $tsheetUser = TsheetUser::findOne(['external_id' => $userId]);
+
+            $rows = TsheetGeolocation::find()
+                ->where(['tsheet_user_id' => $userId])
+                ->orderBy('tsheet_created ASC')
+                ->all();
+
+            foreach ($rows as $key => $row) {
+                $nextRow = $rows[$key + 1] ?? null;
+                if ($nextRow) {
+                    $startLat = isset($places[$placeIndex]['start']) ? (float)$places[$placeIndex]['start']['lat'] : (float)$row->lat;
+                    $startLon = isset($places[$placeIndex]['start']) ? (float)$places[$placeIndex]['start']['lon'] : (float)$row->lon;
+
+                    $distance = $this->getDistance((float)$nextRow->lat, (float)$nextRow->lon, $startLat, $startLon);
+
+                    if ($distance > self::DEFAULT_DISTANCE) {
+                        if (count($places) - 1 == $placeIndex) {
+                            $places = $this->endPlace($places, $placeIndex, $row);
+
+                            $placeIndex++;
+                        }
+                        continue;
+                    }
+                    $places = $this->startPlace($places, $placeIndex, $row, $tsheetUser);
+                    continue;
+                }
+
+                if (isset($places[$placeIndex]['start']) && !isset($places[$placeIndex]['end'])) {
+                    $places = $this->endPlace($places, $placeIndex, $row);
+                }
+            }
+
+            if ($places) {
+                $this->saveTimeTracker($places);
+
+                print_r($places);
+                echo PHP_EOL . '________________________' . PHP_EOL;
+//                print_r($rowsArr);
+                die;
+            }
+
+        }
+
+        print_r($userIds);
+        die;
+
+    }
+
+    private function startPlace($places, $placeIndex, $row, TsheetUser $tsheetUser): array
+    {
+        if (!isset($places[$placeIndex]['start'])) {
+            $places[$placeIndex]['start'] = $row->getAttributes();
+            $geoPlace = $this->checkGeoCodePlace($places[$placeIndex]['start']);
+            $places[$placeIndex]['isMicrosoftLocation'] = $geoPlace['isMicrosoftLocation'];
+            $places[$placeIndex]['locationName'] = $geoPlace['locationName'];
+            $places[$placeIndex]['user_id'] = $tsheetUser->id;
+            $places[$placeIndex]['user'] = $tsheetUser->first_name . ' ' . $tsheetUser->last_name;
+            $date = new \DateTime($places[$placeIndex]['start']['tsheet_created']);
+            $places[$placeIndex]['date'] = $date->format('Y-m-d H:i:s');
+        }
+
+        $date = new \DateTime($places[$placeIndex]['start']['tsheet_created']);
+        $places[$placeIndex]['clock_in'] = $date->format('h:i A');
+
+
+        return $places;
+    }
+
+    private function endPlace($places, $placeIndex, $row): array
+    {
+        $places[$placeIndex]['end'] = $row->getAttributes();
+        $startDate = new \DateTime($places[$placeIndex]['start']['tsheet_created']);
+        $endDate = new \DateTime($places[$placeIndex]['end']['tsheet_created']);
+        $diff = $startDate->diff($endDate);
+
+        $h = str_pad($diff->h, 2, '0', STR_PAD_LEFT);
+        $i = str_pad($diff->i, 2, '0', STR_PAD_LEFT);
+        $duration = $h . ':' . $i;
+        $places[$placeIndex]['duration'] = $duration;
+        $places[$placeIndex]['clock_out'] = $endDate->format('h:i A');
+
+        return $places;
+    }
+
+    private function checkGeoCodePlace($place)
+    {
+        $isMicrosoftLocation = false;
+        $locationName = $this->getLocationByCode($place['lat'], $place['lon']);
+        $locations = MicrosoftLocation::find()->all();
+        foreach ($locations as $location) {
+            $distance = $this->getDistance((float)$location->lat, (float)$location->lon, $place['lat'], $place['lon']);
+            if ($distance < self::DEFAULT_DISTANCE) {
+                $isMicrosoftLocation = true;
+                $locationName = $location->displayName;
+                break;
+            }
+        }
+
+        return compact('isMicrosoftLocation', 'locationName');
+    }
+
+    private function saveTimeTracker(array $places): void
+    {
+        foreach ($places as $place) {
+            $clock_in = (new \DateTime($place['clock_in']))->format('H:i:s');
+            $clock_out = (new \DateTime($place['clock_out']))->format('H:i:s');
+            $exists = TimeTracker::find()
+                ->where(['user_id' => $place['user_id']])
+                ->where(['clock_in' => $clock_in])
+                ->exists();
+            if (!$exists) {
+                $timeTracker = new TimeTracker();
+                $timeTracker->isMicrosoftLocation = $place['isMicrosoftLocation'];
+                $timeTracker->locationName = $place['locationName'];
+                $timeTracker->date = $place['date'];
+                $timeTracker->clock_in = $clock_in;
+                $timeTracker->clock_out = $clock_out;
+                $timeTracker->duration = $place['duration'];
+                $timeTracker->user_id = $place['user_id'];
+                $timeTracker->user = $place['user'];
+                $timeTracker->save();
+            }
+        }
+    }
+
+}

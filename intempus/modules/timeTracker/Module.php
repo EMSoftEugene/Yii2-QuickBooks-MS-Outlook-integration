@@ -1,4 +1,5 @@
 <?php
+
 namespace app\modules\timeTracker;
 
 use Yii;
@@ -7,24 +8,24 @@ use yii\web\Session;
 use app\modules\bonus\models\Score;
 use app\modules\bonus\models\Transaction;
 
-class Module extends \yii\base\Module
+class Module extends \yii\base\Module implements \yii\base\BootstrapInterface
 {
-    public string $userModel = 'app\models\User';
+    public function bootstrap($app)
+    {
+        if ($app instanceof \yii\console\Application) {
+            $this->controllerNamespace = 'app\modules\timeTracker\commands';
+        }
+    }
 
     public function init()
     {
-		parent::init();
+        parent::init();
 
         $conf = require realpath(__DIR__ . '/../../config/timeTrackerConfig.php');
         $arr = [
             'params' => $conf['params'],
         ];
         \Yii::configure($this, $arr);
-
-
-        if (isset($userModel)){
-			$this->userModel = $userModel;
-		}
     }
 
 }

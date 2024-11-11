@@ -17,6 +17,9 @@ $config = [
         'timeTracker' => [
             'class' => \app\modules\timeTracker\Module::class,
         ],
+        'gridview' =>  [
+            'class' => '\kartik\grid\Module'
+        ]
     ],
     'components' => [
         'request' => [
