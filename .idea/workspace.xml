@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc66266e-6f69-4fda-adf9-2630599b2b5e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/intempus/composer.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/commands/TimeTrackerController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/commands/TimeTrackerController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -288,7 +289,7 @@
       <workItem from="1731354729458" duration="6753000" />
       <workItem from="1731423541337" duration="16999000" />
       <workItem from="1731476695587" duration="404000" />
-      <workItem from="1731489838556" duration="13699000" />
+      <workItem from="1731489838556" duration="15543000" />
     </task>
     <servers />
   </component>
