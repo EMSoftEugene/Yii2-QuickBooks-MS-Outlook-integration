@@ -61,6 +61,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        return $this->redirect('/time-tracker/report/location');
         return $this->render('index');
     }
 

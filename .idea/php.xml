@@ -139,6 +139,11 @@
       <path value="$PROJECT_DIR$/intempus/vendor/kartik-v/yii2-grid" />
       <path value="$PROJECT_DIR$/intempus/vendor/select2/select2" />
       <path value="$PROJECT_DIR$/intempus/vendor/kartik-v/yii2-widget-select2" />
+      <path value="$PROJECT_DIR$/intempus/vendor/kartik-v/yii2-bootstrap5-dropdown" />
+      <path value="$PROJECT_DIR$/intempus/vendor/kartik-v/yii2-date-range" />
+      <path value="$PROJECT_DIR$/intempus/vendor/kartik-v/yii2-widget-activeform" />
+      <path value="$PROJECT_DIR$/intempus/vendor/kartik-v/yii2-icons" />
+      <path value="$PROJECT_DIR$/intempus/vendor/components/flag-icon-css" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4">

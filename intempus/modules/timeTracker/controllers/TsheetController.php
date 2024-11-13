@@ -8,7 +8,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 
-class TsheetController extends Controller
+class TsheetController extends BaseController
 {
     private ApiInterface $apiService;
 

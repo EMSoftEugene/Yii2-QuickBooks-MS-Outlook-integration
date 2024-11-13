@@ -15,10 +15,12 @@ class TimeTrackerService
     use CoordinateTrait;
 
     const DEFAULT_DISTANCE = 100;
+    const DEFAULT_TIME = 5;
 
 
     public function create($date): int
     {
+        $count = 0;
         $startDate = $date . ' 00:00:00';
         $endDate = $date . ' 23:59:59';
         $userIds = TsheetGeolocation::find()
@@ -28,10 +30,15 @@ class TimeTrackerService
             ->column();
 
         foreach ($userIds as $userId) {
-            if ($userId == 748553) continue;
             $places = [];
             $placeIndex = 0;
             $tsheetUser = TsheetUser::findOne(['external_id' => $userId]);
+
+            $rowsArr = TsheetGeolocation::find()
+                ->where(['tsheet_user_id' => $userId])
+                ->orderBy('tsheet_created ASC')
+                ->asArray()
+                ->all();
 
             $rows = TsheetGeolocation::find()
                 ->where(['tsheet_user_id' => $userId])
@@ -64,19 +71,12 @@ class TimeTrackerService
             }
 
             if ($places) {
+                $places = $this->filterPlaces($places);
+                $count += count($places);
                 $this->saveTimeTracker($places);
-
-                print_r($places);
-                echo PHP_EOL . '________________________' . PHP_EOL;
-//                print_r($rowsArr);
-                die;
             }
-
         }
-
-        print_r($userIds);
-        die;
-
+        return $count;
     }
 
     private function startPlace($places, $placeIndex, $row, TsheetUser $tsheetUser): array
@@ -154,6 +154,18 @@ class TimeTrackerService
                 $timeTracker->save();
             }
         }
+    }
+
+    private function filterPlaces($places): array
+    {
+        $result = [];
+        foreach ($places as $place) {
+            $explode = explode(':', $place['duration']);
+            if (((int)$explode[0] > 0) || ((int)$explode[1] - self::DEFAULT_TIME > 0)) {
+                $result[] = $place;
+            }
+        }
+        return $result;
     }
 
 }

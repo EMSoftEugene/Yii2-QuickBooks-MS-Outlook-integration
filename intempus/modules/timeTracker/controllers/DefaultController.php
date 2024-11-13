@@ -32,6 +32,7 @@ class DefaultController extends \yii\web\Controller
      */
     public function actionIndex()
     {
+        return $this->redirect('/time-tracker/report/location');
         return $this->render('index');
     }
 

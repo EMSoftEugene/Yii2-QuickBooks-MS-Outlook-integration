@@ -34,6 +34,7 @@ trait CoordinateTrait
 
     public function getCodeByLocation(string $name)
     {
+        sleep(1); // 429 Too Many Requests
         $module = \Yii::$app->getModule('timeTracker');
         $client = new Client();
         $url = 'https://geocode.maps.co/search?q=' . $name . '&api_key='.$module->params['geocode_api'];
@@ -44,6 +45,7 @@ trait CoordinateTrait
 
     public function getLocationByCode(string $lat, string $lon)
     {
+        sleep(1); // 429 Too Many Requests
         $module = \Yii::$app->getModule('timeTracker');
         $client = new Client();
         $url = 'https://geocode.maps.co/reverse?lat=' . $lat . '&lon=' . $lon . '&api_key='.$module->params['geocode_api'];

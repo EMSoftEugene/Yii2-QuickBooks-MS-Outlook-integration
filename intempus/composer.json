@@ -24,7 +24,11 @@
         "quickbooks/v3-php-sdk": "^6.1",
         "yiisoft/yii2-jui": "^2.0",
         "kartik-v/yii2-grid": "dev-master",
-        "kartik-v/yii2-widget-select2": "^2.2"
+        "kartik-v/yii2-widget-select2": "^2.2",
+        "kartik-v/yii2-bootstrap5-dropdown": "@dev",
+        "kartik-v/yii2-date-range": "dev-master",
+        "kartik-v/yii2-widget-activeform": "dev-master",
+        "kartik-v/yii2-icons": "^1.4"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

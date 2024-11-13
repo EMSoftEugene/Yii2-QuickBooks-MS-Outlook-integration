@@ -8,7 +8,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 
-class MicrosoftController extends Controller
+class MicrosoftController extends BaseController
 {
     private ApiInterface $apiService;
 

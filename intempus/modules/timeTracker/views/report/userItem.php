@@ -58,12 +58,12 @@ use kartik\icons\Icon;
                     <tr>
                         <td style="padding-right: 15px; vertical-align: top; min-width: 140px;">
                             <h4 style="font-weight: normal;">
-                                <a style="text-decoration: none;" href="/time-tracker/report/location"><?= Icon::show('caret-left', ['class' => 'fa-sm', 'title' => 'Microsoft Outlook Location'], Icon::FA) ?>
-                                </a>&nbsp;Location:
+                                <a style="text-decoration: none;" href="/time-tracker/report/user"><?= Icon::show('caret-left', ['class' => 'fa-sm', 'title' => 'Microsoft Outlook Location'], Icon::FA) ?>
+                                </a>&nbsp;Technican:
                             </h4>
 
                         </td>
-                        <td><h4><?= Html::encode($locationName) ?></h4></td>
+                        <td><h4><?= Html::encode($userName) ?></h4></td>
                     </tr>
                 </table>
                 <p>&nbsp;</p>
@@ -137,11 +137,10 @@ use kartik\icons\Icon;
                             'groupEvenCssClass' => 'kv-grouped-row', // configure even group cell css class
                         ],
                         [
-                            'label' => 'Tech Name',
-                            'attribute' => 'user',
+                            'label' => 'Location',
+                            'attribute' => 'locationName',
                             'enableSorting' => false,
-                            'value' => 'user',
-//                            'group' => true,  // enable grouping,
+                            'value' => 'locationName',
                         ],
                         [
                             'label' => 'Clock In',
