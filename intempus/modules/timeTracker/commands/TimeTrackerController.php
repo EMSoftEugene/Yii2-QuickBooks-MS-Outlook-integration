@@ -25,6 +25,8 @@ class TimeTrackerController extends Controller
     public function actionIndex()
     {
         $date = '2024-11-08';
+        $date = new \DateTime();
+        $date->modify('-1 days');
 
         $addedRows = $this->timeTrackerService->create($date);
 

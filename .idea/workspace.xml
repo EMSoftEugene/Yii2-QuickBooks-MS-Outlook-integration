@@ -5,23 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc66266e-6f69-4fda-adf9-2630599b2b5e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/config/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/config/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/controllers/ReportController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/controllers/SiteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/controllers/SiteController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/DefaultController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/DefaultController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/MicrosoftController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/MicrosoftController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/ReportController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/ReportController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/TsheetController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/TsheetController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TimeTrackerService.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TimeTrackerService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/traits/CoordinateTrait.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/traits/CoordinateTrait.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/location.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/location.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/locationItem.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/locationItem.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/report2.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/views/report/report1.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/views/report/report2.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/commands/TimeTrackerController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/commands/TimeTrackerController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -303,7 +288,7 @@
       <workItem from="1731354729458" duration="6753000" />
       <workItem from="1731423541337" duration="16999000" />
       <workItem from="1731476695587" duration="404000" />
-      <workItem from="1731489838556" duration="13510000" />
+      <workItem from="1731489838556" duration="13699000" />
     </task>
     <servers />
   </component>
