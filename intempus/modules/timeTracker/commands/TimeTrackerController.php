@@ -27,6 +27,7 @@ class TimeTrackerController extends Controller
         $date = '2024-11-08';
         $date = new \DateTime();
         $date->modify('-1 days');
+        $date = $date->format('Y-m-d');
 
         $addedRows = $this->timeTrackerService->create($date);
 
