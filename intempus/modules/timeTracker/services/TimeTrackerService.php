@@ -160,6 +160,9 @@ class TimeTrackerService
     {
         $result = [];
         foreach ($places as $place) {
+            if($place['duration'] == '00:00'){
+                continue;
+            }
             $explode = explode(':', $place['duration']);
             if (((int)$explode[0] > 0) || ((int)$explode[1] - self::DEFAULT_TIME > 0)) {
                 $result[] = $place;
