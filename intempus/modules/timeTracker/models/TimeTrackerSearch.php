@@ -52,6 +52,14 @@ class TimeTrackerSearch extends TimeTracker
 
     public function search($params)
     {
+        if(!$this->date_range && !$this->date_start && !$this->date_end){
+            $dateStart = date('Y-m-01');
+            $dateEnd = date('Y-m-t');
+            $this->date_range = $dateStart . ' - ' . $dateEnd;
+            $this->date_start = $dateStart;
+            $this->date_end = $dateEnd;
+        }
+
         $query = self::find();
         if (isset($params['locationName']) && $params['locationName']){
             $query->andFilterWhere(['locationName' => $params['locationName']]);
@@ -125,6 +133,62 @@ class TimeTrackerSearch extends TimeTracker
         $query->andFilterWhere(['like', 'user', $this->user]);
 
         return $dataProvider;
+    }
+
+    public function autocompleteUser($params)
+    {
+        if(!$this->date_range && !$this->date_start && !$this->date_end){
+            $dateStart = date('Y-m-01');
+            $dateEnd = date('Y-m-t');
+            $this->date_range = $dateStart . ' - ' . $dateEnd;
+            $this->date_start = $dateStart;
+            $this->date_end = $dateEnd;
+        }
+
+        $query = self::find()->select('user');
+        if (isset($params['locationName']) && $params['locationName']){
+            $query->andFilterWhere(['locationName' => $params['locationName']]);
+        }
+
+        if ($this->date_start && $this->date_end) {
+            $query->andFilterWhere(['between', 'date', $this->date_start, $this->date_end]);
+        }
+
+        // adjust the query by adding the filters
+        $query->andFilterWhere(['id' => $this->id]);
+        $term = $params['term'] ?? '';
+        $query->andFilterWhere(['like', 'user', $term]);
+        $query->groupBy('user');
+
+        return \yii\helpers\Json::encode($query->column());
+    }
+
+    public function autocompleteLocation($params)
+    {
+        if(!$this->date_range && !$this->date_start && !$this->date_end){
+            $dateStart = date('Y-m-01');
+            $dateEnd = date('Y-m-t');
+            $this->date_range = $dateStart . ' - ' . $dateEnd;
+            $this->date_start = $dateStart;
+            $this->date_end = $dateEnd;
+        }
+
+        $query = self::find()->select('locationName');
+        if (isset($params['userName']) && $params['userName']){
+            $query->andFilterWhere(['user' => $params['userName']]);
+        }
+
+        if ($this->date_start && $this->date_end) {
+            $query->andFilterWhere(['between', 'date', $this->date_start, $this->date_end]);
+        }
+
+        // adjust the query by adding the filters
+        $query->andFilterWhere(['id' => $this->id]);
+        $term = $params['term'] ?? '';
+        $query->andFilterWhere(['like', 'locationName', $term]);
+        $query->groupBy('locationName');
+
+        return \yii\helpers\Json::encode($query->column());
     }
 
 }

@@ -6,7 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="cc66266e-6f69-4fda-adf9-2630599b2b5e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/commands/TimeTrackerController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/commands/TimeTrackerController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/commands/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/commands/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/ReportController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/ReportController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/TsheetController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/TsheetController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241105_170424_update_api_auth.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241105_170424_update_api_auth.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/models/TimeTrackerSearch.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/models/TimeTrackerSearch.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TimeTrackerService.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TimeTrackerService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TsheetDataService.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TsheetDataService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TsheetService.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TsheetService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/locationItem.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/locationItem.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/userItem.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/userItem.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,22 +192,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/oleg/www/docker/intempus/intempus/modules/timeTracker/views/report",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.stylelint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.stylelint": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/oleg/www/docker/intempus/intempus/modules/timeTracker/views/report&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/intempus/modules/timeTracker/views/report" />
@@ -288,7 +297,11 @@
       <workItem from="1731354729458" duration="6753000" />
       <workItem from="1731423541337" duration="16999000" />
       <workItem from="1731476695587" duration="404000" />
-      <workItem from="1731489838556" duration="16637000" />
+      <workItem from="1731489838556" duration="18865000" />
+      <workItem from="1731578078370" duration="10000" />
+      <workItem from="1731613846056" duration="4025000" />
+      <workItem from="1731660145302" duration="6332000" />
+      <workItem from="1731681576348" duration="4085000" />
     </task>
     <servers />
   </component>

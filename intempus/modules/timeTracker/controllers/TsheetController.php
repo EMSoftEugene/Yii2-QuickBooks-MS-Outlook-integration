@@ -86,22 +86,4 @@ class TsheetController extends BaseController
 
         return $this->redirect('/time-tracker');
     }
-
-    public function actionTimeEntries()
-    {
-        $date = \Yii::$app->request->post('date');
-        try {
-            $queryParams = [
-                'start_date' => $date ?: date('Y-m-d'),
-            ];
-            $result = $this->apiService->requestGet('timesheets', $queryParams);
-            $imported = $this->apiService->handleTimeSheet($result);
-            \Yii::$app->session->setFlash('success', 'Success. Imported time sheets: ' . count($imported));
-        } catch (\Exception $e) {
-            $err = $e->getMessage() . ' | ' . $e->getLine() . ' | ' . $e->getFile();
-            \Yii::$app->session->setFlash('error', $err);
-            \Yii::info('error: ' . $e->getMessage() . ' | ' . $e->getTraceAsString());
-        }
-        $this->redirect('/time-tracker');
-    }
 }

@@ -11,6 +11,8 @@ use kartik\daterange\DateRangePicker;
 $this->title = 'Outlook Service';
 
 use kartik\icons\Icon;
+use yii\jui\AutoComplete;
+use yii\web\JsExpression;
 
 ?>
 <style>
@@ -48,6 +50,9 @@ use kartik\icons\Icon;
         float: left;
         width: auto !important;
     }
+    .toolbar-container { width: 100%; }
+    .toolbar-container .btn-group { width: 100%; display: inline-block; }
+    .toolbar-container h4 { float: right; }
 </style>
 <div class="site-index">
 
@@ -76,7 +81,8 @@ use kartik\icons\Icon;
                     0 => 0,
                     1 => 0
                 ];
-                foreach ($provider->models as $item) {
+                $data = $provider->models;
+                foreach ($data as $item) {
                     $explode = explode(':', $item['duration']);
                     $h = $explode[0];
                     $m = $explode[1];
@@ -91,7 +97,6 @@ use kartik\icons\Icon;
                 $total[1] = $total[1] - $extraHours * 60;
                 $h = str_pad($total[0], 2, '0', STR_PAD_LEFT);
                 $i = str_pad($total[1], 2, '0', STR_PAD_LEFT);
-
 
 
                 echo \kartik\grid\GridView::widget([
@@ -121,6 +126,11 @@ use kartik\icons\Icon;
                     'toolbar' => [
                         [
                             'content' =>
+                                '<div style="float: left;">
+                                    <a class="btn btn-outline-primary" 
+                                    href="/time-tracker/report/user-raw/' . $id . '?date_start='.$filter->date_start.'&date_end='.$filter->date_end.'">
+                                    Show Raw Tsheets Records
+                                    </a></div>' .
                                 '<h4 style="font-weight: normal;">Total hours for selected period: <b>' . $h . 'h ' . $i . 'm</b></h4>',
                         ],
                     ],
@@ -131,6 +141,7 @@ use kartik\icons\Icon;
                             'value' => function ($model, $key, $index, $widget) {
                                 return (new \DateTime($model['date']))->format('F dS, Y');
                             },
+                            'hidden' => !$data,
                             'group' => true,  // enable grouping,
                             'groupedRow' => true,                    // move grouped column to a single grouped row
                             'groupOddCssClass' => 'kv-grouped-row',  // configure odd group cell css class
@@ -140,7 +151,23 @@ use kartik\icons\Icon;
                             'label' => 'Location',
                             'attribute' => 'locationName',
                             'enableSorting' => false,
-                            'value' => 'locationName',
+                            'format'=>'html',
+                            'value' => function ($model, $key, $index, $widget) {
+                                return '<a style="text-decoration:none;" href="/time-tracker/report/location/'.$model["id"].'">'.$model['locationName'].'</a>';
+                            },
+                            'filter' => AutoComplete::widget([
+                                'model' => $filter,
+                                'attribute' => 'locationName',
+                                'clientOptions' => [
+                                    'source' => new JsExpression("function(request, response) {
+                                        $.getJSON('" . Yii::$app->request->url . "', {
+                                            term: request.term
+                                        }, response);
+                                    }"),
+                                    'minLength' => '2',
+                                ],
+                                'options' => ['class' => 'form-control'],
+                            ]),
                         ],
                         [
                             'label' => 'Clock In',

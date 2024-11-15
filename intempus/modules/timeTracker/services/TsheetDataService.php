@@ -120,4 +120,32 @@ class TsheetDataService
         return $count;
     }
 
+    public function getUserGeolocations($userId, $dateStart, $dateEnd): ?array
+    {
+        $formatedStartDate = (new \DateTime($dateStart))->format('c');
+        $formatedEndDate = (new \DateTime($dateEnd))->format('c');
+
+        $result = [];
+        $page = 1;
+        $count = 200;
+        while ($count == 200) {
+            $queryParams = [
+                'user_ids' => $userId,
+                'modified_since' => $formatedStartDate,
+                'modified_before' => $formatedEndDate,
+                'page' => $page,
+                'limit' => 200
+            ];
+            $response = $this->apiService->requestGet('geolocations', $queryParams);
+            $responseGeo = $response['results']['geolocations'] ?? [];
+            $result = array_merge($result, $responseGeo);
+
+            $count = $responseGeo ? count($responseGeo) : 0;
+
+            $page++;
+        }
+
+        return $result;
+    }
+
 }

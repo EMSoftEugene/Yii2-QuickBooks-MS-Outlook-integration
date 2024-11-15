@@ -11,8 +11,8 @@ class m241105_170424_update_api_auth extends Migration
 {
     public function up()
     {
-        $this->update('{{%api_auth}}', ['access_token'], $this->text()->null());
-        $this->update('{{%api_auth}}', ['refresh_token'], $this->text()->null());
+        $this->alterColumn('{{%api_auth}}', 'access_token', $this->text()->null());
+        $this->alterColumn('{{%api_auth}}', 'refresh_token', $this->text()->null());
     }
 
     public function down()

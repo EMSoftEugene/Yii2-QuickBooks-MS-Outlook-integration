@@ -102,8 +102,11 @@ class TimeTrackerService
     private function endPlace($places, $placeIndex, $row): array
     {
         $places[$placeIndex]['end'] = $row->getAttributes();
-        $startDate = new \DateTime($places[$placeIndex]['start']['tsheet_created']);
-        $endDate = new \DateTime($places[$placeIndex]['end']['tsheet_created']);
+        $startDate = (new \DateTime($places[$placeIndex]['start']['tsheet_created']))->format('Y-m-d H:i');
+        $startDate = new \DateTime($startDate);
+        $endDate = (new \DateTime($places[$placeIndex]['end']['tsheet_created']))->format('Y-m-d H:i');
+        $endDate = new \DateTime($endDate);
+
         $diff = $startDate->diff($endDate);
 
         $h = str_pad($diff->h, 2, '0', STR_PAD_LEFT);
