@@ -16,6 +16,10 @@ $this->title = 'Outlook Service';
         padding: 4px 12px;
         border: 1px solid #ccc;
     }
+    .outlook-logo {
+        width: 25px;
+        margin-right: 5px;
+    }
 </style>
 <div class="site-index">
 
@@ -51,7 +55,7 @@ $this->title = 'Outlook Service';
                             'value' => function ($model) {
                                 $model = (object)$model;
                                 $icon = $model->isMicrosoftLocation ?
-                                    Icon::show('check-circle', ['class' => 'fa-sm green', 'title' => 'Microsoft Outlook Location'], Icon::FA) : '';
+                                    '<img class="outlook-logo" src="/images/outlook3.png" />' : '';
                                 return '<a style="text-decoration: none !important;" href="/time-tracker/report/location/' . $model->id . '">'
                                     . $icon
                                     . $model->locationName . '</a>    ';

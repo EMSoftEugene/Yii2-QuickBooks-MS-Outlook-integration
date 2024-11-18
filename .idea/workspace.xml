@@ -6,16 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="cc66266e-6f69-4fda-adf9-2630599b2b5e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/commands/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/commands/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/ReportController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/ReportController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/TsheetController.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/controllers/TsheetController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241105_170424_update_api_auth.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/migrations/m241105_170424_update_api_auth.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/models/TimeTrackerSearch.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/models/TimeTrackerSearch.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TimeTrackerService.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TimeTrackerService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TsheetDataService.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TsheetDataService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TsheetService.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/services/TsheetService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/locationItem.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/locationItem.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/userItem.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/userItem.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/location.php" beforeDir="false" afterPath="$PROJECT_DIR$/intempus/modules/timeTracker/views/report/location.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -195,6 +186,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;last_opened_file_path&quot;: &quot;/home/oleg/www/docker/intempus/intempus/modules/timeTracker/views/report&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -233,8 +225,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PS-242.23726.107" />
-        <option value="bundled-php-predefined-a98d8de5180a-90914f2295cb-com.jetbrains.php.sharedIndexes-PS-242.23726.107" />
+        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-PS-243.21565.202" />
+        <option value="bundled-php-predefined-a98d8de5180a-5fbe0c30323e-com.jetbrains.php.sharedIndexes-PS-243.21565.202" />
       </set>
     </attachedChunks>
   </component>
@@ -301,7 +293,12 @@
       <workItem from="1731578078370" duration="10000" />
       <workItem from="1731613846056" duration="4025000" />
       <workItem from="1731660145302" duration="6332000" />
-      <workItem from="1731681576348" duration="4085000" />
+      <workItem from="1731681576348" duration="4202000" />
+      <workItem from="1731698443613" duration="40000" />
+      <workItem from="1731702114001" duration="956000" />
+      <workItem from="1731745261967" duration="12000" />
+      <workItem from="1731939815494" duration="1341000" />
+      <workItem from="1731942074295" duration="1592000" />
     </task>
     <servers />
   </component>
