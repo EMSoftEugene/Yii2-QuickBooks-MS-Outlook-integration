@@ -140,9 +140,11 @@ class TimeTrackerService
         foreach ($places as $place) {
             $clock_in = (new \DateTime($place['clock_in']))->format('H:i:s');
             $clock_out = (new \DateTime($place['clock_out']))->format('H:i:s');
+            $date = (new \DateTime($place['date']))->format('Y-m-d');
             $exists = TimeTracker::find()
                 ->where(['user_id' => $place['user_id']])
                 ->where(['clock_in' => $clock_in])
+                ->where(['date' => $date])
                 ->exists();
             if (!$exists) {
                 $timeTracker = new TimeTracker();
