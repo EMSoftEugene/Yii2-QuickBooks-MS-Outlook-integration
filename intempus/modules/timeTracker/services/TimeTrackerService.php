@@ -14,9 +14,14 @@ class TimeTrackerService
 {
     use CoordinateTrait;
 
-    const DEFAULT_DISTANCE = 100;
     const DEFAULT_TIME = 5;
+    private array $params;
 
+    public function __construct()
+    {
+        $module = \Yii::$app->getModule('timeTracker');
+        $this->params = $module->params;
+    }
 
     public function create($date): int
     {
@@ -53,7 +58,7 @@ class TimeTrackerService
 
                     $distance = $this->getDistance((float)$nextRow->lat, (float)$nextRow->lon, $startLat, $startLon);
 
-                    if ($distance > self::DEFAULT_DISTANCE) {
+                    if ($distance > $this->params['distance']) {
                         if (count($places) - 1 == $placeIndex) {
                             $places = $this->endPlace($places, $placeIndex, $row);
 
@@ -125,7 +130,7 @@ class TimeTrackerService
         $locations = MicrosoftLocation::find()->all();
         foreach ($locations as $location) {
             $distance = $this->getDistance((float)$location->lat, (float)$location->lon, $place['lat'], $place['lon']);
-            if ($distance < self::DEFAULT_DISTANCE) {
+            if ($distance < $this->params['distance']) {
                 $isMicrosoftLocation = true;
                 $locationName = $location->displayName;
                 break;
