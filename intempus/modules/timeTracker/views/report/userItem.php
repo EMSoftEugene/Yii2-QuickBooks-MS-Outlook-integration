@@ -53,6 +53,10 @@ use yii\web\JsExpression;
     .toolbar-container { width: 100%; }
     .toolbar-container .btn-group { width: 100%; display: inline-block; }
     .toolbar-container h4 { float: right; }
+    .outlook-logo {
+        width: 25px;
+        margin-right: 5px;
+    }
 </style>
 <div class="site-index">
 
@@ -97,6 +101,7 @@ use yii\web\JsExpression;
                 $total[1] = $total[1] - $extraHours * 60;
                 $h = str_pad($total[0], 2, '0', STR_PAD_LEFT);
                 $i = str_pad($total[1], 2, '0', STR_PAD_LEFT);
+
 
 
                 echo \kartik\grid\GridView::widget([
@@ -153,7 +158,9 @@ use yii\web\JsExpression;
                             'enableSorting' => false,
                             'format'=>'html',
                             'value' => function ($model, $key, $index, $widget) {
-                                return '<a style="text-decoration:none;" href="/time-tracker/report/location/'.$model["id"].'">'.$model['locationName'].'</a>';
+                                $icon = $model->isMicrosoftLocation ?
+                                    '<img class="outlook-logo" src="/images/outlook3.png" />' : '';
+                                return $icon .' <a style="text-decoration:none;" href="/time-tracker/report/location/'.$model["id"].'">'.$model['locationName'].'</a>';
                             },
                             'filter' => AutoComplete::widget([
                                 'model' => $filter,

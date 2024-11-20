@@ -19,6 +19,24 @@ class TsheetDataService
         $this->apiService = new TsheetService();
     }
 
+    public function getAllUsers(): ?array
+    {
+        $queryParams = [
+        ];
+        $response = $this->apiService->requestGet('users', $queryParams);
+        $responseUsers = $response['results']['users'] ?? [];
+
+        $users = [];
+        foreach ($responseUsers as $user) {
+            $users[] = [
+                'first_name' => $user['first_name'],
+                'last_name' => $user['last_name'],
+                'email' => $user['email'],
+            ];
+        }
+        return $users;
+    }
+
     public function getUsers(): ?array
     {
         $microsoftGroup = MicrosoftGroup::getTechNames();

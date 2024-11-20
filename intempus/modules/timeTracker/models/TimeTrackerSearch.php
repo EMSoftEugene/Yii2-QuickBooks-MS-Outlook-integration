@@ -70,7 +70,7 @@ class TimeTrackerSearch extends TimeTracker
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['date' => SORT_DESC]],
+            'sort'=> ['defaultOrder' => ['date' => SORT_DESC, 'clock_in' => SORT_ASC]],
         ]);
 
         // load the search form data and validate

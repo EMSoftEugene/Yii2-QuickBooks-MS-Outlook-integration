@@ -3,6 +3,7 @@
 namespace app\modules\timeTracker\controllers;
 
 use app\modules\timeTracker\services\interfaces\ApiInterface;
+use app\modules\timeTracker\services\TsheetDataService;
 use app\modules\timeTracker\services\TsheetService;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -85,5 +86,20 @@ class TsheetController extends BaseController
         }
 
         return $this->redirect('/time-tracker');
+    }
+
+    /**
+     * Refresh token
+     *
+     * @return Response
+     */
+    public function actionUsers()
+    {
+        $apiDataService = new TsheetDataService();
+        $users = $apiDataService->getAllUsers();
+
+        return $this->render('usersAll', [
+            'data' => $users,
+        ]);
     }
 }
