@@ -35,7 +35,11 @@ class TsheetController extends Controller
 
     public function actionGeolocations()
     {
-        $geolocations = $this->apiDataService->getGeolocations();
+        $date = '2024-11-08';
+        $date = new \DateTime();
+        $date = $date->format('Y-m-d');
+
+        $geolocations = $this->apiDataService->getGeolocations($date);
 
         if ($geolocations) {
             $addedNewGeolocations = $this->apiDataService->saveNewGeolocations($geolocations);

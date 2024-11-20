@@ -61,9 +61,9 @@ class TsheetDataService
         return $count;
     }
 
-    public function getGeolocations(): ?array
+    public function getGeolocations($date = null): ?array
     {
-        $date = new \DateTime();
+        $date = $date ? new \DateTime($date) : new \DateTime();
         $date->modify('-1 days');
         $startDate = $date->format('Y-m-d') . ' 00:00:00'; // ISO 8601 format (YYYY-MM-DDThh:mm:ss±hh:mm)
         $endDate = $date->format('Y-m-d') . ' 23:59:59';

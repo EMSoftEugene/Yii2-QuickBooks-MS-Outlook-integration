@@ -35,22 +35,29 @@ class TimeTrackerService
             ->column();
 
         foreach ($userIds as $userId) {
+            echo $userId.PHP_EOL;
+
             $places = [];
             $placeIndex = 0;
             $tsheetUser = TsheetUser::findOne(['external_id' => $userId]);
 
             $rowsArr = TsheetGeolocation::find()
                 ->where(['tsheet_user_id' => $userId])
+                ->andWhere(['between', 'tsheet_created', $startDate, $endDate])
                 ->orderBy('tsheet_created ASC')
                 ->asArray()
                 ->all();
 
             $rows = TsheetGeolocation::find()
                 ->where(['tsheet_user_id' => $userId])
-                ->orderBy('tsheet_created ASC')
+                ->andWhere(['between', 'tsheet_created', $startDate, $endDate])
+                ->orderBy('tsheet_createds ASC')
                 ->all();
+            echo "countRows=" . count($rows) . PHP_EOL;
 
             foreach ($rows as $key => $row) {
+                echo 'key=' . $key . PHP_EOL;
+
                 $nextRow = $rows[$key + 1] ?? null;
                 if ($nextRow) {
                     $startLat = isset($places[$placeIndex]['start']) ? (float)$places[$placeIndex]['start']['lat'] : (float)$row->lat;
@@ -148,8 +155,8 @@ class TimeTrackerService
             $date = (new \DateTime($place['date']))->format('Y-m-d');
             $exists = TimeTracker::find()
                 ->where(['user_id' => $place['user_id']])
-                ->where(['clock_in' => $clock_in])
-                ->where(['date' => $date])
+                ->andWhere(['clock_in' => $clock_in])
+                ->andWhere(['date' => $date])
                 ->exists();
             if (!$exists) {
                 $timeTracker = new TimeTracker();
