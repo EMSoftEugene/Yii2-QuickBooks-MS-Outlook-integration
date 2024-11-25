@@ -2,6 +2,8 @@
 
 namespace app\modules\timeTracker\controllers;
 
+use app\modules\timeTracker\models\TsheetUserRaw;
+use app\modules\timeTracker\models\TsheetUserRawSearch;
 use app\modules\timeTracker\services\interfaces\ApiInterface;
 use app\modules\timeTracker\services\TsheetDataService;
 use app\modules\timeTracker\services\TsheetService;
@@ -102,4 +104,21 @@ class TsheetController extends BaseController
             'data' => $users,
         ]);
     }
+
+    /**
+     * Refresh token
+     *
+     * @return Response
+     */
+    public function actionUsersRaw()
+    {
+        $filterModel = new TsheetUserRawSearch();
+        $dataProvider = $filterModel->search(\Yii::$app->request->get());
+
+        return $this->render('usersRaw', [
+            'provider' => $dataProvider,
+            'filter' => $filterModel,
+        ]);
+    }
+
 }

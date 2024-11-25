@@ -25,6 +25,7 @@ class TsheetController extends Controller
     {
         $users = $this->apiDataService->getUsers();
 
+        $addedNewUsers = 0;
         if ($users) {
             $addedNewUsers = $this->apiDataService->saveNewUsers($users);
         }
@@ -41,11 +42,25 @@ class TsheetController extends Controller
 
         $geolocations = $this->apiDataService->getGeolocations($date);
 
+        $addedNewGeolocations = 0;
         if ($geolocations) {
             $addedNewGeolocations = $this->apiDataService->saveNewGeolocations($geolocations);
         }
 
         echo "Successful added $addedNewGeolocations new Geolocations\n";
+        return ExitCode::OK;
+    }
+
+    public function actionUsersRaw()
+    {
+        $users = $this->apiDataService->getUsersRaw();
+
+        $addedNewUsers = 0;
+        if ($users) {
+            $addedNewUsers = $this->apiDataService->saveNewUsersRaw($users);
+        }
+
+        echo "Successful added $addedNewUsers new Users\n";
         return ExitCode::OK;
     }
 

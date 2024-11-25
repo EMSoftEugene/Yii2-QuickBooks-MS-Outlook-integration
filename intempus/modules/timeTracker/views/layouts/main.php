@@ -55,6 +55,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             !Yii::$app->user->isGuest ? ['label' => 'Locations', 'url' => ['/time-tracker/report/location']] : '',
             !Yii::$app->user->isGuest ? ['label' => 'Techinians', 'url' => ['/time-tracker/report/user']] : '',
             !Yii::$app->user->isGuest ? ['label' => 'Tsheet Users', 'url' => ['/time-tracker/tsheet/users']] : '',
+            !Yii::$app->user->isGuest ? ['label' => 'Tsheet Users Raw', 'url' => ['/time-tracker/tsheet/users-raw']] : '',
         ]
     ]);
     NavBar::end();

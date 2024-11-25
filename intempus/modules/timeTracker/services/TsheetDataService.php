@@ -7,6 +7,7 @@ use app\modules\timeTracker\models\MicrosoftGroup;
 use app\modules\timeTracker\models\MicrosoftLocation;
 use app\modules\timeTracker\models\TsheetGeolocation;
 use app\modules\timeTracker\models\TsheetUser;
+use app\modules\timeTracker\models\TsheetUserRaw;
 use app\modules\timeTracker\services\interfaces\ApiInterface;
 use GuzzleHttp\Client;
 
@@ -164,6 +165,35 @@ class TsheetDataService
         }
 
         return $result;
+    }
+
+    public function getUsersRaw(): ?array
+    {
+        $microsoftGroup = MicrosoftGroup::getTechNames();
+        $queryParams = [
+        ];
+        $response = $this->apiService->requestGet('users', $queryParams);
+        $responseUsers = $response['results']['users'] ?? [];
+
+        return $responseUsers;
+    }
+
+    public function saveNewUsersRaw(array $users): int
+    {
+        $count = 0;
+        foreach ($users as $user) {
+            $exists = TsheetUserRaw::find()->where(['external_id' => $user['id']])->exists();
+            if (!$exists && isset($user['email']) && !empty($user['email'])) {
+                $tsheetUser = new TsheetUserRaw();
+                $tsheetUser->first_name = $user['first_name'];
+                $tsheetUser->last_name = $user['last_name'];
+                $tsheetUser->email = $user['email'];
+                $tsheetUser->external_id = $user['id'];
+                $tsheetUser->save();
+                $count++;
+            }
+        }
+        return $count;
     }
 
 }
