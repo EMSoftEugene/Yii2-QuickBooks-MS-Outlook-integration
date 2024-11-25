@@ -2,6 +2,7 @@
 
 namespace app\modules\timeTracker\controllers;
 
+use app\modules\timeTracker\models\MicrosoftGroupSearch;
 use app\modules\timeTracker\services\interfaces\ApiInterface;
 use app\modules\timeTracker\services\MicrosoftService;
 use yii\filters\AccessControl;
@@ -85,5 +86,21 @@ class MicrosoftController extends BaseController
         }
 
         return $this->redirect('/time-tracker');
+    }
+
+    /**
+     * Refresh token
+     *
+     * @return Response
+     */
+    public function actionGroups()
+    {
+        $filterModel = new MicrosoftGroupSearch();
+        $dataProvider = $filterModel->search(\Yii::$app->request->get());
+
+        return $this->render('groups', [
+            'provider' => $dataProvider,
+            'filter' => $filterModel,
+        ]);
     }
 }
