@@ -220,6 +220,7 @@ class TsheetDataService
                 $geolocation->converted_location = $locationName;
                 $geolocation->save();
                 $count++;
+                echo "count: " . $count . PHP_EOL;
             }
         }
         return $count;
