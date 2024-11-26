@@ -9,10 +9,13 @@ use app\modules\timeTracker\models\TsheetGeolocation;
 use app\modules\timeTracker\models\TsheetUser;
 use app\modules\timeTracker\models\TsheetUserRaw;
 use app\modules\timeTracker\services\interfaces\ApiInterface;
+use app\modules\timeTracker\traits\CoordinateTrait;
 use GuzzleHttp\Client;
 
 class TsheetDataService
 {
+    use CoordinateTrait;
+
     private ApiInterface $apiService;
 
     public function __construct()
@@ -125,11 +128,18 @@ class TsheetDataService
         foreach ($geolocations as $geolocation) {
             $exists = TsheetGeolocation::find()->where(['tsheet_id' => $geolocation['id']])->exists();
             if (!$exists) {
+                $locationName = '';
+                try {
+                    $locationName = $this->getLocationByCode($geolocation['latitude'], $geolocation['longitude']);
+                } catch (\Exception $exception) {
+                }
+
                 $tsheetGeolocation = new TsheetGeolocation();
                 $tsheetGeolocation->tsheet_user_id = $geolocation['user_id'];
                 $tsheetGeolocation->tsheet_id = $geolocation['id'];
                 $tsheetGeolocation->lat = $geolocation['latitude'];
                 $tsheetGeolocation->lon = $geolocation['longitude'];
+                $tsheetGeolocation->converted_location = $locationName;
                 $tsheetGeolocation->speed = $geolocation['speed'];
                 $tsheetGeolocation->tsheet_created = $geolocation['created'];
                 $tsheetGeolocation->save();
@@ -190,6 +200,25 @@ class TsheetDataService
                 $tsheetUser->email = $user['email'];
                 $tsheetUser->external_id = $user['id'];
                 $tsheetUser->save();
+                $count++;
+            }
+        }
+        return $count;
+    }
+
+    public function fixGeolocations(array $geolocations): int
+    {
+        $count = 0;
+        foreach ($geolocations as $geolocation) {
+            $locationName = '';
+            try {
+                $locationName = $this->getLocationByCode($geolocation->lat, $geolocation->lon);
+            } catch (\Exception $exception) {
+            }
+
+            if ($locationName) {
+                $geolocation->converted_location = $locationName;
+                $geolocation->save();
                 $count++;
             }
         }

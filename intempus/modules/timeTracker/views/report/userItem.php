@@ -135,7 +135,13 @@ use yii\web\JsExpression;
                                     <a class="btn btn-outline-primary" 
                                     href="/time-tracker/report/user-raw/' . $id . '?date_start='.$filter->date_start.'&date_end='.$filter->date_end.'">
                                     Show Raw Tsheets Records
-                                    </a></div>' .
+                                    </a>
+                                    &nbsp;
+                                    <a class="btn btn-outline-primary" 
+                                    href="/time-tracker/report/user-geolocations/' . $id . '?date_start='.$filter->date_start.'&date_end='.$filter->date_end.'">
+                                    Show User Geolocations
+                                    </a>
+                                    </div>' .
                                 '<h4 style="font-weight: normal;">Total hours for selected period: <b>' . $h . 'h ' . $i . 'm</b></h4>',
                         ],
                     ],

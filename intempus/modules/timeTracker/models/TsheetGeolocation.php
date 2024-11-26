@@ -17,6 +17,7 @@ use yii\web\IdentityInterface;
  * @property integer $tsheet_id
  * @property string $lat
  * @property string $lon
+ * @property string $converted_location
  * @property string $speed
  * @property timestamp $tsheet_created
  *

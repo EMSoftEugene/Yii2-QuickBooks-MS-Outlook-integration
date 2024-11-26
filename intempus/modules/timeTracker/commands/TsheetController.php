@@ -3,6 +3,7 @@
 namespace app\modules\timeTracker\commands;
 
 use app\modules\timeTracker\models\MicrosoftLocation;
+use app\modules\timeTracker\models\TsheetGeolocation;
 use app\modules\timeTracker\services\TsheetDataService;
 use Yii;
 use yii\console\ExitCode;
@@ -61,6 +62,16 @@ class TsheetController extends Controller
         }
 
         echo "Successful added $addedNewUsers new Users\n";
+        return ExitCode::OK;
+    }
+
+    public function actionGeolocationsFix()
+    {
+        $geolocations = TsheetGeolocation::find()->orderBy('id')->offset(0)->limit(4500)->all();
+
+        $fixedGeolocations = $this->apiDataService->fixGeolocations($geolocations);
+
+        echo "Successful fixed $fixedGeolocations Geolocations\n";
         return ExitCode::OK;
     }
 

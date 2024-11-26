@@ -4,6 +4,8 @@ namespace app\modules\timeTracker\controllers;
 
 use app\modules\timeTracker\models\TimeTracker;
 use app\modules\timeTracker\models\TimeTrackerSearch;
+use app\modules\timeTracker\models\TsheetGeolocation;
+use app\modules\timeTracker\models\TsheetGeolocationSearch;
 use app\modules\timeTracker\models\TsheetUser;
 use app\modules\timeTracker\services\TsheetDataService;
 use yii\filters\AccessControl;
@@ -143,6 +145,31 @@ class ReportController extends BaseController
 
         return $this->render('userRaw', [
             'data' => $data,
+            'userName' => $userName,
+            'id' => $id,
+        ]);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function actionUserGeolocations($id)
+    {
+        $timeTrackerItem = TimeTracker::findOne($id);
+        $userName = $timeTrackerItem->user;
+        $userId = $timeTrackerItem->user_id;
+        $tsheetUser = TsheetUser::findOne(['id' => $userId]);
+        $tsheetUserId = $tsheetUser->external_id ?? 0;
+
+        $getParams = array_merge(\Yii::$app->request->get(), ['tsheetUserId' => $tsheetUserId]);
+
+        $filterModel = new TsheetGeolocationSearch();
+        $dataProvider = $filterModel->search($getParams);
+
+        return $this->render('userGeolocations', [
+            'provider' => $dataProvider,
+            'filter' => $filterModel,
             'userName' => $userName,
             'id' => $id,
         ]);
