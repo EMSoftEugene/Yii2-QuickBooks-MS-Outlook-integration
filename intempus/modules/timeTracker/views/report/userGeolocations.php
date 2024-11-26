@@ -74,6 +74,15 @@ use yii\web\JsExpression;
                                 return $model->lon;
                             },
                         ],
+                        [
+                            'label' => 'DateTime',
+                            'attribute' => 'lon',
+                            'filter' => false,
+                            'enableSorting' => false,
+                            'value' => function ($model) {
+                                return $model->tsheet_created;
+                            },
+                        ],
                     ],
                 ]);
                 ?>
