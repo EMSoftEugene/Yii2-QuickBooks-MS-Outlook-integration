@@ -67,7 +67,7 @@ class TsheetController extends Controller
 
     public function actionGeolocationsFix()
     {
-        $geolocations = TsheetGeolocation::find()->orderBy('id')->offset(0)->limit(4500)->all();
+        $geolocations = TsheetGeolocation::find()->where(['is', 'converted_location', null])->orderBy('id')->offset(0)->limit(4500)->all();
 
         $fixedGeolocations = $this->apiDataService->fixGeolocations($geolocations);
 

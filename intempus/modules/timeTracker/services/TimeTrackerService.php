@@ -51,7 +51,7 @@ class TimeTrackerService
             $rows = TsheetGeolocation::find()
                 ->where(['tsheet_user_id' => $userId])
                 ->andWhere(['between', 'tsheet_created', $startDate, $endDate])
-                ->orderBy('tsheet_createds ASC')
+                ->orderBy('tsheet_created ASC')
                 ->all();
             echo "countRows=" . count($rows) . PHP_EOL;
 
