@@ -14,7 +14,7 @@ class TimeTrackerService
 {
     use CoordinateTrait;
 
-    const DEFAULT_TIME = 5;
+    const DEFAULT_TIME = 1;
     private array $params;
 
     public function __construct()
