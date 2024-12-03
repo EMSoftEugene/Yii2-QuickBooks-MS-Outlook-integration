@@ -41,10 +41,8 @@ $this->title = 'Outlook Service';
                     'filterModel' => $filter,
                     'panel' => [
                         'heading' => '<h3 class="panel-title"></h3>',
-//                        'type'=>'success',
                         'before' => '',
                         'after' => '',
-                        'footer' => false
                     ],
                     'toolbar' => false,
                     'columns' => [

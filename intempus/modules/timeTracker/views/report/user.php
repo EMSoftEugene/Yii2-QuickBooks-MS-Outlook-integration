@@ -38,7 +38,6 @@ $this->title = 'Outlook Service';
 //                        'type'=>'success',
                         'before'=>'',
                         'after'=>'',
-                        'footer'=>false
                     ],
                     'toolbar' => false,
                     'columns' => [

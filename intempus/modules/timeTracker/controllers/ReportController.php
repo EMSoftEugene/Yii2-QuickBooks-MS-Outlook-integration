@@ -43,6 +43,7 @@ class ReportController extends BaseController
     {
         $filterModel = new TimeTrackerSearch();
         $dataProvider = $filterModel->searchIndex(\Yii::$app->request->get());
+        $dataProvider->setPagination(['pageSize' => 20]);
 
         return $this->render('location', [
             'provider' => $dataProvider,
@@ -85,6 +86,7 @@ class ReportController extends BaseController
     {
         $filterModel = new TimeTrackerSearch();
         $dataProvider = $filterModel->searchUsers(\Yii::$app->request->get());
+        $dataProvider->setPagination(['pageSize' => 20]);
 
         return $this->render('user', [
             'provider' => $dataProvider,
