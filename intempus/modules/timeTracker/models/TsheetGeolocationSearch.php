@@ -47,7 +47,7 @@ class TsheetGeolocationSearch extends TsheetGeolocation
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => false,
-            'sort' => ['defaultOrder' => ['converted_location' => SORT_ASC]],
+            'sort' => ['defaultOrder' => ['tsheet_created' => SORT_ASC]],
         ]);
 
         // load the search form data and validate
