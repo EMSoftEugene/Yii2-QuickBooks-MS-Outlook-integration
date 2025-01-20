@@ -16,8 +16,8 @@ class AuthController extends Controller
 
     public function actionRefresh()
     {
-        $tsheetService = new TsheetService();
-        $tsheetService->refreshToken();
+//        $tsheetService = new TsheetService();
+//        $tsheetService->refreshToken();
 
         $microsoftService = new MicrosoftService();
         $microsoftService->refreshToken();

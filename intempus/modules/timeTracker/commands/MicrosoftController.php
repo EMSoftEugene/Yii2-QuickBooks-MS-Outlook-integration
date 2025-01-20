@@ -44,7 +44,7 @@ class MicrosoftController extends Controller
             $addedNewLocations = $this->apiDataService->saveNewLocations($locations);
         }
 
-        echo "Successful added $addedNewLocations new Groups\n";
+        echo "Successful added $addedNewLocations new Locations\n";
         return ExitCode::OK;
     }
 

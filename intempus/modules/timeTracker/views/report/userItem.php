@@ -187,7 +187,9 @@ use yii\web\JsExpression;
                             'attribute' => 'clock_in',
                             'enableSorting' => false,
                             'value' => function ($model, $key, $index, $widget) {
-                                return (new \DateTime($model['clock_in']))->format('h:i A');
+                                $y = (new \DateTime($model['clock_in']))->format('H:i:s');
+                                $rounded = date('h:i A', round(strtotime($y)/60)*60);
+                                return $rounded;
                             },
                         ],
                         [
@@ -195,7 +197,9 @@ use yii\web\JsExpression;
                             'attribute' => 'clock_out',
                             'enableSorting' => false,
                             'value' => function ($model, $key, $index, $widget) {
-                                return (new \DateTime($model['clock_out']))->format('h:i A');
+                                $y = (new \DateTime($model['clock_out']))->format('H:i:s');
+                                $rounded = date('h:i A', round(strtotime($y)/60)*60);
+                                return $rounded;
                             },
                         ],
                         [
