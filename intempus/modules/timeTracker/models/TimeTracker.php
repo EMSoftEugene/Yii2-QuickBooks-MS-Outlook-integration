@@ -20,6 +20,7 @@ use yii\web\IdentityInterface;
  * @property string $duration
  * @property integer $user_id
  * @property string $user
+ * @property boolean $haul_away
  *
  * @property timestamp $created_at
  * @property timestamp $updated_at

@@ -16,6 +16,8 @@ use yii\web\IdentityInterface;
  * @property string $displayName
  * @property string $lat
  * @property string $lon
+ * @property boolean $haul_away
+ * @property string $date_time
  * @property timestamp $created_at
  * @property timestamp $updated_at
  */

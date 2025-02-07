@@ -38,13 +38,9 @@ class TimeTrackerController extends Controller
         return ExitCode::OK;
     }
 
-    public function actionV2()
+    public function actionV2($date = null)
     {
-        $date = '2025-01-11';
-        $date = new \DateTime($date);
-        $date->modify('-1 days');
-        $date = $date->format('Y-m-d');
-
+        $date = $date ? (new \DateTime($date))->format('Y-m-d') : (new \DateTime())->modify('-2 days')->format('Y-m-d');
         $addedRows = $this->timeTrackerV2Service->create($date);
 
         echo "Successful added $addedRows new rows\n";

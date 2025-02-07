@@ -116,6 +116,7 @@ class TimeTrackerV2Service
             $geoPlace = $this->checkGeoCodePlace($places[$placeIndex]['start']);
             $places[$placeIndex]['isMicrosoftLocation'] = $geoPlace['isMicrosoftLocation'];
             $places[$placeIndex]['locationName'] = $geoPlace['locationName'];
+            $places[$placeIndex]['haul_away'] = $geoPlace['haul_away'];
             $places[$placeIndex]['user_id'] = $user->microsoft_id;
             $places[$placeIndex]['user'] = $user->name;
             $date = new \DateTime($places[$placeIndex]['start']['UpdateUtc']);
@@ -151,19 +152,23 @@ class TimeTrackerV2Service
 
     private function checkGeoCodePlace($place)
     {
+        $date = (new \DateTime($place['UpdateUtc']))->format('Y-m-d');
         $isMicrosoftLocation = false;
+        $haul_away = false;
         $locationName = $place['location'];
-        $locations = MicrosoftLocation::find()->all();
+        $locations = MicrosoftLocation::find()->where(['date_time' => $date])->all();
         foreach ($locations as $location) {
+            /** @var MicrosoftLocation $location */
             $distance = $this->getDistance((float)$location->lat, (float)$location->lon, $place['Latitude'], $place['Longitude']);
-            if ($distance < 400) {
+            if ($distance < $this->params['distance']) {
                 $isMicrosoftLocation = true;
                 $locationName = $location->displayName;
+                $haul_away = $location->haul_away;
                 break;
             }
         }
 
-        return compact('isMicrosoftLocation', 'locationName');
+        return compact('isMicrosoftLocation', 'locationName', 'haul_away');
     }
 
     private function saveTimeTracker(array $places): void
@@ -187,6 +192,7 @@ class TimeTrackerV2Service
                 $timeTracker->duration = $place['duration'];
                 $timeTracker->user_id = $place['user_id'];
                 $timeTracker->user = $place['user'];
+                $timeTracker->haul_away = (bool)$place['haul_away'];
                 $timeTracker->save();
             }
         }

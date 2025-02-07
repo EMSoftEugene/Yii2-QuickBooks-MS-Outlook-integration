@@ -60,6 +60,17 @@ class MicrosoftController extends Controller
         return ExitCode::OK;
     }
 
+    public function actionRealGroup($date = null)
+    {
+        $dateTimeStart = $date ? (new \DateTime($date))->format('Y-m-d') : (new \DateTime())->modify('-2 days')->format('Y-m-d');
+        $dateTimeEnd = $date ? (new \DateTime($date))->modify('+1 days')->format('Y-m-d') : (new \DateTime())->modify('-1 days')->format('Y-m-d');
+
+        $groups = $this->apiDataService->groupsByNameAndDate($dateTimeStart, $dateTimeEnd);
+
+        echo "Successful found " . count($groups) . " Location\n";
+        return ExitCode::OK;
+    }
+
 
 
 }

@@ -43,6 +43,17 @@ trait CoordinateTrait
         return $response;
     }
 
+    public function getCodeByLocationv2(string $name)
+    {
+        sleep(1); // 429 Too Many Requests
+        $module = \Yii::$app->getModule('timeTracker');
+        $client = new Client();
+        $url = 'https://api.geoapify.com/v1/geocode/search?text=' . urlencode($name) . '&apiKey='.$module->params['geocode_apiKey'];
+        $response = $client->request('GET', $url);
+        $response = json_decode($response->getBody()->getContents(), true);
+        return $response;
+    }
+
     public function getLocationByCode(string $lat, string $lon)
     {
         sleep(1); // 429 Too Many Requests

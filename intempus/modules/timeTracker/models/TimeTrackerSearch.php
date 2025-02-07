@@ -79,7 +79,11 @@ class TimeTrackerSearch extends TimeTracker
         }
 
         if ($this->date_start && $this->date_end) {
-            $query->andFilterWhere(['between', 'date', $this->date_start, $this->date_end]);
+            if ($this->date_start == $this->date_end) {
+                $query->andFilterWhere(['date' => $this->date_start]);
+            } else {
+                $query->andFilterWhere(['between', 'date', $this->date_start, $this->date_end]);
+            }
         }
 
         // adjust the query by adding the filters

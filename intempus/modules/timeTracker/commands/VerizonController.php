@@ -20,10 +20,12 @@ class VerizonController extends Controller
         $this->apiDataService = new VerizonDataService();
     }
 
-    public function actionHistory()
+    public function actionHistory($date = null)
     {
-        $startdatetimeutc = date('2025-01-11 00:00:00');
-        $enddatetimeutc = date('2025-01-11 23:59:59');
+        $startdatetimeutc = $date ? (new \DateTime($date))->modify('-1 days')->format('Y-m-d') . ' 00:00:00' :
+            (new \DateTime())->modify('-2 days')->format('Y-m-d') . ' 00:00:00';
+        $enddatetimeutc = $date ? (new \DateTime($date))->modify('+1 days')->format('Y-m-d') . ' 23:59:59'
+            : (new \DateTime())->format('Y-m-d') . ' 23:59:59';
         $vehiclenumber = 7;
 
         $histories = $this->apiDataService->getVehiclesHistory($vehiclenumber, $startdatetimeutc, $enddatetimeutc);

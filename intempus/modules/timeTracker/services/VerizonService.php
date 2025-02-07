@@ -37,7 +37,9 @@ class VerizonService implements ApiInterface
     {
         $curDate = date("Y-m-d H:i:s");
         $this->apiAuth->access_token;
-        if (!$this->apiAuth->access_token || $this->apiAuth->expires_in < $curDate) {
+        $expires_in = $this->apiAuth->expires_in ? (new \DateTime($this->apiAuth->expires_in))->format('Y-m-d H:i:s') : '1970-01-01 00:00:00';
+
+        if (!$this->apiAuth->access_token || $expires_in < $curDate) {
             $client = new Client();
             $headers = [
                 'Authorization' => 'Basic ' . base64_encode($this->params['client_id'] . ':' . $this->params['client_secret']),

@@ -87,10 +87,10 @@ use yii\web\JsExpression;
                 ];
                 $data = $provider->models;
                 foreach ($data as $item) {
-                    $explode = explode(':', $item['duration']);
+                    $explode = explode(':', $item['rule4']);
                     $h = $explode[0];
                     $m = $explode[1];
-                    if ($item['duration']) {
+                    if ($item['rule4']) {
                         $total[0] = $total[0] + (int)$h;
                         $total[1] = $total[1] + (int)$m;
                     }
@@ -132,13 +132,7 @@ use yii\web\JsExpression;
                         [
                             'content' =>
                                 '<div style="float: left;">
-                                    <a class="btn btn-outline-primary" 
-                                    href="/time-tracker/report/user-billable/' . $id . '?' .
-                                    'TimeTrackerSearch%5Bdate_range%5D=' . $filter->date_start. '+-+' . $filter->date_end .
-                                    '&TimeTrackerSearch%5Bdate_start%5D=' . $filter->date_start . '&TimeTrackerSearch%5Bdate_end%5D=' . $filter->date_end .'">
-                                    Billable Report
-                                    </a>
-                                    
+                                    &nbsp;
                                     </div>' .
                                 '<h4 style="font-weight: normal;">Total hours for selected period: <b>' . $h . 'h ' . $i . 'm</b></h4>',
                         ],
@@ -155,6 +149,25 @@ use yii\web\JsExpression;
                             'groupedRow' => true,                    // move grouped column to a single grouped row
                             'groupOddCssClass' => 'kv-grouped-row',  // configure odd group cell css class
                             'groupEvenCssClass' => 'kv-grouped-row', // configure even group cell css class
+                            'groupFooter' => function ($model, $key, $index, $widget) use ($totalDay) { // Closure method
+                                return [
+//                                    'mergeColumns' => [[1,3]], // columns to merge in summary
+                                    'content' => [             // content to show in each summary cell
+                                        1 => 'Total:',
+                                        8 => $totalDay[$model['date']],
+                                    ],
+//                                    'contentFormats' => [      // content reformatting for each summary cell
+//                                        4 => ['format' => 'number', 'decimals' => 2],
+//                                        8 => ['format' => 'number', 'decimals' => 2],
+//                                    ],
+//                                    'contentOptions' => [      // content html attributes for each summary cell
+//                                        1 => ['style' => 'font-variant:small-caps'],
+//                                        8 => ['style' => 'text-align:right'],
+//                                    ],
+                                    // html attributes for group summary row
+                                    'options' => ['class' => 'info table-info','style' => 'font-weight:bold;']
+                                ];
+                            }
                         ],
                         [
                             'label' => 'Location',
@@ -162,7 +175,7 @@ use yii\web\JsExpression;
                             'enableSorting' => false,
                             'format'=>'html',
                             'value' => function ($model, $key, $index, $widget) {
-                                $icon = $model->isMicrosoftLocation ?
+                                $icon = $model['isMicrosoftLocation'] ?
                                     '<img class="outlook-logo" src="/images/outlook3.png" />' : '';
                                 return $icon .' <a style="text-decoration:none;" href="/time-tracker/report/location/'.$model["id"].'">'.$model['locationName'].'</a>';
                             },
@@ -204,6 +217,43 @@ use yii\web\JsExpression;
                             'attribute' => 'duration',
                             'enableSorting' => false,
                             'value' => 'duration',
+                        ],
+                        [
+                            'label' => 'Rule 1',
+                            'enableSorting' => false,
+                            'format' => 'html',
+                            'value' => function ($model, $key, $index, $widget) {
+                                $value = $model['rule1'] ?: '';
+                                return '<span title="Allow for 15 minutes in between work orders">' . $value . '</span>';
+                            },
+                        ],
+                        [
+                            'label' => 'Rule 2',
+                            'enableSorting' => false,
+                            'format' => 'html',
+                            'value' => function ($model, $key, $index, $widget) {
+                                $value = $model['rule2'] ?: '';
+                                return '<span title="Need to add 1 hour for appliance haul away">' . $value . '</span>';
+                            },
+                        ],
+                        [
+                            'label' => 'Rule 3',
+                            'enableSorting' => false,
+                            'format' => 'html',
+                            'value' => function ($model, $key, $index, $widget) {
+                                $value = $model['rule3'] ?: '';
+                                return '<span title="We bill a minimum of 1 hour">' . $value . '</span>';
+                            },
+                        ],
+                        [
+                            'label' => 'Rule 4',
+                            'enableSorting' => false,
+                            'format' => 'html',
+                            'pageSummary' => true,
+                            'value' => function ($model, $key, $index, $widget) {
+                                $value = $model['rule4'] ?: '';
+                                return '<span title="Round up when billing">' . $value . '</span>';
+                            },
                         ],
                     ],
                     'responsive' => true,
