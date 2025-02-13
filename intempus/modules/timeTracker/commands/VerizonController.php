@@ -25,7 +25,7 @@ class VerizonController extends Controller
         $startdatetimeutc = $date ? (new \DateTime($date))->modify('-1 days')->format('Y-m-d') . ' 00:00:00' :
             (new \DateTime())->modify('-3 days')->format('Y-m-d') . ' 00:00:00';
         $enddatetimeutc = $date ? (new \DateTime($date))->modify('+1 days')->format('Y-m-d') . ' 23:59:59'
-            : (new \DateTime())->modify('-1 days')->format('Y-m-d') . ' 23:59:59';
+            : (new \DateTime())->format('Y-m-d H:i:s');
         $vehiclenumber = 7;
 
         $histories = $this->apiDataService->getVehiclesHistory($vehiclenumber, $startdatetimeutc, $enddatetimeutc);
