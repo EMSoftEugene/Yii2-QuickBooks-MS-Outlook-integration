@@ -3,7 +3,7 @@
 
 namespace app\modules\timeTracker\services;
 
-use app\models\VehiclesHistory;
+use app\modules\timeTracker\models\VehiclesHistory;
 use app\modules\timeTracker\models\MicrosoftGroup;
 use app\modules\timeTracker\models\MicrosoftLocation;
 use app\modules\timeTracker\models\TimeTracker;

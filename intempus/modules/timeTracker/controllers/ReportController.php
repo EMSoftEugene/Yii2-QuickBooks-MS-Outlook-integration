@@ -116,6 +116,7 @@ class ReportController extends BaseController
         $dataProvider = $filterModel->search($getParams);
         $dataProvider->pagination->pageSize=50;
 
+
         return $this->render('userItem', [
             'provider' => $dataProvider,
             'filter' => $filterModel,

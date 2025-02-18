@@ -55,6 +55,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             !Yii::$app->user->isGuest ? ['label' => 'Locations', 'url' => ['/time-tracker/report/location']] : '',
             !Yii::$app->user->isGuest ? ['label' => 'Techinians', 'url' => ['/time-tracker/report/user']] : '',
             !Yii::$app->user->isGuest ? ['label' => 'Outlook Groups', 'url' => ['/time-tracker/microsoft/groups']] : '',
+            !Yii::$app->user->isGuest ? ['label' => 'Verizon History', 'url' => ['/time-tracker/verizon/history']] : '',
         ]
     ]);
     NavBar::end();

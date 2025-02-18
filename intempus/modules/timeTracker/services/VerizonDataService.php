@@ -3,7 +3,7 @@
 
 namespace app\modules\timeTracker\services;
 
-use app\models\VehiclesHistory;
+use app\modules\timeTracker\models\VehiclesHistory;
 use app\modules\timeTracker\helper\DateTimeHelper;
 use app\modules\timeTracker\services\interfaces\ApiInterface;
 use app\modules\timeTracker\traits\CoordinateTrait;

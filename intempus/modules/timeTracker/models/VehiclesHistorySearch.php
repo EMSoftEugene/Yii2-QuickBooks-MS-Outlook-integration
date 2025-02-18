@@ -1,10 +1,12 @@
 <?php
 
-namespace app\models;
+namespace app\modules\timeTracker\models;
 
 use Yii;
+use yii\base\Model;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
+use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\web\IdentityInterface;
@@ -37,31 +39,43 @@ use yii\web\IdentityInterface;
  * @property timestamp $created_at
  * @property timestamp $updated_at
  */
-class VehiclesHistory extends ActiveRecord
+class VehiclesHistorySearch extends VehiclesHistory
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
+
+    public function rules()
     {
-        return '{{%vehicles_history}}';
+        // only fields in rules() are searchable
+        return [
+            [['location'], 'string'],
+        ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
+    public function scenarios()
     {
-        return [
-            'timestamp' => [
-                'class' => 'yii\behaviors\TimestampBehavior',
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
-                ],
-                'value' => new Expression('NOW()')
-            ],
-        ];
+        // bypass scenarios() implementation in the parent class
+        return Model::scenarios();
+    }
+
+    public function search($params)
+    {
+        $query = self::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => ['pageSize' => 50],
+            'sort' => ['defaultOrder' => ['UpdateUtc' => SORT_DESC]],
+        ]);
+
+        // load the search form data and validate
+        if (!($this->load($params) && $this->validate())) {
+            return $dataProvider;
+        }
+
+        // adjust the query by adding the filters
+        $query->andFilterWhere(['like', 'location', $this->location]);
+
+
+        return $dataProvider;
     }
 
 }
