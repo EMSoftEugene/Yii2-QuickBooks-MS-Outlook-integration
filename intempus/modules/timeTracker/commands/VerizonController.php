@@ -22,7 +22,7 @@ class VerizonController extends Controller
 
     public function actionHistory($date = null)
     {
-        Yii::debug('actionHistory start');
+        Yii::info('actionHistory start');
 
         $startdatetimeutc = $date ? (new \DateTime($date))->modify('-1 days')->format('Y-m-d') . ' 00:00:00' :
             (new \DateTime())->modify('-3 days')->format('Y-m-d') . ' 00:00:00';
@@ -36,7 +36,7 @@ class VerizonController extends Controller
             $addedNewHistories = $this->apiDataService->saveNewHistories($histories);
         }
 
-        Yii::debug('actionHistory stopped. addedNewHistories='.$addedNewHistories);
+        Yii::info('actionHistory stopped. addedNewHistories='.$addedNewHistories);
 
         echo "Successful added $addedNewHistories new Vehicles History\n";
         return ExitCode::OK;

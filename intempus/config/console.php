@@ -33,10 +33,12 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'log' => [
+            'traceLevel' => 0,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'levels' => ['info', 'error', 'warning'],
+                    'logFile' => '@runtime/logs/app.log', // Путь к файлу логов
                 ],
             ],
         ],
