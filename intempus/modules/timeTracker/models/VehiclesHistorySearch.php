@@ -46,7 +46,7 @@ class VehiclesHistorySearch extends VehiclesHistory
     {
         // only fields in rules() are searchable
         return [
-            [['location'], 'string'],
+            [['UpdateUtc','location'], 'string'],
         ];
     }
 
@@ -72,6 +72,7 @@ class VehiclesHistorySearch extends VehiclesHistory
         }
 
         // adjust the query by adding the filters
+        $query->andFilterWhere(['like', 'UpdateUtc', $this->UpdateUtc]);
         $query->andFilterWhere(['like', 'location', $this->location]);
 
 
