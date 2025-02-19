@@ -256,10 +256,10 @@ class ReportController extends BaseController
             }
 
             $itemCalc['rule6_desc'] .= empty($itemCalc['rule6_desc']) ? '' : ' + ' . $itemCalc['rule6_desc'];
-            $itemCalc['rule6_desc'] .=  DateTimeHelper::formatHM($itemCalc['duration']) . 'L' . $i . '(duration)';
+            $itemCalc['rule6_desc'] .=  DateTimeHelper::formatHM($itemCalc['duration']) . 'L' . $i . '#stop';
             if ($itemCalc['rule1'] != $itemCalc['duration']) {
                 $dd = DateTimeHelper::diff($itemCalc['rule1'], $itemCalc['duration']);
-                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '(#extra)';
+                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '#extra';
             }
 
             // rule 2
@@ -280,7 +280,7 @@ class ReportController extends BaseController
 
             if ($itemCalc['rule2'] != $itemCalc['rule1']) {
                 $dd = DateTimeHelper::diff($itemCalc['rule2'], $itemCalc['rule1']);
-                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '(#houl_away)';
+                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '#houl_away';
             }
 
             // rule 3
@@ -294,7 +294,7 @@ class ReportController extends BaseController
 
             if ($itemCalc['rule3'] != $itemCalc['rule2']) {
                 $dd = DateTimeHelper::diff($itemCalc['rule3'], $itemCalc['rule2']);
-                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '(#minim_stop_1h)';
+                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '#minim_stop_1h';
             }
 
             // rule 4
@@ -308,7 +308,7 @@ class ReportController extends BaseController
 
             if ($itemCalc['rule4'] != $itemCalc['rule3']) {
                 $dd = DateTimeHelper::diff($itemCalc['rule4'], $itemCalc['rule3']);
-                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '(#rounding)';
+                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '#rounding';
             }
             $itemCalc['rule5_desc'] .= DateTimeHelper::formatHM($itemCalc['rule4']) . 'L' . $i;
             $formula[$itemCalc['date']][0] .= empty($formula[$itemCalc['date']][0]) ?

@@ -316,7 +316,7 @@ use yii\web\JsExpression;
             foreach ($formula as $key => $value): $i++; ?>
                 <div id="<?= $key . 'z' ?>" style="display: none;" class="extendme">
                     <div>
-                        <?= $value[0] ?>
+                        <?= $value[1] ?>
                     </div>
                 </div>
                 <div id="<?= $key . 'z2' ?>" style="display: none;">
@@ -357,12 +357,12 @@ $script = <<< JS
 
           modalEl.modal('toggle');
         });
-        $('#helperModalContent').click(function() {
-          modalContent2.show();
-        });
-        modalEl.on('hidden.bs.modal', function () {
-           modalContent2.hide();
-        });
+        // $('#helperModalContent').click(function() {
+        //   modalContent2.show();
+        // });
+        // modalEl.on('hidden.bs.modal', function () {
+        //    modalContent2.hide();
+        // });
         
         $('.rule').click(function() {
           let name = $(this).attr('data-name');
