@@ -174,7 +174,10 @@ use yii\web\JsExpression;
 //                                    'mergeColumns' => [[1,3]], // columns to merge in summary
                                         'content' => [             // content to show in each summary cell
                                             1 => 'Total:',
-                                            8 => $totalDay[$model['date']],
+                                            8 => '<div data-name="' . $model['date'] . '" class="total_date" style="cursor: pointer;" 
+                                            data-content-id="' . $model['date'] . 'z' . '"
+                                            data-content-id2="' . $model['date'] . 'z2' . '"
+                                            >' . $totalDay[$model['date']] . '</div>',
                                         ],
 //                                    'contentFormats' => [      // content reformatting for each summary cell
 //                                        4 => ['format' => 'number', 'decimals' => 2],
@@ -249,9 +252,9 @@ use yii\web\JsExpression;
                                     $desc = $model['rule1_desc'] ?: '';
                                     $id = $model['id'] . 'rule1';
 
-                                    return '<span class="rule" data-name="Rule 1" data-content-id="'.$id.'">'
+                                    return '<span class="rule" data-name="Rule 1" data-content-id="' . $id . '">'
                                         . $value . '</span>'
-                                        . '<div style="display:none;" id="'.$id.'">' . $desc . '</div>';
+                                        . '<div style="display:none;" id="' . $id . '">' . $desc . '</div>';
                                 },
                             ],
                             [
@@ -263,9 +266,9 @@ use yii\web\JsExpression;
                                     $desc = $model['rule2_desc'] ?: '';
                                     $id = $model['id'] . 'rule2';
 
-                                    return '<span class="rule" data-name="Rule 2" data-content-id="'.$id.'">'
+                                    return '<span class="rule" data-name="Rule 2" data-content-id="' . $id . '">'
                                         . $value . '</span>'
-                                        . '<div style="display:none;" id="'.$id.'">' . $desc . '</div>';
+                                        . '<div style="display:none;" id="' . $id . '">' . $desc . '</div>';
                                 },
                             ],
                             [
@@ -277,9 +280,9 @@ use yii\web\JsExpression;
                                     $desc = $model['rule3_desc'] ?: '';
                                     $id = $model['id'] . 'rule3';
 
-                                    return '<span class="rule" data-name="Rule 3" data-content-id="'.$id.'">'
+                                    return '<span class="rule" data-name="Rule 3" data-content-id="' . $id . '">'
                                         . $value . '</span>'
-                                        . '<div style="display:none;" id="'.$id.'">' . $desc . '</div>';
+                                        . '<div style="display:none;" id="' . $id . '">' . $desc . '</div>';
                                 },
                             ],
                             [
@@ -292,9 +295,9 @@ use yii\web\JsExpression;
                                     $desc = $model['rule4_desc'] ?: '';
                                     $id = $model['id'] . 'rule4';
 
-                                    return '<span class="rule" data-name="Rule 4" data-content-id="'.$id.'">'
+                                    return '<span class="rule" data-name="Rule 4" data-content-id="' . $id . '">'
                                         . $value . '</span>'
-                                        . '<div style="display:none;" id="'.$id.'">' . $desc . '</div>';
+                                        . '<div style="display:none;" id="' . $id . '">' . $desc . '</div>';
                                 },
                             ],
                         ],
@@ -309,11 +312,26 @@ use yii\web\JsExpression;
             </div>
 
             <?php
+            $i = 1;
+            foreach ($formula as $key => $value): $i++; ?>
+                <div id="<?= $key . 'z' ?>" style="display: none;" class="extendme">
+                    <div>
+                        <?= $value[0] ?>
+                    </div>
+                </div>
+                <div id="<?= $key . 'z2' ?>" style="display: none;">
+                    <div>
+                        <?= $value[1] ?>
+                    </div>
+                </div>
+            <?php
+            endforeach; ?>
+            <?php
             Modal::begin([
                 'id' => 'helperModal',
                 'title' => '<h4 id="helperModalTitle">Hello world</h4>',
             ]);
-            echo '<div id="helperModalContent"></div>';
+            echo '<div style="cursor: pointer" id="helperModalContent"></div><br/><br/><div style="display: none;" id="helperModalContent2"></div>';
             Modal::end();
             ?>
         </div>
@@ -325,6 +343,27 @@ $script = <<< JS
         let modalEl = $('#helperModal');
         let modalTitle = $('#helperModalTitle');
         let modalContent = $('#helperModalContent');
+        let modalContent2 = $('#helperModalContent2');
+        $('.total_date').click(function() {
+          let name = $(this).attr('data-name');
+          let id = $(this).attr('data-content-id');
+          let content = $('#'+id).html();
+          modalTitle.html(name);
+          modalContent.html(content);
+          
+          let id2 = $(this).attr('data-content-id2');
+          let content2 = $('#'+id2).html();
+          modalContent2.html(content2);
+
+          modalEl.modal('toggle');
+        });
+        $('#helperModalContent').click(function() {
+          modalContent2.show();
+        });
+        modalEl.on('hidden.bs.modal', function () {
+           modalContent2.hide();
+        });
+        
         $('.rule').click(function() {
           let name = $(this).attr('data-name');
           let id = $(this).attr('data-content-id');
@@ -333,7 +372,6 @@ $script = <<< JS
           modalContent.html(content);
           modalEl.modal('toggle');
         });
-
   });
 
 JS;

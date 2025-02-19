@@ -97,4 +97,12 @@ class DateTimeHelper
         return $new_time;
     }
 
+    public static function formatHM($time): string
+    {
+        list($hours, $minutes) = explode(":", $time);
+        $hours = $hours === '00' ?  '' : (int)$hours . 'h';
+        $minutes = $minutes === '00' ?  '' : (int)$minutes . 'm';
+        return $hours.$minutes;
+    }
+
 }

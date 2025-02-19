@@ -52,7 +52,6 @@ class ReportController extends BaseController
             'provider' => $dataProvider,
             'filter' => $filterModel,
         ]);
-
     }
 
     /**
@@ -71,7 +70,7 @@ class ReportController extends BaseController
         }
 
         $dataProvider = $filterModel->search($getParams);
-        $dataProvider->pagination->pageSize=50;
+        $dataProvider->pagination->pageSize = 50;
 
         return $this->render('locationItem', [
             'provider' => $dataProvider,
@@ -95,7 +94,6 @@ class ReportController extends BaseController
             'provider' => $dataProvider,
             'filter' => $filterModel,
         ]);
-
     }
 
     /**
@@ -114,7 +112,7 @@ class ReportController extends BaseController
         }
 
         $dataProvider = $filterModel->search($getParams);
-        $dataProvider->pagination->pageSize=50;
+        $dataProvider->pagination->pageSize = 50;
 
 
         return $this->render('userItem', [
@@ -140,8 +138,8 @@ class ReportController extends BaseController
 
         $dateStart = \Yii::$app->request->get('date_start');
         $dateEnd = \Yii::$app->request->get('date_end');
-        if(!$dateStart && !$dateEnd){
-            $dateStart = date('Y-m-01'). ' 00:00:00';
+        if (!$dateStart && !$dateEnd) {
+            $dateStart = date('Y-m-01') . ' 00:00:00';
             $dateEnd = date('Y-m-t') . ' 23:59:59';
         }
 
@@ -192,21 +190,26 @@ class ReportController extends BaseController
         $filterModel = new TimeTrackerSearch();
         $getParams = array_merge(\Yii::$app->request->get(), ['userName' => $userName]);
         $dataProvider = $filterModel->search($getParams);
-        $dataProvider->pagination->pageSize=1000;
+        $dataProvider->pagination->pageSize = 1000;
         $data = $dataProvider->models;
         $calculatedData = [];
         $totalDay = [];
+        $formula = [];
+        $i = 0;
         foreach ($data as $key => $item) {
-            if (!$item->isMicrosoftLocation){
+            if (!$item->isMicrosoftLocation) {
                 continue;
             }
+            $i++;
             $itemCalc = $item->toArray();
             $itemCalc['rule1'] = $itemCalc['duration'];
             $itemCalc['rule1_desc'] = '';
+            $itemCalc['rule5_desc'] = '';
+            $itemCalc['rule6_desc'] = '';
 
             // rule 1
             $cur = $data[$key]->clock_in;
-            $roundedCur = date('h:i', round(strtotime($cur)/60)*60);
+            $roundedCur = date('h:i', round(strtotime($cur) / 60) * 60);
             $itemCalc['rule1_desc'] = '<b>Description</b>: Allow for 15 minutes in between work orders. So if it takes 30 minutes to get to the next job, add 15 minutes to this job and if it takes 45 minutes to get there, add 30 minutes';
             $itemCalc['rule1_desc'] .= '<br/><b>Formula</b>:';
             $itemCalc['rule1_desc'] .= '<br/>1. Rule1 = Duration + AddValue.';
@@ -214,7 +217,7 @@ class ReportController extends BaseController
             $itemCalc['rule1_desc'] .= '<br/>3. AddValue = (if Diff > 45) = 30 minutes.';
             $itemCalc['rule1_desc'] .= '<br/>4. AddValue = (if Diff > 30 and Diff <= 45) = 15 minutes.';
             $itemCalc['rule1_desc'] .= '<br/><b>Calculate</b>:';
-            if (empty($calculatedData) || !isset($data[$key - 1])){
+            if (empty($calculatedData) || !isset($data[$key - 1])) {
                 $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 15);
 
                 $itemCalc['rule1_desc'] .= '<br/>Duration= ' . $itemCalc['duration'];
@@ -222,17 +225,17 @@ class ReportController extends BaseController
                 $itemCalc['rule1_desc'] .= '<br/>CurrentLocation=' . $roundedCur;
                 $itemCalc['rule1_desc'] .= '<br/>Diff=';
                 $itemCalc['rule1_desc'] .= '<br/>AddValue=15 (No PrevLocation, so always +15minutes)';
-                $itemCalc['rule1_desc'] .= '<br/>Rule1 = '.$itemCalc['duration'].' + 15';
-                $itemCalc['rule1_desc'] .= '<br/><b>Rule1 = '.$itemCalc['rule1'] . '</b>';
+                $itemCalc['rule1_desc'] .= '<br/>Rule1 = ' . $itemCalc['duration'] . ' + 15';
+                $itemCalc['rule1_desc'] .= '<br/><b>Rule1 = ' . $itemCalc['rule1'] . '</b>';
             } else {
                 $prev = $data[$key - 1]->clock_out;
-                $roundedPrev = date('h:i', round(strtotime($prev)/60)*60);
+                $roundedPrev = date('h:i', round(strtotime($prev) / 60) * 60);
                 $diff = DateTimeHelper::diff($roundedCur, $roundedPrev, true);
                 $addValue = 0;
-                if ($diff > 45){
+                if ($diff > 45) {
                     $addValue = 30;
                     $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 30);
-                } elseif ($diff >= 30 && $diff < 45){
+                } elseif ($diff >= 30 && $diff < 45) {
                     $addValue = 15;
                     $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 15);
                 } else {
@@ -242,10 +245,17 @@ class ReportController extends BaseController
                 $itemCalc['rule1_desc'] .= '<br/>Duration= ' . $itemCalc['duration'];
                 $itemCalc['rule1_desc'] .= '<br/>PrevLocation=' . $roundedPrev;
                 $itemCalc['rule1_desc'] .= '<br/>CurrentLocation=' . $roundedCur;
-                $itemCalc['rule1_desc'] .= '<br/>Diff='.$diff;
-                $itemCalc['rule1_desc'] .= '<br/>AddValue='.$addValue;
-                $itemCalc['rule1_desc'] .= '<br/>Rule1 = '.$itemCalc['duration'].' + '.$addValue;
-                $itemCalc['rule1_desc'] .= '<br/><b>Rule1 = '.$itemCalc['rule1'] . '</b>';
+                $itemCalc['rule1_desc'] .= '<br/>Diff=' . $diff;
+                $itemCalc['rule1_desc'] .= '<br/>AddValue=' . $addValue;
+                $itemCalc['rule1_desc'] .= '<br/>Rule1 = ' . $itemCalc['duration'] . ' + ' . $addValue;
+                $itemCalc['rule1_desc'] .= '<br/><b>Rule1 = ' . $itemCalc['rule1'] . '</b>';
+            }
+
+            $itemCalc['rule6_desc'] .= empty($itemCalc['rule6_desc']) ? '' : ' + ' . $itemCalc['rule6_desc'];
+            $itemCalc['rule6_desc'] .=  DateTimeHelper::formatHM($itemCalc['duration']) . 'L' . $i . '(duration)';
+            if ($itemCalc['rule1'] != $itemCalc['duration']) {
+                $dd = DateTimeHelper::diff($itemCalc['rule1'], $itemCalc['duration']);
+                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '(rule1)';
             }
 
             // rule 2
@@ -256,13 +266,18 @@ class ReportController extends BaseController
             $itemCalc['rule2_desc'] .= '<br/>1. Rule2 = Rule1 HaulAway.';
             $itemCalc['rule2_desc'] .= '<br/>2. HaulAway = (if isset HaulAway in description) = 60 minutes.';
             $itemCalc['rule2_desc'] .= '<br/><b>Calculate</b>:';
-            if ($itemCalc['haul_away']){
+            if ($itemCalc['haul_away']) {
                 $haulAway = 60;
                 $itemCalc['rule2'] = DateTimeHelper::addMinutes($itemCalc['rule2'], 60);
             }
             $itemCalc['rule2_desc'] .= '<br/>HaulAway= ' . (int)$itemCalc['haul_away'];
-            $itemCalc['rule2_desc'] .= '<br/>Rule2 = '.$itemCalc['rule1'].' + '.$haulAway;
-            $itemCalc['rule2_desc'] .= '<br/><b>Rule2 = '.$itemCalc['rule2'] . '</b>';
+            $itemCalc['rule2_desc'] .= '<br/>Rule2 = ' . $itemCalc['rule1'] . ' + ' . $haulAway;
+            $itemCalc['rule2_desc'] .= '<br/><b>Rule2 = ' . $itemCalc['rule2'] . '</b>';
+
+            if ($itemCalc['rule2'] != $itemCalc['rule1']) {
+                $dd = DateTimeHelper::diff($itemCalc['rule2'], $itemCalc['rule1']);
+                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '(rule2)';
+            }
 
             // rule 3
             $itemCalc['rule3_desc'] = '<b>Description</b>: We bill a minimum of 1 hour.';
@@ -270,8 +285,13 @@ class ReportController extends BaseController
             $itemCalc['rule3_desc'] .= '<br/>1. Rule3 = roundToHour(Rule2)';
             $itemCalc['rule3_desc'] .= '<br/><b>Calculate</b>:';
             $itemCalc['rule3'] = DateTimeHelper::roundToHour($itemCalc['rule2']);
-            $itemCalc['rule3_desc'] .= '<br/>Rule3 = roundToHour('.$itemCalc['rule2'].')';
-            $itemCalc['rule3_desc'] .= '<br/><b>Rule3 = '.$itemCalc['rule3'] . '</b>';
+            $itemCalc['rule3_desc'] .= '<br/>Rule3 = roundToHour(' . $itemCalc['rule2'] . ')';
+            $itemCalc['rule3_desc'] .= '<br/><b>Rule3 = ' . $itemCalc['rule3'] . '</b>';
+
+            if ($itemCalc['rule3'] != $itemCalc['rule2']) {
+                $dd = DateTimeHelper::diff($itemCalc['rule3'], $itemCalc['rule2']);
+                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '(rule3)';
+            }
 
             // rule 4
             $itemCalc['rule4_desc'] = '<b>Description</b>: Round up when billing, Example: If a job takes 1 hour and five minutes we will bill one hour, but if it takes 1 hour and 6 or more minutes, we will bill 1.5 hours. If a job takes 1 hour and 35 minutes we will bill 1.5 hours. If the job takes 1 hours and 36 or more minutes we will bill 2 hours.';
@@ -279,16 +299,32 @@ class ReportController extends BaseController
             $itemCalc['rule4_desc'] .= '<br/>1. Rule3 = roundUp(Rule3)';
             $itemCalc['rule4_desc'] .= '<br/><b>Calculate</b>:';
             $itemCalc['rule4'] = DateTimeHelper::complexRounding($itemCalc['rule3']);
-            $itemCalc['rule4_desc'] .= '<br/>Rule4 = roundToHour('.$itemCalc['rule3'].')';
-            $itemCalc['rule4_desc'] .= '<br/><b>Rule4 = '.$itemCalc['rule4'] . '</b>';
+            $itemCalc['rule4_desc'] .= '<br/>Rule4 = roundToHour(' . $itemCalc['rule3'] . ')';
+            $itemCalc['rule4_desc'] .= '<br/><b>Rule4 = ' . $itemCalc['rule4'] . '</b>';
 
-            $totalDay[$itemCalc['date']] = DateTimeHelper::addition($totalDay[$itemCalc['date']] ?? '00:00', $itemCalc['rule4']);
+            if ($itemCalc['rule4'] != $itemCalc['rule3']) {
+                $dd = DateTimeHelper::diff($itemCalc['rule4'], $itemCalc['rule3']);
+                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '(rule4)';
+            }
+            $itemCalc['rule5_desc'] .= DateTimeHelper::formatHM($itemCalc['rule4']) . 'L' . $i;
+            $formula[$itemCalc['date']][0] .= empty($formula[$itemCalc['date']]) ?
+                $itemCalc['rule5_desc'] : ' + ' . $itemCalc['rule5_desc'];
+            $formula[$itemCalc['date']][1] .= empty($formula[$itemCalc['date']][1]) ?
+                $itemCalc['rule6_desc'] : ' + ' . $itemCalc['rule6_desc'];
+
+            $totalDay[$itemCalc['date']] = DateTimeHelper::addition(
+                $totalDay[$itemCalc['date']] ?? '00:00',
+                $itemCalc['rule4']
+            );
             $calculatedData[] = $itemCalc;
         }
 
+//        print_r($formula);
+//        die;
+
         $dataProvider = new ArrayDataProvider([
             'allModels' => $calculatedData,
-            'pagination' => [ 'pageSize' => 1000, ],
+            'pagination' => ['pageSize' => 1000,],
         ]);
 
         return $this->render('userBillable', [
@@ -298,6 +334,7 @@ class ReportController extends BaseController
             'timeTrackerItem' => $timeTrackerItem,
             'id' => $id,
             'totalDay' => $totalDay,
+            'formula' => $formula,
         ]);
     }
 
