@@ -206,6 +206,9 @@ class ReportController extends BaseController
             $itemCalc['rule1_desc'] = '';
             $itemCalc['rule5_desc'] = '';
             $itemCalc['rule6_desc'] = '';
+            if (!isset($formula[$itemCalc['date']])) {
+                $formula[$itemCalc['date']] = [0=>null, 1=>null];
+            }
 
             // rule 1
             $cur = $data[$key]->clock_in;
@@ -307,7 +310,7 @@ class ReportController extends BaseController
                 $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '(rule4)';
             }
             $itemCalc['rule5_desc'] .= DateTimeHelper::formatHM($itemCalc['rule4']) . 'L' . $i;
-            $formula[$itemCalc['date']][0] .= empty($formula[$itemCalc['date']]) ?
+            $formula[$itemCalc['date']][0] .= empty($formula[$itemCalc['date']][0]) ?
                 $itemCalc['rule5_desc'] : ' + ' . $itemCalc['rule5_desc'];
             $formula[$itemCalc['date']][1] .= empty($formula[$itemCalc['date']][1]) ?
                 $itemCalc['rule6_desc'] : ' + ' . $itemCalc['rule6_desc'];
