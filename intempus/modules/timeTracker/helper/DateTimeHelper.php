@@ -44,7 +44,7 @@ class DateTimeHelper
         $newMinutes = 0;
         if ($minutes < 15) {
             $newMinutes = 0;
-        } elseif ($minutes >= 15 && $minutes < 45) {
+        } elseif ($minutes > 15 && $minutes < 45) {
             $newMinutes = 30;
         } elseif ($minutes >= 45) {
             $newMinutes = 60;
