@@ -193,6 +193,14 @@ use yii\web\JsExpression;
                                 }
                             ],
                             [
+                                'label' => '#',
+//                                'attribute' => 'clock_in',
+                                'enableSorting' => false,
+                                'value' => function ($model, $key, $index, $widget) use ($lNum, $data) {
+                                    return 'L' . $model['L'];
+                                },
+                            ],
+                            [
                                 'label' => 'Location',
                                 'attribute' => 'locationName',
                                 'enableSorting' => false,

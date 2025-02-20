@@ -210,6 +210,7 @@ class ReportController extends BaseController
                 $i=1;
                 $formula[$itemCalc['date']] = [0=>null, 1=>null];
             }
+            $itemCalc['L'] = $i;
 
             // rule 1
             $cur = $data[$key]->clock_in;
