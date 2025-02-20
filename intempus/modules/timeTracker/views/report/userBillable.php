@@ -196,7 +196,7 @@ use yii\web\JsExpression;
                                 'label' => '#',
 //                                'attribute' => 'clock_in',
                                 'enableSorting' => false,
-                                'value' => function ($model, $key, $index, $widget) use ($lNum, $data) {
+                                'value' => function ($model, $key, $index, $widget) {
                                     return 'L' . $model['L'];
                                 },
                             ],
