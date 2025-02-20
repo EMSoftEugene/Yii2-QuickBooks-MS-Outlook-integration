@@ -174,7 +174,7 @@ use yii\web\JsExpression;
 //                                    'mergeColumns' => [[1,3]], // columns to merge in summary
                                         'content' => [             // content to show in each summary cell
                                             1 => 'Total:',
-                                            8 => '<div data-name="' . $model['date'] . '" class="total_date" style="cursor: pointer;" 
+                                            9 => '<div data-name="' . $model['date'] . '" class="total_date" style="cursor: pointer;" 
                                             data-content-id="' . $model['date'] . 'z' . '"
                                             data-content-id2="' . $model['date'] . 'z2' . '"
                                             >' . $totalDay[$model['date']] . '</div>',
