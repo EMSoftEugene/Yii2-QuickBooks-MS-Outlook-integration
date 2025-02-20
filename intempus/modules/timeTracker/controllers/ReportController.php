@@ -255,8 +255,8 @@ class ReportController extends BaseController
                 $itemCalc['rule1_desc'] .= '<br/><b>Rule1 = ' . $itemCalc['rule1'] . '</b>';
             }
 
-            $itemCalc['rule6_desc'] .= empty($itemCalc['rule6_desc']) ? '' : ' + ' . $itemCalc['rule6_desc'];
-            $itemCalc['rule6_desc'] .=  DateTimeHelper::formatHM($itemCalc['duration']) . 'L' . $i . '#stop';
+            $itemCalc['rule6_desc'] .= '<b>L' . $i . '(</b>';
+            $itemCalc['rule6_desc'] .=  DateTimeHelper::formatHM($itemCalc['duration']) . '#stop';
             if ($itemCalc['rule1'] != $itemCalc['duration']) {
                 $dd = DateTimeHelper::diff($itemCalc['rule1'], $itemCalc['duration']);
                 $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '#extra';
@@ -280,7 +280,7 @@ class ReportController extends BaseController
 
             if ($itemCalc['rule2'] != $itemCalc['rule1']) {
                 $dd = DateTimeHelper::diff($itemCalc['rule2'], $itemCalc['rule1']);
-                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '#houl_away';
+                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . '#houl_away';
             }
 
             // rule 3
@@ -294,22 +294,23 @@ class ReportController extends BaseController
 
             if ($itemCalc['rule3'] != $itemCalc['rule2']) {
                 $dd = DateTimeHelper::diff($itemCalc['rule3'], $itemCalc['rule2']);
-                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '#minim_stop_1h';
+                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . '#minim_stop_1h';
             }
 
             // rule 4
             $itemCalc['rule4_desc'] = '<b>Description</b>: Round up when billing, Example: If a job takes 1 hour and five minutes we will bill one hour, but if it takes 1 hour and 6 or more minutes, we will bill 1.5 hours. If a job takes 1 hour and 35 minutes we will bill 1.5 hours. If the job takes 1 hours and 36 or more minutes we will bill 2 hours.';
             $itemCalc['rule4_desc'] .= '<br/><b>Formula</b>:';
-            $itemCalc['rule4_desc'] .= '<br/>1. Rule3 = roundUp(Rule3)';
+            $itemCalc['rule4_desc'] .= '<br/>1. Rule4 = roundUp(Rule3)';
             $itemCalc['rule4_desc'] .= '<br/><b>Calculate</b>:';
             $itemCalc['rule4'] = DateTimeHelper::complexRounding($itemCalc['rule3']);
-            $itemCalc['rule4_desc'] .= '<br/>Rule4 = roundToHour(' . $itemCalc['rule3'] . ')';
+            $itemCalc['rule4_desc'] .= '<br/>Rule4 = roundUp(' . $itemCalc['rule3'] . ')';
             $itemCalc['rule4_desc'] .= '<br/><b>Rule4 = ' . $itemCalc['rule4'] . '</b>';
 
             if ($itemCalc['rule4'] != $itemCalc['rule3']) {
                 $dd = DateTimeHelper::diff($itemCalc['rule4'], $itemCalc['rule3']);
-                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '#rounding';
+                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . '#rounding';
             }
+            $itemCalc['rule6_desc'] .= '<b>)</b>';
             $itemCalc['rule5_desc'] .= DateTimeHelper::formatHM($itemCalc['rule4']) . 'L' . $i;
             $formula[$itemCalc['date']][0] .= empty($formula[$itemCalc['date']][0]) ?
                 $itemCalc['rule5_desc'] : ' + ' . $itemCalc['rule5_desc'];

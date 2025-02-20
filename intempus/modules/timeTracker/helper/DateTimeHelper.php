@@ -67,9 +67,15 @@ class DateTimeHelper
         list($hours2, $minutes2) = explode(":", $time2);
         $total_minutes2 = $hours2 * 60 + $minutes2;
 
-        $new_total_minutes = $total_minutes1 - $total_minutes2;
+        $sign = '';
+        if (($total_minutes1 - $total_minutes2) > 0) {
+            $new_total_minutes = $total_minutes1 - $total_minutes2;
+        } else {
+            $sign = '-';
+            $new_total_minutes = $total_minutes2 - $total_minutes1;
+        }
         if ($returnMinutes) {
-            return $new_total_minutes;
+            return (int)($sign.$new_total_minutes);
         }
         $new_minutes = $new_total_minutes % 60;
         $new_hours = floor($new_total_minutes / 60);
@@ -77,7 +83,7 @@ class DateTimeHelper
         $new_hours = str_pad($new_hours, 2, '0', STR_PAD_LEFT);
         $new_minutes = str_pad($new_minutes, 2, '0', STR_PAD_LEFT);
         $new_time = "$new_hours:$new_minutes";
-        return $new_time;
+        return $sign . $new_time;
     }
 
     public static function addition($time1, $time2): string
@@ -100,9 +106,15 @@ class DateTimeHelper
     public static function formatHM($time): string
     {
         list($hours, $minutes) = explode(":", $time);
+        $sign = mb_substr($hours,0,1);
+        if ($sign === '-'){
+            $hours = mb_substr($hours,1);
+        } else {
+            $sign = '';
+        }
         $hours = $hours === '00' ?  '' : (int)$hours . 'h';
         $minutes = $minutes === '00' ?  '' : (int)$minutes . 'm';
-        return $hours.$minutes;
+        return $sign.$hours.$minutes;
     }
 
 }
