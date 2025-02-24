@@ -329,10 +329,14 @@ class ReportController extends BaseController
         }
 
         foreach ($totalDay as $key => &$item){
-            $extraHours = DateTimeHelper::diff($item, '07:00', false, true);
+            $extraMinutes = DateTimeHelper::diff($item, '08:00', true );
+            if ($extraMinutes < 0) {
+                continue;
+            }
+            $extraHours = ceil($extraMinutes/60);
             if ($extraHours > 0){
                 $extraValue = $extraHours * 0.5;
-                $extraValueDesc = DateTimeHelper::formatHM('00:'.$extraValue);
+                $extraValueDesc = DateTimeHelper::formatHM('00:'.$extraValue*60);
                 $extraValue = '00:'. $extraValue * 60;
                 $item = DateTimeHelper::addition(
                     $item ?? '00:00',
