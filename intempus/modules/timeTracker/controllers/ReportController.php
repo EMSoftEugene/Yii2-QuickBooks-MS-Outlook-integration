@@ -332,7 +332,7 @@ class ReportController extends BaseController
             $extraHours = DateTimeHelper::diff($item, '07:00', false, true);
             if ($extraHours > 0){
                 $extraValue = $extraHours * 0.5;
-                $extraValueDesc = DateTimeHelper::formatHM('00'.$extraValue);
+                $extraValueDesc = DateTimeHelper::formatHM('00:'.$extraValue);
                 $extraValue = '00:'. $extraValue * 60;
                 $item = DateTimeHelper::addition(
                     $item ?? '00:00',
