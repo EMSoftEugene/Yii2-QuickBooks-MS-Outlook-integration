@@ -204,8 +204,8 @@ class ReportController extends BaseController
             $itemCalc = $item->toArray();
             $itemCalc['rule1'] = $itemCalc['duration'];
             $itemCalc['rule1_desc'] = '';
-            $itemCalc['rule5_desc'] = '';
-            $itemCalc['rule6_desc'] = '';
+            $itemCalc['rulex0_desc'] = '';
+            $itemCalc['rulex1_desc'] = '';
             if (!isset($formula[$itemCalc['date']])) {
                 $i=1;
                 $formula[$itemCalc['date']] = [0=>null, 1=>null];
@@ -256,11 +256,11 @@ class ReportController extends BaseController
                 $itemCalc['rule1_desc'] .= '<br/><b>Rule1 = ' . $itemCalc['rule1'] . '</b>';
             }
 
-            $itemCalc['rule6_desc'] .= '<b>L' . $i . '(</b>';
-            $itemCalc['rule6_desc'] .=  DateTimeHelper::formatHM($itemCalc['duration']) . '#stop';
+            $itemCalc['rulex1_desc'] .= '<b>L' . $i . '(</b>';
+            $itemCalc['rulex1_desc'] .=  DateTimeHelper::formatHM($itemCalc['duration']) . '#stop';
             if ($itemCalc['rule1'] != $itemCalc['duration']) {
                 $dd = DateTimeHelper::diff($itemCalc['rule1'], $itemCalc['duration']);
-                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '#extra';
+                $itemCalc['rulex1_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '#extra';
             }
 
             // rule 2
@@ -281,7 +281,7 @@ class ReportController extends BaseController
 
             if ($itemCalc['rule2'] != $itemCalc['rule1']) {
                 $dd = DateTimeHelper::diff($itemCalc['rule2'], $itemCalc['rule1']);
-                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . '#houl_away';
+                $itemCalc['rulex1_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . '#houl_away';
             }
 
             // rule 3
@@ -295,7 +295,7 @@ class ReportController extends BaseController
 
             if ($itemCalc['rule3'] != $itemCalc['rule2']) {
                 $dd = DateTimeHelper::diff($itemCalc['rule3'], $itemCalc['rule2']);
-                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . '#minim_stop_1h';
+                $itemCalc['rulex1_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . '#minim_stop_1h';
             }
 
             // rule 4
@@ -309,24 +309,38 @@ class ReportController extends BaseController
 
             if ($itemCalc['rule4'] != $itemCalc['rule3']) {
                 $dd = DateTimeHelper::diff($itemCalc['rule4'], $itemCalc['rule3']);
-                $itemCalc['rule6_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . '#rounding';
+                $itemCalc['rulex1_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . '#rounding';
             }
-            $itemCalc['rule6_desc'] .= '<b>)</b>';
-            $itemCalc['rule5_desc'] .= DateTimeHelper::formatHM($itemCalc['rule4']) . 'L' . $i;
-            $formula[$itemCalc['date']][0] .= empty($formula[$itemCalc['date']][0]) ?
-                $itemCalc['rule5_desc'] : ' + ' . $itemCalc['rule5_desc'];
-            $formula[$itemCalc['date']][1] .= empty($formula[$itemCalc['date']][1]) ?
-                $itemCalc['rule6_desc'] : ' + ' . $itemCalc['rule6_desc'];
+            $itemCalc['rulex1_desc'] .= '<b>)</b> ';
 
             $totalDay[$itemCalc['date']] = DateTimeHelper::addition(
                 $totalDay[$itemCalc['date']] ?? '00:00',
                 $itemCalc['rule4']
             );
+
+            $itemCalc['rulex0_desc'] .= DateTimeHelper::formatHM($itemCalc['rule4']) . 'L' . $i;
+            $formula[$itemCalc['date']][0] .= empty($formula[$itemCalc['date']][0]) ?
+                $itemCalc['rulex0_desc'] : ' + ' . $itemCalc['rulex0_desc'];
+            $formula[$itemCalc['date']][1] .= empty($formula[$itemCalc['date']][1]) ?
+                $itemCalc['rulex1_desc'] : ' + ' . $itemCalc['rulex1_desc'];
+
+
             $calculatedData[] = $itemCalc;
         }
 
-//        print_r($formula);
-//        die;
+        foreach ($totalDay as $key => &$item){
+            $extraHours = DateTimeHelper::diff($item, '07:00', false, true);
+            if ($extraHours > 0){
+                $extraValue = $extraHours * 0.5;
+                $extraValueDesc = DateTimeHelper::formatHM('00'.$extraValue);
+                $extraValue = '00:'. $extraValue * 60;
+                $item = DateTimeHelper::addition(
+                    $item ?? '00:00',
+                    $extraValue
+                );
+                $formula[$key][1] .= ' + ' .$extraValueDesc . '#everyExtraHour';
+            }
+        }
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $calculatedData,

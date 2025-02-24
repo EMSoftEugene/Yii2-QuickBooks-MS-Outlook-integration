@@ -60,7 +60,7 @@ class DateTimeHelper
         return $new_time;
     }
 
-    public static function diff($time1, $time2, $returnMinutes = false): string
+    public static function diff($time1, $time2, $returnMinutes = false, $returnHours = false): string
     {
         list($hours1, $minutes1) = explode(":", $time1);
         $total_minutes1 = $hours1 * 60 + $minutes1;
@@ -76,6 +76,9 @@ class DateTimeHelper
         }
         if ($returnMinutes) {
             return (int)($sign.$new_total_minutes);
+        }
+        if ($returnHours) {
+            return (int)($sign.floor($new_total_minutes / 60));
         }
         $new_minutes = $new_total_minutes % 60;
         $new_hours = floor($new_total_minutes / 60);
