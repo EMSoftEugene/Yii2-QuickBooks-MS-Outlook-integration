@@ -208,7 +208,7 @@ class ReportController extends BaseController
             $itemCalc['rulex1_desc'] = '';
             if (!isset($formula[$itemCalc['date']])) {
                 $i=1;
-                $formula[$itemCalc['date']] = [0=>null, 1=>null];
+                $formula[$itemCalc['date']] = [0=>null, 1=>null, 2=>null];
             }
             $itemCalc['L'] = $i;
 
