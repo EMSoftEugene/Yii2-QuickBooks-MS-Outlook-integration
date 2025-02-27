@@ -323,11 +323,14 @@ class ReportController extends BaseController
                 $itemCalc['rulex0_desc'] : ' + ' . $itemCalc['rulex0_desc'];
             $formula[$itemCalc['date']][1] .= empty($formula[$itemCalc['date']][1]) ?
                 $itemCalc['rulex1_desc'] : ' + ' . $itemCalc['rulex1_desc'];
+            $formula[$itemCalc['date']][2] .= empty($formula[$itemCalc['date']][2]) ?
+                $itemCalc['rulex1_desc'] : ' + ' . $itemCalc['rulex1_desc'];
 
 
             $calculatedData[] = $itemCalc;
         }
 
+        $totalDay0 = $totalDay;
         foreach ($totalDay as $key => &$item){
             $extraMinutes = DateTimeHelper::diff($item, '08:00', true );
             if ($extraMinutes < 0) {
@@ -358,6 +361,7 @@ class ReportController extends BaseController
             'timeTrackerItem' => $timeTrackerItem,
             'id' => $id,
             'totalDay' => $totalDay,
+            'totalDay0' => $totalDay0,
             'formula' => $formula,
         ]);
     }

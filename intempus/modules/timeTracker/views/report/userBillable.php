@@ -168,15 +168,17 @@ use yii\web\JsExpression;
                                 'groupedRow' => true,                    // move grouped column to a single grouped row
                                 'groupOddCssClass' => 'kv-grouped-row',  // configure odd group cell css class
                                 'groupEvenCssClass' => 'kv-grouped-row', // configure even group cell css class
-                                'groupFooter' => function ($model, $key, $index, $widget) use ($totalDay
+                                'groupFooter' => function ($model, $key, $index, $widget) use ($totalDay, $totalDay0
                                 ) { // Closure method
                                     return [
 //                                    'mergeColumns' => [[1,3]], // columns to merge in summary
                                         'content' => [             // content to show in each summary cell
                                             1 => 'Total:',
-                                            9 => '<div data-name="' . $model['date'] . '" class="total_date" style="cursor: pointer;" 
+                                            9 => '<div data-name="' . $model['date'] . '" class="total_date0" style="cursor: pointer;" 
+                                            data-content-id="' . $model['date'] . 'z2' . '"
+                                            >' . $totalDay0[$model['date']] . '</div>',
+                                            10 => '<div data-name="' . $model['date'] . '" class="total_date" style="cursor: pointer;" 
                                             data-content-id="' . $model['date'] . 'z' . '"
-                                            data-content-id2="' . $model['date'] . 'z2' . '"
                                             >' . $totalDay[$model['date']] . '</div>',
                                         ],
 //                                    'contentFormats' => [      // content reformatting for each summary cell
@@ -308,6 +310,15 @@ use yii\web\JsExpression;
                                         . '<div style="display:none;" id="' . $id . '">' . $desc . '</div>';
                                 },
                             ],
+                            [
+                                'label' => 'Rule 5',
+                                'enableSorting' => false,
+                                'format' => 'raw',
+                                'pageSummary' => true,
+                                'value' => function ($model, $key, $index, $widget) {
+                                    return '';
+                                },
+                            ],
                         ],
                         'responsive' => true,
                         'hover' => true
@@ -329,7 +340,7 @@ use yii\web\JsExpression;
                 </div>
                 <div id="<?= $key . 'z2' ?>" style="display: none;">
                     <div>
-                        <?= $value[1] ?>
+                        <?= $value[2] ?>
                     </div>
                 </div>
             <?php
@@ -353,6 +364,19 @@ $script = <<< JS
         let modalContent = $('#helperModalContent');
         let modalContent2 = $('#helperModalContent2');
         $('.total_date').click(function() {
+          let name = $(this).attr('data-name');
+          let id = $(this).attr('data-content-id');
+          let content = $('#'+id).html();
+          modalTitle.html(name);
+          modalContent.html(content);
+          
+          let id2 = $(this).attr('data-content-id2');
+          let content2 = $('#'+id2).html();
+          modalContent2.html(content2);
+
+          modalEl.modal('toggle');
+        });
+        $('.total_date0').click(function() {
           let name = $(this).attr('data-name');
           let id = $(this).attr('data-content-id');
           let content = $('#'+id).html();
