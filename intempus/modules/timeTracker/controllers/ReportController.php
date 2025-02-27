@@ -345,7 +345,7 @@ class ReportController extends BaseController
                     $item ?? '00:00',
                     $extraValue
                 );
-                $formula[$key][1] .= ' + ' .$extraValueDesc . '#totalExtra';
+                $formula[$key][1] .= ' + ' .$extraValueDesc . '#overtime';
             }
         }
 
