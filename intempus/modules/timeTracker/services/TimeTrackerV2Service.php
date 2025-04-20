@@ -3,6 +3,7 @@
 
 namespace app\modules\timeTracker\services;
 
+use app\modules\timeTracker\helper\DateTimeHelper;
 use app\modules\timeTracker\models\VehiclesHistory;
 use app\modules\timeTracker\models\MicrosoftGroup;
 use app\modules\timeTracker\models\MicrosoftLocation;
@@ -30,6 +31,10 @@ class TimeTrackerV2Service
 
     public function create($date): int
     {
+        $fullDate = $date;
+        $date = (new \DateTime($fullDate))->format('Y-m-d');
+        $dateNext = (new \DateTime($date))->modify('+1 day')->format('Y-m-d');
+
         $count = 0;
         $startDate = $date . ' 00:00:00';
         $endDate = $date . ' 23:59:59';
@@ -59,6 +64,7 @@ class TimeTrackerV2Service
             foreach ($rows as $key => $row) {
                 $nextRow = $rows[$key + 1] ?? null;
 
+
                 if ($nextRow) {
                     if ($key == 0) {
                         if ((int)$row->Speed == 0) {
@@ -82,7 +88,12 @@ class TimeTrackerV2Service
                         $startLat = (float)$places[$placeIndex]['start']['Latitude'];
                         $startLon = (float)$places[$placeIndex]['start']['Longitude'];
 
-                        $distance = $this->getDistance((float)$nextRow->Latitude, (float)$nextRow->Longitude, $startLat, $startLon);
+                        $distance = $this->getDistance(
+                            (float)$nextRow->Latitude,
+                            (float)$nextRow->Longitude,
+                            $startLat,
+                            $startLon
+                        );
 
                         if ((int)$row->Speed != 0 && $nextRow->Speed != 0 && $distance > $this->params['distance']) { //  && $distance > $this->params['distance']
                             if (count($places) - 1 == $placeIndex) {
@@ -100,11 +111,133 @@ class TimeTrackerV2Service
 
             if ($places) {
                 $places = $this->filterPlaces($places);
+
+                $places = $this->fixToRealMicrosoftLocations($places, $date, $dateNext, $microsoftUser);
                 $count += count($places);
+
                 $this->saveTimeTracker($places);
             }
         }
         return $count;
+    }
+
+    public function fixToRealMicrosoftLocations($places, $date, $dateNext, $microsoftUser)
+    {
+        // For testing functional
+//        foreach ($places as $key => $place) {
+//            if ($place['locationName'] === '2250 Monroe St #325, 2250 Monroe St #325, Santa Clara, CA, 95050') {
+//                unset($places[$key]);
+//            }
+//            if ($place['locationName'] === '1235 Francisco Avenue, Unit A, San Jose, CA, 95126') {
+//                unset($places[$key]);
+//            }
+//        }
+
+        $allMicrosoftLocations = [];
+        foreach ($places as $place) {
+            if ($place['isMicrosoftLocation']) {
+                $allMicrosoftLocations[$place['locationName']] = [
+                    'location' => $place['locationName'],
+                ];
+            }
+        }
+
+        $ext = [];
+        $locations = MicrosoftLocation::find()
+            ->where(['>=', 'date_time', $date])
+            ->andWhere(['<', 'date_time', $dateNext])
+            ->orderBy('date_time', SORT_ASC)
+            ->asArray()
+            ->all();
+
+        foreach ($locations as $key => $location) {
+            if (!isset($allMicrosoftLocations[$location['displayName']])) {
+                $location['key'] = $key;
+                $ext[] = $location;
+            }
+        }
+
+        if ($ext) {
+            foreach ($ext as $item) {
+                $newPlaces = [];
+                $tmpCount = [];
+                $neededKey = $item['key'];
+                $placeKey = 0;
+                $clonePlaces = $places;
+                $added = false;
+
+                foreach ($places as $key => $place) {
+                    $clock_out = null;
+                    if ($neededKey == 0) {
+                        $clock_out = date('h:i:s A', strtotime('-10 minutes', strtotime($place['clock_in'])));
+                    }
+
+                    if ($neededKey == $placeKey && !$clock_out) {
+                        $clock_out = date(
+                            'h:i:s A',
+                            strtotime('+10 minutes', strtotime($places[$key]['clock_out']))
+                        );
+                    }
+
+                    if ($clock_out && $place['isMicrosoftLocation'] && !$added) {
+                        $lastPlace = true;
+
+                        if ($neededKey != 0) {
+                            foreach ($clonePlaces as $subKey => $subPlace) {
+                                if ($subKey <= $key) {
+                                    continue;
+                                }
+                                if ($subPlace['locationName'] === $place['locationName']) {
+                                    $lastPlace = false;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if ($lastPlace) {
+                            $clock_in = date('h:i:s A', strtotime('+10 minutes', strtotime($clock_out)));
+
+                            $tmp = [
+                                'start' => [
+                                    ''
+                                ],
+                                'date' => $date,
+                                'locationName' => $item['displayName'],
+                                'clock_in' => $clock_out,
+                                'clock_out' => $clock_in,
+                                'duration' => '00:10',
+                                'isMicrosoftLocation' => true,
+                                'haul_away' => $item['haul_away'],
+                                'user_id' => $microsoftUser->microsoft_id,
+                                'user' => $microsoftUser->name,
+                                'end' => [
+                                    ''
+                                ],
+                            ];
+
+                            $newPlaces[] = $tmp;
+                            $tmpCount[$tmp['locationName']] = $tmp['locationName'];
+                            $added = true;
+
+                            $newPlaces[] = $place;
+                            $tmpCount[$place['locationName']] = $place['locationName'];
+                            $placeKey = count($tmpCount);
+                            continue;
+                        }
+                    }
+
+                    $newPlaces[] = $place;
+                    echo $key . ' ' . $place['locationName'] . PHP_EOL;
+                    if ($place['isMicrosoftLocation']) {
+                        $tmpCount[$place['locationName']] = $place['locationName'];
+                        $placeKey = count($tmpCount);
+                    }
+                }
+
+                $places = $newPlaces;
+            }
+        }
+        return $places;
     }
 
     private function startPlace($places, $placeIndex, $row, $user): array
@@ -153,13 +286,23 @@ class TimeTrackerV2Service
     private function checkGeoCodePlace($place)
     {
         $date = (new \DateTime($place['UpdateUtc']))->format('Y-m-d');
+        $dateNext = (new \DateTime($place['UpdateUtc']))->modify('+1 day')->format('Y-m-d');
         $isMicrosoftLocation = false;
         $haul_away = false;
         $locationName = $place['location'];
-        $locations = MicrosoftLocation::find()->where(['date_time' => $date])->all();
+        $locations = MicrosoftLocation::find()
+            ->where(['>=', 'date_time', $date])
+            ->andWhere(['<', 'date_time', $dateNext])
+            ->all();
+
         foreach ($locations as $location) {
             /** @var MicrosoftLocation $location */
-            $distance = $this->getDistance((float)$location->lat, (float)$location->lon, $place['Latitude'], $place['Longitude']);
+            $distance = $this->getDistance(
+                (float)$location->lat,
+                (float)$location->lon,
+                $place['Latitude'],
+                $place['Longitude']
+            );
             if ($distance < $this->params['distance']) {
                 $isMicrosoftLocation = true;
                 $locationName = $location->displayName;

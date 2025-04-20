@@ -157,9 +157,11 @@ class MicrosoftDataService
                 $newDisplayName = $street . ', ' . $city . ', ' . $state . ', ' . $postalCode;
                 $displayName = mb_strlen($newDisplayName) > mb_strlen($displayName) ? $newDisplayName : $displayName;
             }
+            $fullTime = $location['start']['dateTime'] ?? null;
+            $fullTime = $fullTime ? (new \DateTime($fullTime))->format('Y-m-d H:i:s') : $dateTimeStart;
             $exists = MicrosoftLocation::find()->where(['displayName' => $displayName])->one();
             $object = $exists ?: new MicrosoftLocation();
-            $newLocations[] = $this->saveLocation($object, $displayName, $isHaulAway, $dateTimeStart);
+            $newLocations[] = $this->saveLocation($object, $displayName, $isHaulAway, $fullTime);
         }
 
         return $newLocations;
