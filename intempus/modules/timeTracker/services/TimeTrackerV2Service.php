@@ -227,7 +227,6 @@ class TimeTrackerV2Service
                     }
 
                     $newPlaces[] = $place;
-                    echo $key . ' ' . $place['locationName'] . PHP_EOL;
                     if ($place['isMicrosoftLocation']) {
                         $tmpCount[$place['locationName']] = $place['locationName'];
                         $placeKey = count($tmpCount);
