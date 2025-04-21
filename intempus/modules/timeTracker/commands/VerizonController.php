@@ -2,6 +2,7 @@
 
 namespace app\modules\timeTracker\commands;
 
+use app\modules\timeTracker\models\MicrosoftGroup;
 use app\modules\timeTracker\services\VerizonDataService;
 use Yii;
 use yii\console\ExitCode;
@@ -28,17 +29,21 @@ class VerizonController extends Controller
             (new \DateTime())->modify('-3 days')->format('Y-m-d') . ' 00:00:00';
         $enddatetimeutc = $date ? (new \DateTime($date))->modify('+1 days')->format('Y-m-d') . ' 23:59:59'
             : (new \DateTime())->format('Y-m-d H:i:s');
-        $vehiclenumber = 7;
 
-        $histories = $this->apiDataService->getVehiclesHistory($vehiclenumber, $startdatetimeutc, $enddatetimeutc);
-        $addedNewHistories = 0;
-        if ($histories) {
-            $addedNewHistories = $this->apiDataService->saveNewHistories($histories);
+        $groups = MicrosoftGroup::find()->where(['>', 'verizon_id', 0])->asArray()->all();
+        foreach ($groups as $group) {
+            $vehiclenumber = $group['verizon_id'];
+
+            $histories = $this->apiDataService->getVehiclesHistory($vehiclenumber, $startdatetimeutc, $enddatetimeutc);
+            $addedNewHistories = 0;
+            if ($histories) {
+                $addedNewHistories = $this->apiDataService->saveNewHistories($histories);
+            }
+            Yii::info('actionHistory stopped. addedNewHistories=' . $addedNewHistories);
         }
 
-        Yii::info('actionHistory stopped. addedNewHistories='.$addedNewHistories);
 
-        echo "Successful added $addedNewHistories new Vehicles History\n";
+        echo "Successful added Vehicles History : " . count($groups) . "\n";
         return ExitCode::OK;
     }
 

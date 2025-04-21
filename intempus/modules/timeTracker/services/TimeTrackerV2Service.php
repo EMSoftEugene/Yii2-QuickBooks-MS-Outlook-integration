@@ -39,25 +39,24 @@ class TimeTrackerV2Service
         $startDate = $date . ' 00:00:00';
         $endDate = $date . ' 23:59:59';
         $userIds = VehiclesHistory::find()
-            ->select('VehicleName')
+            ->select('VehicleNumber')
             ->where(['between', 'UpdateUtc', $startDate, $endDate])
-            ->groupBy('VehicleName')
+            ->groupBy('VehicleNumber')
             ->column();
 
         foreach ($userIds as $userId) {
             $places = [];
             $placeIndex = 0;
-            $microsoftUser = MicrosoftGroup::find()->where(['like', 'name', $userId])->one();
+            $microsoftUser = MicrosoftGroup::find()->where(['verizon_id' => $userId])->one();
             if (!$microsoftUser) {
                 continue;
             }
 
             $rows = VehiclesHistory::find()
-                ->where(['VehicleName' => $userId])
+                ->where(['VehicleNumber' => $userId])
                 ->andWhere(['between', 'UpdateUtc', $startDate, $endDate])
                 ->orderBy('UpdateUtc ASC')
                 ->all();
-
 
             echo "countRows=" . count($rows) . PHP_EOL;
 

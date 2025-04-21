@@ -53,7 +53,6 @@ use yii\web\JsExpression;
 //                        'type'=>'success',
                         'before' => '',
                         'after' => '',
-                        'footer' => false
                     ],
                     'toolbar' => false,
                     'columns' => [
@@ -73,6 +72,23 @@ use yii\web\JsExpression;
                                 return $model->email;
                             },
                         ],
+                        [
+                            'label' => 'Verizon ID',
+                            'attribute' => 'verizon_id',
+                            'enableSorting' => false,
+                            'value' => function ($model) {
+                                return $model->verizon_id ? $model->verizon_id : '';
+                            },
+                        ],
+                        [
+                            'label' => 'Action',
+                            'enableSorting' => false,
+                            'format' => 'html',
+                            'value' => function ($model) {
+                                return '<a href="/time-tracker/microsoft/groups/' . $model->id . '">Edit</a>';
+                            },
+                        ],
+
                     ],
                 ]);
                 ?>

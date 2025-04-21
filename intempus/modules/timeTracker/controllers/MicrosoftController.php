@@ -2,11 +2,13 @@
 
 namespace app\modules\timeTracker\controllers;
 
+use app\modules\timeTracker\models\MicrosoftGroup;
 use app\modules\timeTracker\models\MicrosoftGroupSearch;
 use app\modules\timeTracker\services\interfaces\ApiInterface;
 use app\modules\timeTracker\services\MicrosoftService;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class MicrosoftController extends BaseController
@@ -101,6 +103,23 @@ class MicrosoftController extends BaseController
         return $this->render('groups', [
             'provider' => $dataProvider,
             'filter' => $filterModel,
+        ]);
+    }
+
+    public function actionUpdateGroup($id)
+    {
+        $model = MicrosoftGroup::findOne($id);
+        if (!$model) {
+            throw new \yii\web\NotFoundHttpException('Group not found');
+        }
+
+        if ($model->load(\Yii::$app->request->post()) && $model->save()) {
+            \Yii::$app->session->setFlash('success', 'Updated successfully');
+            return $this->redirect(['groups']);
+        }
+
+        return $this->render('groupEdit', [
+            'model' => $model,
         ]);
     }
 }

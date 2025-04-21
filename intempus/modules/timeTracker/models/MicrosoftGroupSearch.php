@@ -37,7 +37,9 @@ class MicrosoftGroupSearch extends MicrosoftGroup
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => false,
+            'pagination' => [
+                'pageSize' => 30,
+            ],
             'sort' => ['defaultOrder' => ['name' => SORT_ASC]],
         ]);
 
