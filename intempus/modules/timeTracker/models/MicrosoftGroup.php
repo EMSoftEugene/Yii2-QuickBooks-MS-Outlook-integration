@@ -16,7 +16,7 @@ use yii\web\IdentityInterface;
  * @property string $name
  * @property string $microsoft_id
  * @property string $email
- * @property integer $verizon_id
+ * @property string $verizon_id
  * @property timestamp $created_at
  * @property timestamp $updated_at
  */
@@ -26,7 +26,7 @@ class MicrosoftGroup extends ActiveRecord
     {
         return [
             [['name', 'microsoft_id', 'email'], 'string'],
-            [['verizon_id'], 'integer'],
+            [['verizon_id'], 'string', 'max' => 255],
             [['created_at', 'updated_at'], 'safe'],
         ];
     }

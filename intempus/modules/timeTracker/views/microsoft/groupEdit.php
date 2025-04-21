@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'verizon_id')->textInput(['type' => 'number']) ?>
+    <?= $form->field($model, 'verizon_id')->textInput() ?>
 
     <br/><br/>
     <div class="form-group">
