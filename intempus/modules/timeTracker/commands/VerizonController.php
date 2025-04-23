@@ -30,7 +30,7 @@ class VerizonController extends Controller
         $enddatetimeutc = $date ? (new \DateTime($date))->modify('+1 days')->format('Y-m-d') . ' 23:59:59'
             : (new \DateTime())->format('Y-m-d H:i:s');
 
-        $groups = MicrosoftGroup::find()->where(['>', 'verizon_id', 0])->asArray()->all();
+        $groups = MicrosoftGroup::getAvailable();
         foreach ($groups as $group) {
             $vehiclenumber = $group['verizon_id'];
 

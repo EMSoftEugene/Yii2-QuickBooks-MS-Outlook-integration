@@ -144,6 +144,7 @@ class TimeTrackerV2Service
         $ext = [];
         $locations = MicrosoftLocation::find()
             ->where(['>=', 'date_time', $date])
+            ->andWhere(['microsoft_id' => $microsoftUser->microsoft_id])
             ->andWhere(['<', 'date_time', $dateNext])
             ->orderBy('date_time', SORT_ASC)
             ->asArray()
@@ -244,7 +245,7 @@ class TimeTrackerV2Service
 
         if (!isset($places[$placeIndex]['start'])) {
             $places[$placeIndex]['start'] = $row->getAttributes();
-            $geoPlace = $this->checkGeoCodePlace($places[$placeIndex]['start']);
+            $geoPlace = $this->checkGeoCodePlace($places[$placeIndex]['start'], $user);
             $places[$placeIndex]['isMicrosoftLocation'] = $geoPlace['isMicrosoftLocation'];
             $places[$placeIndex]['locationName'] = $geoPlace['locationName'];
             $places[$placeIndex]['haul_away'] = $geoPlace['haul_away'];
@@ -281,7 +282,7 @@ class TimeTrackerV2Service
         return $places;
     }
 
-    private function checkGeoCodePlace($place)
+    private function checkGeoCodePlace($place, $microsoftUser)
     {
         $date = (new \DateTime($place['UpdateUtc']))->format('Y-m-d');
         $dateNext = (new \DateTime($place['UpdateUtc']))->modify('+1 day')->format('Y-m-d');
@@ -291,6 +292,7 @@ class TimeTrackerV2Service
         $locations = MicrosoftLocation::find()
             ->where(['>=', 'date_time', $date])
             ->andWhere(['<', 'date_time', $dateNext])
+            ->andWhere(['microsoft_id' => $microsoftUser->microsoft_id])
             ->all();
 
         foreach ($locations as $location) {

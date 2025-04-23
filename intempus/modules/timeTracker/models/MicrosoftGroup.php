@@ -86,4 +86,12 @@ class MicrosoftGroup extends ActiveRecord
         return $explode[2] ?? '';
     }
 
+    public static function getAvailable(): array
+    {
+        return self::find()
+            ->where(['not', ['verizon_id' => null]])
+            ->asArray()
+            ->all();
+    }
+
 }

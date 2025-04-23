@@ -41,7 +41,7 @@ class MicrosoftDataService
     {
         $count = 0;
         foreach ($groups as $group) {
-            $exists = MicrosoftGroup::find()->where(['microsoft_id' => $group['id']])->exists();
+            $exists = MicrosoftGroup::find()->where(['microsoft_id' => $group['id']])->one();
             if (!$exists) {
                 $microsoftGroup = new MicrosoftGroup();
                 $microsoftGroup->name = $group['displayName'];
@@ -49,6 +49,11 @@ class MicrosoftDataService
                 $microsoftGroup->microsoft_id = $group['id'];
                 $microsoftGroup->save();
                 $count++;
+            } else {
+                $exists->name = $group['displayName'];
+                $exists->email = $group['mail'] ?? '';
+                $exists->microsoft_id = $group['id'];
+                $exists->save();
             }
         }
         return $count;
@@ -83,7 +88,6 @@ class MicrosoftDataService
                 $result = array_merge($result, $tmpLocations);
             } catch (\GuzzleHttp\Exception\ClientException $e) {
             }
-
         }
         return $result;
     }
@@ -131,37 +135,53 @@ class MicrosoftDataService
      */
     public function groupsByNameAndDate($dateTimeStart, $dateTimeEnd): ?array
     {
-        $queryParams = [
-            '$select' => 'id,subject,bodyPreview,location, start, end, createdDateTime',
-            '$top' => '200',
-            '$filter' => "start/dateTime ge '" . $dateTimeStart . "' and start/dateTime lt '" . $dateTimeEnd . "'",
-        ];
-
-        $response = $this->apiService->requestGet('groups/ac6e55e0-20a8-4cbe-b5f5-3209d4f45056/events', $queryParams);
-        $locations = $response['value'] ?? null;
-
         $newLocations = [];
-        foreach ($locations as $location) {
-            $bodyPreview = $location['bodyPreview'] ?? null;
-            $isHaulAway = strpos($bodyPreview, 'haul away') !== false;
+        $groups = MicrosoftGroup::getAvailable();
+        foreach ($groups as $group) {
+            $queryParams = [
+                '$select' => 'id,subject,bodyPreview,location, start, end, createdDateTime',
+                '$top' => '200',
+                '$filter' => "start/dateTime ge '" . $dateTimeStart . "' and start/dateTime lt '" . $dateTimeEnd . "'",
+            ];
 
-            $displayName = $location['location']['displayName'] ?? null;
-            if (!$displayName) continue;
+            $response = $this->apiService->requestGet(
+                'groups/' . $group['microsoft_id'] . '/events',
+                $queryParams
+            );
 
-            $address = $location['location']['address'] ?? null;
-            if ($address) {
-                $street = $location['location']['address']['street'] ?? null;
-                $city = $location['location']['address']['city'] ?? null;
-                $state = $location['location']['address']['state'] ?? null;
-                $postalCode = $location['location']['address']['postalCode'] ?? null;
-                $newDisplayName = $street . ', ' . $city . ', ' . $state . ', ' . $postalCode;
-                $displayName = mb_strlen($newDisplayName) > mb_strlen($displayName) ? $newDisplayName : $displayName;
+            $locations = $response['value'] ?? null;
+
+//            if (isset($response['value']) && $response['value']){
+//                print_r($response);
+//                die;
+//            }
+
+            foreach ($locations as $location) {
+                $bodyPreview = $location['bodyPreview'] ?? null;
+                $isHaulAway = strpos($bodyPreview, 'haul away') !== false;
+
+                $displayName = $location['location']['displayName'] ?? null;
+                if (!$displayName) {
+                    continue;
+                }
+
+                $address = $location['location']['address'] ?? null;
+                if ($address) {
+                    $street = $location['location']['address']['street'] ?? null;
+                    $city = $location['location']['address']['city'] ?? null;
+                    $state = $location['location']['address']['state'] ?? null;
+                    $postalCode = $location['location']['address']['postalCode'] ?? null;
+                    $newDisplayName = $street . ', ' . $city . ', ' . $state . ', ' . $postalCode;
+                    $displayName = mb_strlen($newDisplayName) > mb_strlen(
+                        $displayName
+                    ) ? $newDisplayName : $displayName;
+                }
+                $fullTime = $location['start']['dateTime'] ?? null;
+                $fullTime = $fullTime ? (new \DateTime($fullTime))->format('Y-m-d H:i:s') : $dateTimeStart;
+                $exists = MicrosoftLocation::find()->where(['displayName' => $displayName])->one();
+                $object = $exists ?: new MicrosoftLocation();
+                $newLocations[] = $this->saveLocation($object, $displayName, $isHaulAway, $fullTime, $group['microsoft_id']);
             }
-            $fullTime = $location['start']['dateTime'] ?? null;
-            $fullTime = $fullTime ? (new \DateTime($fullTime))->format('Y-m-d H:i:s') : $dateTimeStart;
-            $exists = MicrosoftLocation::find()->where(['displayName' => $displayName])->one();
-            $object = $exists ?: new MicrosoftLocation();
-            $newLocations[] = $this->saveLocation($object, $displayName, $isHaulAway, $fullTime);
         }
 
         return $newLocations;
@@ -175,13 +195,19 @@ class MicrosoftDataService
      * @return array
      * @throws Exception
      */
-    private function saveLocation(MicrosoftLocation $microsoftLocation, string $displayName, bool $isHaulAway, string $dateTimeStart): array
-    {
+    private function saveLocation(
+        MicrosoftLocation $microsoftLocation,
+        string $displayName,
+        bool $isHaulAway,
+        string $dateTimeStart,
+        string $microsoft_id = ''
+    ): array {
         $microsoftLocation->lat = 0;
         $microsoftLocation->lon = 0;
         $microsoftLocation->displayName = $displayName;
         $microsoftLocation->haul_away = $isHaulAway;
         $microsoftLocation->date_time = $dateTimeStart;
+        $microsoftLocation->microsoft_id = $microsoft_id;
         $microsoftLocation = $this->geoCodeItem($microsoftLocation);
         $microsoftLocation->save();
         return MicrosoftLocation::find()->where(['displayName' => $displayName])->one()->toArray();
@@ -189,12 +215,12 @@ class MicrosoftDataService
 
     private function geoCodeItem(MicrosoftLocation $location): MicrosoftLocation
     {
-//        if (!$location->lat || !$location->lon) {
-        $response = $this->getCodeByLocationv2($location->displayName);
-        sleep(2);
-        $location->lat = $response['features'][0]['properties']['lat'] ?? null;
-        $location->lon = $response['features'][0]['properties']['lon'] ?? null;
-//        }
+        if (!$location->lat || !$location->lon) {
+            $response = $this->getCodeByLocationv2($location->displayName);
+            sleep(2);
+            $location->lat = $response['features'][0]['properties']['lat'] ?? null;
+            $location->lon = $response['features'][0]['properties']['lon'] ?? null;
+        }
         return $location;
     }
 

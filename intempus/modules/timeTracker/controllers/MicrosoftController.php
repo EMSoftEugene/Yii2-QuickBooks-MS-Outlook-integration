@@ -113,9 +113,12 @@ class MicrosoftController extends BaseController
             throw new \yii\web\NotFoundHttpException('Group not found');
         }
 
-        if ($model->load(\Yii::$app->request->post()) && $model->save()) {
-            \Yii::$app->session->setFlash('success', 'Updated successfully');
-            return $this->redirect(['groups']);
+        if ($model->load(\Yii::$app->request->post())) {
+            $model->verizon_id = $model->verizon_id ? $model->verizon_id : null;
+            if($model->save()){
+                \Yii::$app->session->setFlash('success', 'Updated successfully');
+                return $this->redirect(['groups']);
+            }
         }
 
         return $this->render('groupEdit', [
