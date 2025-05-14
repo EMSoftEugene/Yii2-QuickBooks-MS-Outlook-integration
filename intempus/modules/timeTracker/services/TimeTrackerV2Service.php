@@ -179,7 +179,7 @@ class TimeTrackerV2Service
                         );
                     }
 
-                    if ($clock_out && $place['isMicrosoftLocation'] && !$added) {
+                    if ($clock_out && !$added) {
                         $lastPlace = true;
 
                         if ($neededKey != 0) {
