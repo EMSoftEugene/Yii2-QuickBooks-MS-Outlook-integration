@@ -158,7 +158,7 @@ class TimeTrackerV2Service
         }
 
         if ($ext) {
-            foreach ($ext as $item) {
+            foreach ($ext as $extKey => $item) {
                 $newPlaces = [];
                 $tmpCount = [];
                 $neededKey = $item['key'];
@@ -177,6 +177,15 @@ class TimeTrackerV2Service
                             'h:i:s A',
                             strtotime('+10 minutes', strtotime($places[$key]['clock_out']))
                         );
+
+                        $myLastElement = end($newPlaces);
+
+                        if (isset($myLastElement['clock_in']) && $myLastElement['clock_in'] == $clock_out){
+                            $clock_out = date(
+                                'h:i:s A',
+                                strtotime('+60 minutes', strtotime($myLastElement['clock_out']))
+                            );
+                        }
                     }
 
                     if ($clock_out && !$added) {
@@ -216,11 +225,15 @@ class TimeTrackerV2Service
                             ];
 
                             $newPlaces[] = $tmp;
-                            $tmpCount[$tmp['locationName']] = $tmp['locationName'];
                             $added = true;
 
                             $newPlaces[] = $place;
-                            $tmpCount[$place['locationName']] = $place['locationName'];
+                            $tmpCount = [];
+                            foreach($newPlaces as $subPlace){
+                                if($subPlace['isMicrosoftLocation']){
+                                    $tmpCount[$subPlace['locationName']] = $subPlace['locationName'];
+                                }
+                            }
                             $placeKey = count($tmpCount);
                             continue;
                         }

@@ -52,6 +52,16 @@ trait CoordinateTrait
         $response = $client->request('GET', $url);
         $response = json_decode($response->getBody()->getContents(), true);
         return $response;
+
+
+//        $url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' .
+//            urlencode($name) . '&key='.$module->params['google_api_key'];
+//
+//        $response = $client->request('GET', $url);
+//        $response = json_decode($response->getBody()->getContents(), true);
+//
+//        $resultArr = $response['results'][0]['geometry']['location'];
+//        return $resultArr;
     }
 
     public function getLocationByCode(string $lat, string $lon)
