@@ -2,6 +2,7 @@
 
 namespace app\modules\timeTracker\models;
 
+use app\modules\timeTracker\traits\CoordinateTrait;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -39,6 +40,7 @@ use yii\web\IdentityInterface;
  */
 class VehiclesHistory extends ActiveRecord
 {
+    use CoordinateTrait;
     /**
      * @inheritdoc
      */
@@ -62,6 +64,18 @@ class VehiclesHistory extends ActiveRecord
                 'value' => new Expression('NOW()')
             ],
         ];
+    }
+
+    public static function getLocation($locationName)
+    {
+        return self::find()->where(['location' => $locationName])->one();
+    }
+
+    public function distance($latitudeFrom = 0,  $longitudeFrom = 0,  $latitudeTo = 0,  $longitudeTo = 0) {
+        if (!$latitudeFrom || !$longitudeFrom || !$latitudeTo || !$longitudeTo) {
+            return 0;
+        }
+        return $this->getDistance($latitudeFrom,  $longitudeFrom,  $latitudeTo,  $longitudeTo);
     }
 
 }

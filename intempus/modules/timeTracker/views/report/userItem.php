@@ -2,7 +2,9 @@
 
 /** @var yii\web\View $this */
 
+use app\modules\timeTracker\models\MicrosoftLocation;
 use app\modules\timeTracker\models\TimeTracker;
+use app\modules\timeTracker\models\VehiclesHistory;
 use kartik\form\ActiveForm;
 use kartik\grid\GridView;
 use yii\helpers\Html;
@@ -132,6 +134,13 @@ use yii\web\JsExpression;
                         [
                             'content' =>
                                 '<div style="float: left;">
+                                <a class="btn btn-outline-primary" 
+                                    href="/time-tracker/report/user-billable-consolidated/' . $id . '?' .
+                                'TimeTrackerSearch%5Bdate_range%5D=' . $filter->date_start. '+-+' . $filter->date_end .
+                                '&TimeTrackerSearch%5Bdate_start%5D=' . $filter->date_start . '&TimeTrackerSearch%5Bdate_end%5D=' . $filter->date_end .'">
+                                    Billable Total Report
+                                    </a>
+                                    
                                     <a class="btn btn-outline-primary" 
                                     href="/time-tracker/report/user-billable/' . $id . '?' .
                                     'TimeTrackerSearch%5Bdate_range%5D=' . $filter->date_start. '+-+' . $filter->date_end .
@@ -140,7 +149,7 @@ use yii\web\JsExpression;
                                     </a>
                                     
                                     </div>' .
-                                '<h4 style="font-weight: normal;">Total hours for selected period: <b>' . $h . 'h ' . $i . 'm</b></h4>',
+                                '<h4 style="font-weight: normal; display: none;">Total hours for selected period: <b>' . $h . 'h ' . $i . 'm</b></h4>',
                         ],
                     ],
                     'columns' => [
@@ -164,7 +173,20 @@ use yii\web\JsExpression;
                             'value' => function ($model, $key, $index, $widget) {
                                 $icon = $model->isMicrosoftLocation ?
                                     '<img class="outlook-logo" src="/images/outlook3.png" />' : '';
-                                return $icon .' <a style="text-decoration:none;" href="/time-tracker/report/location/'.$model["id"].'">'.$model['locationName'].'</a>';
+                                $url = $icon .' <a style="text-decoration:none;" href="/time-tracker/report/location/'.$model["id"].'">'.$model['locationName'].'</a>';
+
+                                if ($model->isMicrosoftLocation && isset($model->locationNameVerizon) && $model->locationNameVerizon) {
+                                    $microsoftLocation = MicrosoftLocation::getLocation($model['locationName']);
+//                                    $url .= ' | lat: '.$microsoftLocation->lat . ', lon: '.$microsoftLocation->lon;
+                                    $verizonLocation = VehiclesHistory::getLocation($model['locationNameVerizon']);
+                                    $url .= ' <br/>(<span title="Verizon location">' . $model->locationNameVerizon . ')';
+//                                        . ' | lat: '. $verizonLocation['Latitude'] .' , lon: '. $verizonLocation['Longitude'] .'</span>)';
+                                    $vehiclesHistory = new VehiclesHistory();
+//                                    $distance = $vehiclesHistory->distance($microsoftLocation->lat, $microsoftLocation->lon,$verizonLocation['Latitude'],$verizonLocation['Longitude']);
+//                                    $url .= '<br/>Distance: '.round($distance) . 'm';
+                                }
+
+                                return $url;
                             },
                             'filter' => AutoComplete::widget([
                                 'model' => $filter,
@@ -187,6 +209,11 @@ use yii\web\JsExpression;
                             'value' => function ($model, $key, $index, $widget) {
                                 $y = (new \DateTime($model['clock_in']))->format('H:i:s');
                                 $rounded = date('h:i A', round(strtotime($y)/60)*60);
+                                if ($model->isMicrosoftLocation) {
+                                    if(!isset($model->locationNameVerizon) || !$model->locationNameVerizon){
+                                        return '';
+                                    }
+                                }
                                 return $rounded;
                             },
                         ],
@@ -197,13 +224,25 @@ use yii\web\JsExpression;
                             'value' => function ($model, $key, $index, $widget) {
                                 $y = (new \DateTime($model['clock_out']))->format('H:i:s');
                                 $rounded = date('h:i A', round(strtotime($y)/60)*60);
+                                if ($model->isMicrosoftLocation) {
+                                    if(!isset($model->locationNameVerizon) || !$model->locationNameVerizon){
+                                        return '';
+                                    }
+                                }
                                 return $rounded;
                             },
                         ],
                         [
                             'attribute' => 'duration',
                             'enableSorting' => false,
-                            'value' => 'duration',
+                            'value' => function ($model, $key, $index, $widget) {
+                                if ($model->isMicrosoftLocation) {
+                                    if(!isset($model->locationNameVerizon) || !$model->locationNameVerizon){
+                                        return 'No GPS records';
+                                    }
+                                }
+                                return $model['duration'];
+                            },
                         ],
                     ],
                     'responsive' => true,

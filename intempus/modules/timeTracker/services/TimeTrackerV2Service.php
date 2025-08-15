@@ -261,6 +261,7 @@ class TimeTrackerV2Service
             $geoPlace = $this->checkGeoCodePlace($places[$placeIndex]['start'], $user);
             $places[$placeIndex]['isMicrosoftLocation'] = $geoPlace['isMicrosoftLocation'];
             $places[$placeIndex]['locationName'] = $geoPlace['locationName'];
+            $places[$placeIndex]['locationNameVerizon'] = $geoPlace['locationNameVerizon'];
             $places[$placeIndex]['haul_away'] = $geoPlace['haul_away'];
             $places[$placeIndex]['user_id'] = $user->microsoft_id;
             $places[$placeIndex]['user'] = $user->name;
@@ -302,6 +303,8 @@ class TimeTrackerV2Service
         $isMicrosoftLocation = false;
         $haul_away = false;
         $locationName = $place['location'];
+        $locationNameVerizon = $place['location'];
+
         $locations = MicrosoftLocation::find()
             ->where(['>=', 'date_time', $date])
             ->andWhere(['<', 'date_time', $dateNext])
@@ -324,7 +327,7 @@ class TimeTrackerV2Service
             }
         }
 
-        return compact('isMicrosoftLocation', 'locationName', 'haul_away');
+        return compact('isMicrosoftLocation', 'locationName', 'haul_away', 'locationNameVerizon');
     }
 
     private function saveTimeTracker(array $places): void
@@ -342,6 +345,7 @@ class TimeTrackerV2Service
                 $timeTracker = new TimeTracker();
                 $timeTracker->isMicrosoftLocation = $place['isMicrosoftLocation'];
                 $timeTracker->locationName = $place['locationName'];
+                $timeTracker->locationNameVerizon = $place['locationNameVerizon'];
                 $timeTracker->date = $place['date'];
                 $timeTracker->clock_in = $clock_in;
                 $timeTracker->clock_out = $clock_out;

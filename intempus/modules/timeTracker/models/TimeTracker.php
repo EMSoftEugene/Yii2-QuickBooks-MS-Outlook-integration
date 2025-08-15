@@ -14,6 +14,7 @@ use yii\web\IdentityInterface;
  * @property integer $id
  * @property boolean $isMicrosoftLocation
  * @property string $locationName
+ * @property string $locationNameVerizon
  * @property date $date
  * @property time $clock_in
  * @property time $clock_out

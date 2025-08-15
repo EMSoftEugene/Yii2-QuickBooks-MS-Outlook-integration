@@ -141,11 +141,9 @@ use yii\web\JsExpression;
                                     'pluginOptions' => [
                                         'locale' => [
                                             'format' => 'Y-m-d',
-//                                        'separator' => ' to ',
                                         ],
                                     ],
                                 ]) . '<input type="submit" class="submit btn btn-primary" value="Search" /></div>',
-//                        'type'=>'success',
                             'before' => '',
                             'after' => '',
                             'footer' => false
@@ -177,52 +175,53 @@ use yii\web\JsExpression;
 //                                    'mergeColumns' => [[1,3]], // columns to merge in summary
                                         'content' => [             // content to show in each summary cell
                                             1 => 'Total:',
-                                            9 => '<div data-name="' . $model['date'] . '" class="total_date0" style="cursor: pointer;" 
+                                            2 => '<div data-name="' . $model['date'] . '" class="total_date0" style="cursor: pointer;" 
                                             data-content-id="' . $model['date'] . 'z2' . '"
                                             >' . $totalDay0[$model['date']] . '</div>',
-                                            10 => '<div data-name="' . $model['date'] . '" class="total_date" style="cursor: pointer;" 
-                                            data-content-id="' . $model['date'] . 'z' . '"
-                                            >' . $totalDay[$model['date']] . '</div>',
+//                                            10 => '<div data-name="' . $model['date'] . '" class="total_date" style="cursor: pointer;"
+//                                            data-content-id="' . $model['date'] . 'z' . '"
+//                                            >' . $totalDay[$model['date']] . '</div>',
                                         ],
-//                                    'contentFormats' => [      // content reformatting for each summary cell
-//                                        4 => ['format' => 'number', 'decimals' => 2],
-//                                        8 => ['format' => 'number', 'decimals' => 2],
-//                                    ],
-//                                    'contentOptions' => [      // content html attributes for each summary cell
-//                                        1 => ['style' => 'font-variant:small-caps'],
-//                                        8 => ['style' => 'text-align:right'],
-//                                    ],
-                                        // html attributes for group summary row
                                         'options' => ['class' => 'info table-info', 'style' => 'font-weight:bold;']
                                     ];
                                 }
                             ],
-                            [
-                                'label' => '#',
-//                                'attribute' => 'clock_in',
-                                'enableSorting' => false,
-                                'value' => function ($model, $key, $index, $widget) {
-                                    return 'L' . $model['L'];
-                                },
-                            ],
+//                            [
+//                                'label' => '#',
+//                                'enableSorting' => false,
+//                                'value' => function ($model, $key, $index, $widget) {
+//                                    return $key;
+//                                },
+//                            ],
                             [
                                 'label' => 'Location',
                                 'attribute' => 'locationName',
                                 'enableSorting' => false,
                                 'format' => 'html',
                                 'value' => function ($model, $key, $index, $widget) {
+                                    $count = $model['count']+1;
                                     $icon = $model['isMicrosoftLocation'] ?
                                         '<img class="outlook-logo" src="/images/outlook3.png" />' : '';
+                                    $result = $icon . ' <span>' . $model['locationName'] . '</span>';
 
-                                    $url = $icon . ' <span>' . $model['locationName'] . '</span>';
-                                    if ($model['isMicrosoftLocation']) {
-                                        if(isset($model['locationNameVerizon']) && $model['locationNameVerizon']){
-//                                            $url .= ' <br/>(<span title="Verizon location">' . $model['locationNameVerizon'] . ')';
-                                        }
+                                    $id = TimeTracker::findOne(['user_id' => $model['user_id']])->id;
+                                    $result = $icon . ' <a style="text-decoration:none;"
+                                        href="/time-tracker/report/user-billable/' . $id . '?' .
+                                        'TimeTrackerSearch%5Bdate_range%5D=' . $model['date'] . '+-+' . $model['date'] .
+                                        '&TimeTrackerSearch%5Bdate_start%5D=' . $model['date'] . '&TimeTrackerSearch%5Bdate_end%5D=' . $model['date'] .'">'
+                                        . $model['locationName']
+                                        . '</a>';
+
+
+//                                    print_r($model);
+//                                    die;
+
+                                    // http://intempus.local/time-tracker/report/user-billable/286?TimeTrackerSearch%5Bdate_range%5D=2025-08-13+-+2025-08-13&TimeTrackerSearch%5Bdate_start%5D=2025-08-13&TimeTrackerSearch%5Bdate_end%5D=2025-08-13
+
+                                    if($count > 1){
+                                        $result = $result . ' (<span style="font-style: italic;">' . $count . ' rows</span>)';
                                     }
-
-                                    return $url;
-//                                    return $icon . ' <a style="text-decoration:none;" href="/time-tracker/report/location/' . $model["id"] . '">' . $model['locationName'] . '</a>';
+                                    return $result;
                                 },
                                 'filter' => AutoComplete::widget([
                                     'model' => $filter,
@@ -241,109 +240,7 @@ use yii\web\JsExpression;
                                 ]),
                             ],
                             [
-                                'label' => 'Clock In',
-                                'attribute' => 'clock_in',
-                                'enableSorting' => false,
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $y = (new \DateTime($model['clock_in']))->format('H:i:s');
-                                    $rounded = date('h:i A', round(strtotime($y) / 60) * 60);
-                                    if ($model['isMicrosoftLocation']) {
-                                        if(!isset($model['locationNameVerizon']) || !$model['locationNameVerizon']){
-                                            return '';
-                                        }
-                                    }
-                                    return $rounded;
-                                },
-                            ],
-                            [
-                                'label' => 'Clock Out',
-                                'attribute' => 'clock_out',
-                                'enableSorting' => false,
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $y = (new \DateTime($model['clock_out']))->format('H:i:s');
-                                    $rounded = date('h:i A', round(strtotime($y) / 60) * 60);
-                                    if ($model['isMicrosoftLocation']) {
-                                        if(!isset($model['locationNameVerizon']) || !$model['locationNameVerizon']){
-                                            return '';
-                                        }
-                                    }
-                                    return $rounded;
-                                },
-                            ],
-                            [
-                                'attribute' => 'duration',
-                                'enableSorting' => false,
-                                'value' => function ($model, $key, $index, $widget) {
-                                    if ($model['isMicrosoftLocation']) {
-                                        if(!isset($model['locationNameVerizon']) || !$model['locationNameVerizon']){
-                                            return '';
-                                        }
-                                    }
-                                    return $model['duration'];
-                                },
-                            ],
-                            [
-                                'label' => 'Rule 1',
-                                'enableSorting' => false,
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $value = $model['rule1'] ?: '';
-                                    $desc = $model['rule1_desc'] ?: '';
-                                    $id = $model['id'] . 'rule1';
-
-                                    if ($model['isMicrosoftLocation']) {
-                                        if(!isset($model['locationNameVerizon']) || !$model['locationNameVerizon']){
-                                            return '';
-                                        }
-                                    }
-
-                                    return '<span class="rule" data-name="Rule 1" data-content-id="' . $id . '">'
-                                        . $value . '</span>'
-                                        . '<div style="display:none;" id="' . $id . '">' . $desc . '</div>';
-                                },
-                            ],
-                            [
-                                'label' => 'Rule 2',
-                                'enableSorting' => false,
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $value = $model['rule2'] ?: '';
-                                    $desc = $model['rule2_desc'] ?: '';
-                                    $id = $model['id'] . 'rule2';
-
-                                    if ($model['isMicrosoftLocation']) {
-                                        if(!isset($model['locationNameVerizon']) || !$model['locationNameVerizon']){
-                                            return '';
-                                        }
-                                    }
-
-                                    return '<span class="rule" data-name="Rule 2" data-content-id="' . $id . '">'
-                                        . $value . '</span>'
-                                        . '<div style="display:none;" id="' . $id . '">' . $desc . '</div>';
-                                },
-                            ],
-                            [
-                                'label' => 'Rule 3',
-                                'enableSorting' => false,
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $value = $model['rule3'] ?: '';
-                                    $desc = $model['rule3_desc'] ?: '';
-                                    $id = $model['id'] . 'rule3';
-
-                                    if ($model['isMicrosoftLocation']) {
-                                        if(!isset($model['locationNameVerizon']) || !$model['locationNameVerizon']){
-                                            return '';
-                                        }
-                                    }
-
-                                    return '<span class="rule" data-name="Rule 3" data-content-id="' . $id . '">'
-                                        . $value . '</span>'
-                                        . '<div style="display:none;" id="' . $id . '">' . $desc . '</div>';
-                                },
-                            ],
-                            [
-                                'label' => 'Rule 4',
+                                'label' => 'Duration',
                                 'enableSorting' => false,
                                 'format' => 'raw',
                                 'pageSummary' => true,
@@ -358,18 +255,7 @@ use yii\web\JsExpression;
                                         }
                                     }
 
-                                    return '<span class="rule" data-name="Rule 4" data-content-id="' . $id . '">'
-                                        . $value . '</span>'
-                                        . '<div style="display:none;" id="' . $id . '">' . $desc . '</div>';
-                                },
-                            ],
-                            [
-                                'label' => 'Rule 5',
-                                'enableSorting' => false,
-                                'format' => 'raw',
-                                'pageSummary' => true,
-                                'value' => function ($model, $key, $index, $widget) {
-                                    return '';
+                                    return $value;
                                 },
                             ],
                         ],
@@ -442,12 +328,6 @@ $script = <<< JS
 
           modalEl.modal('toggle');
         });
-        // $('#helperModalContent').click(function() {
-        //   modalContent2.show();
-        // });
-        // modalEl.on('hidden.bs.modal', function () {
-        //    modalContent2.hide();
-        // });
         
         $('.rule').click(function() {
           let name = $(this).attr('data-name');

@@ -49,4 +49,9 @@ class MicrosoftLocation extends ActiveRecord
         ];
     }
 
+    public static function getLocation($locationName)
+    {
+        return self::find()->where(['displayName' => $locationName])->one();
+    }
+
 }
