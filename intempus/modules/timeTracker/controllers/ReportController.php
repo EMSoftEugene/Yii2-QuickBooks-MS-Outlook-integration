@@ -548,6 +548,8 @@ class ReportController extends BaseController
                 $formula[$key][1] .= ' + ' .$extraValueDesc . '#overtime';
             }
         }
+        $resTotalDay = is_array($totalDay) && !empty($totalDay) ? array_shift($totalDay) : '00:00';
+        $resTotalDay = $resTotalDay ?: '00:00';
 
         $arr = [];
         foreach ($calculatedData as $key => $item){
@@ -583,6 +585,7 @@ class ReportController extends BaseController
             'id' => $id,
             'totalDay' => $totalDay,
             'totalDay0' => $totalDay0,
+            'resTotalDay' => $resTotalDay,
             'formula' => $formula,
         ]);
     }

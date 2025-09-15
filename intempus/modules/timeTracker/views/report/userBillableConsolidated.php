@@ -125,7 +125,6 @@ use yii\web\JsExpression;
                     $h = str_pad($total[0], 2, '0', STR_PAD_LEFT);
                     $i = str_pad($total[1], 2, '0', STR_PAD_LEFT);
 
-
                     echo \kartik\grid\GridView::widget([
                         'dataProvider' => $provider,
                         'filterModel' => $filter,
@@ -169,18 +168,18 @@ use yii\web\JsExpression;
                                 'groupedRow' => true,                    // move grouped column to a single grouped row
                                 'groupOddCssClass' => 'kv-grouped-row',  // configure odd group cell css class
                                 'groupEvenCssClass' => 'kv-grouped-row', // configure even group cell css class
-                                'groupFooter' => function ($model, $key, $index, $widget) use ($totalDay, $totalDay0
+                                'groupFooter' => function ($model, $key, $index, $widget) use ($totalDay, $totalDay0, $resTotalDay
                                 ) { // Closure method
                                     return [
 //                                    'mergeColumns' => [[1,3]], // columns to merge in summary
                                         'content' => [             // content to show in each summary cell
                                             1 => 'Total:',
-                                            2 => '<div data-name="' . $model['date'] . '" class="total_date0" style="cursor: pointer;" 
-                                            data-content-id="' . $model['date'] . 'z2' . '"
-                                            >' . $totalDay0[$model['date']] . '</div>',
-//                                            10 => '<div data-name="' . $model['date'] . '" class="total_date" style="cursor: pointer;"
-//                                            data-content-id="' . $model['date'] . 'z' . '"
-//                                            >' . $totalDay[$model['date']] . '</div>',
+//                                            2 => '<div data-name="' . $model['date'] . '" class="total_date0" style="cursor: pointer;"
+//                                            data-content-id="' . $model['date'] . 'z2' . '"
+//                                            >' . $totalDay0[$model['date']] . '</div>',
+                                            2 => '<div data-name="' . $model['date'] . '" class="total_date" style="cursor: pointer;"
+                                            data-content-id="' . $model['date'] . 'z' . '"
+                                            >' . $resTotalDay . '</div>',
                                         ],
                                         'options' => ['class' => 'info table-info', 'style' => 'font-weight:bold;']
                                     ];
@@ -245,7 +244,7 @@ use yii\web\JsExpression;
                                 'format' => 'raw',
                                 'pageSummary' => true,
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $value = $model['rule5'] ?: '';
+                                    $value = $model['rule4'] ?: '';
                                     $desc = $model['rule4_desc'] ?: '';
                                     $id = $model['id'] . 'rule4';
 
