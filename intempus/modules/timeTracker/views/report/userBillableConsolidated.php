@@ -245,7 +245,7 @@ use yii\web\JsExpression;
                                 'format' => 'raw',
                                 'pageSummary' => true,
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $value = $model['rule4'] ?: '';
+                                    $value = $model['rule5'] ?: '';
                                     $desc = $model['rule4_desc'] ?: '';
                                     $id = $model['id'] . 'rule4';
 
