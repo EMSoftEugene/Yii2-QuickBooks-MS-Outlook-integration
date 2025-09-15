@@ -345,6 +345,9 @@ class TimeTrackerV2Service
                 $timeTracker = new TimeTracker();
                 $timeTracker->isMicrosoftLocation = $place['isMicrosoftLocation'];
                 $timeTracker->locationName = $place['locationName'];
+                if (!isset($place['locationNameVerizon'])){
+                    $place['locationNameVerizon'] = '';
+                }
                 $timeTracker->locationNameVerizon = $place['locationNameVerizon'];
                 $timeTracker->date = $place['date'];
                 $timeTracker->clock_in = $clock_in;
