@@ -341,14 +341,23 @@ class ReportController extends BaseController
             if ($extraMinutes < 0) {
                 continue;
             }
-            $extraHours = ceil($extraMinutes/60);
-            if ($extraHours > 0){
-                $extraValue = 1 * 0.5;
-                $extraValueDesc = DateTimeHelper::formatHM('00:'.$extraValue*60);
-                $extraValue = '00:'. $extraValue * 60;
+
+            $extraHours = $extraMinutes / 60;
+            $extraValue = $extraHours * 0.5;
+
+            if ($extraValue > 0){
+                $extraMinutesValue = $extraValue * 60;
+
+                $hours = floor($extraMinutesValue / 60);
+                $minutes = $extraMinutesValue % 60;
+                $timeString = sprintf("%02d:%02d", $hours, $minutes);
+
+                $extraValueDesc = DateTimeHelper::formatHM($timeString);
+                $extraValueFormatted = $timeString;
+
                 $item = DateTimeHelper::addition(
                     $item ?? '00:00',
-                    $extraValue
+                    $extraValueFormatted
                 );
                 $formula[$key][1] .= ' + ' .$extraValueDesc . '#overtime';
             }
@@ -536,14 +545,23 @@ class ReportController extends BaseController
             if ($extraMinutes < 0) {
                 continue;
             }
-            $extraHours = ceil($extraMinutes/60);
-            if ($extraHours > 0){
-                $extraValue = 1 * 0.5;
-                $extraValueDesc = DateTimeHelper::formatHM('00:'.$extraValue*60);
-                $extraValue = '00:'. $extraValue * 60;
+
+            $extraHours = $extraMinutes / 60;
+            $extraValue = $extraHours * 0.5;
+
+            if ($extraValue > 0){
+                $extraMinutesValue = $extraValue * 60;
+
+                $hours = floor($extraMinutesValue / 60);
+                $minutes = $extraMinutesValue % 60;
+                $timeString = sprintf("%02d:%02d", $hours, $minutes);
+
+                $extraValueDesc = DateTimeHelper::formatHM($timeString);
+                $extraValueFormatted = $timeString;
+
                 $item = DateTimeHelper::addition(
                     $item ?? '00:00',
-                    $extraValue
+                    $extraValueFormatted
                 );
                 $formula[$key][1] .= ' + ' .$extraValueDesc . '#overtime';
             }
