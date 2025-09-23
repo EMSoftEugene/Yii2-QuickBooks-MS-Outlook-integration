@@ -6,6 +6,7 @@ use app\modules\timeTracker\models\MicrosoftLocation;
 use app\modules\timeTracker\services\TimeTrackerService;
 use app\modules\timeTracker\services\TimeTrackerV2Service;
 use app\modules\timeTracker\services\TsheetDataService;
+use app\modules\timeTracker\traits\ScriptMonitorTrait;
 use Yii;
 use yii\console\ExitCode;
 use yii\console\Controller;
@@ -15,6 +16,8 @@ use yii\console\Controller;
  */
 class TimeTrackerController extends Controller
 {
+    use ScriptMonitorTrait;
+
     private TimeTrackerService $timeTrackerService;
     private TimeTrackerV2Service $timeTrackerV2Service;
 
@@ -40,11 +43,33 @@ class TimeTrackerController extends Controller
 
     public function actionV2($date = null)
     {
-        $date = $date ? (new \DateTime($date))->format('Y-m-d') : (new \DateTime())->modify('-2 days')->format('Y-m-d');
-        $addedRows = $this->timeTrackerV2Service->create($date);
+        $date = $date ?: date('Y-m-d');
 
-        echo "Successful added $addedRows new rows\n";
-        return ExitCode::OK;
+        try {
+            $previousScripts = [
+                'timeTracker/verizon/history',
+                'timeTracker/microsoft/real-group'
+            ];
+
+            foreach ($previousScripts as $script) {
+                if (!$this->checkPreviousScriptSuccess($script, $date)) {
+                    echo "Previous script $script failed. Stopping execution.\n";
+                    return ExitCode::UNSPECIFIED_ERROR;
+                }
+            }
+
+            $addedRows = $this->timeTrackerV2Service->create($date);
+
+            $this->saveScriptStatus('timeTracker/time-tracker/v2', 'success', $date);
+
+            echo "Successful added $addedRows new rows\n";
+            return ExitCode::OK;
+
+        } catch (\Exception $e) {
+            $this->saveScriptStatus('timeTracker/time-tracker/v2', 'failed', $date);
+            Yii::error("V2 script failed: " . $e->getMessage());
+            return ExitCode::UNSPECIFIED_ERROR;
+        }
     }
 
 }

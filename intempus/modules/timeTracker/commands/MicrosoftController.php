@@ -6,6 +6,7 @@ use app\modules\timeTracker\models\MicrosoftLocation;
 use app\modules\timeTracker\services\interfaces\ApiInterface;
 use app\modules\timeTracker\services\MicrosoftDataService;
 use app\modules\timeTracker\services\MicrosoftService;
+use app\modules\timeTracker\traits\ScriptMonitorTrait;
 use Yii;
 use yii\console\ExitCode;
 use yii\console\Controller;
@@ -16,6 +17,8 @@ use yii\helpers\ArrayHelper;
  */
 class MicrosoftController extends Controller
 {
+    use ScriptMonitorTrait;
+
     private MicrosoftDataService $apiDataService;
 
     public function __construct($id, $module, $config = [])
@@ -62,15 +65,25 @@ class MicrosoftController extends Controller
 
     public function actionRealGroup($date = null)
     {
-        $dateTimeStart = $date ? (new \DateTime($date))->format('Y-m-d') : (new \DateTime())->modify('-2 days')->format('Y-m-d');
-        $dateTimeEnd = $date ? (new \DateTime($date))->modify('+1 days')->format('Y-m-d') : (new \DateTime())->modify('-1 days')->format('Y-m-d');
+        $date = $date ?: date('Y-m-d');
 
-        $groups = $this->apiDataService->groupsByNameAndDate($dateTimeStart, $dateTimeEnd);
+        try {
+            $dateTimeStart = (new \DateTime($date))->format('Y-m-d');
+            $dateTimeEnd = (new \DateTime($date))->modify('+1 days')->format('Y-m-d');
 
-        echo "Successful found " . count($groups) . " Location\n";
-        return ExitCode::OK;
+            $groups = $this->apiDataService->groupsByNameAndDate($dateTimeStart, $dateTimeEnd);
+
+            $this->saveScriptStatus('timeTracker/microsoft/real-group', 'success', $date);
+
+            echo "Successful found " . count($groups) . " Location\n";
+            return ExitCode::OK;
+
+        } catch (\Exception $e) {
+            $this->saveScriptStatus('timeTracker/microsoft/real-group', 'failed', $date);
+            Yii::error("Real-group script failed: " . $e->getMessage());
+            return ExitCode::UNSPECIFIED_ERROR;
+        }
     }
-
 
 
 }

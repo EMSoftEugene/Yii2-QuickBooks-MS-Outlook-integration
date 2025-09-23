@@ -4,6 +4,7 @@ namespace app\modules\timeTracker\commands;
 
 use app\modules\timeTracker\models\MicrosoftGroup;
 use app\modules\timeTracker\services\VerizonDataService;
+use app\modules\timeTracker\traits\ScriptMonitorTrait;
 use Yii;
 use yii\console\ExitCode;
 use yii\console\Controller;
@@ -13,6 +14,8 @@ use yii\console\Controller;
  */
 class VerizonController extends Controller
 {
+    use ScriptMonitorTrait;
+
     private VerizonDataService $apiDataService;
 
     public function __construct($id, $module, $config = [])
@@ -23,28 +26,35 @@ class VerizonController extends Controller
 
     public function actionHistory($date = null)
     {
-        Yii::info('actionHistory start');
+        $date = $date ?: date('Y-m-d');
 
-        $startdatetimeutc = $date ? (new \DateTime($date))->modify('-1 days')->format('Y-m-d') . ' 00:00:00' :
-            (new \DateTime())->modify('-3 days')->format('Y-m-d') . ' 00:00:00';
-        $enddatetimeutc = $date ? (new \DateTime($date))->modify('+1 days')->format('Y-m-d') . ' 23:59:59'
-            : (new \DateTime())->format('Y-m-d H:i:s');
+        try {
+            Yii::info('actionHistory start');
 
-        $groups = MicrosoftGroup::getAvailable();
-        foreach ($groups as $group) {
-            $vehiclenumber = $group['verizon_id'];
+            $startdatetimeutc = (new \DateTime($date))->modify('-1 days')->format('Y-m-d') . ' 00:00:00';
+            $enddatetimeutc = (new \DateTime($date))->modify('+1 days')->format('Y-m-d') . ' 23:59:59';
 
-            $histories = $this->apiDataService->getVehiclesHistory($vehiclenumber, $startdatetimeutc, $enddatetimeutc);
-            $addedNewHistories = 0;
-            if ($histories) {
-                $addedNewHistories = $this->apiDataService->saveNewHistories($histories);
+            $groups = MicrosoftGroup::getAvailable();
+            foreach ($groups as $group) {
+                $vehiclenumber = $group['verizon_id'];
+                $histories = $this->apiDataService->getVehiclesHistory($vehiclenumber, $startdatetimeutc, $enddatetimeutc);
+                $addedNewHistories = 0;
+                if ($histories) {
+                    $addedNewHistories = $this->apiDataService->saveNewHistories($histories);
+                }
+                Yii::info('actionHistory stopped. addedNewHistories=' . $addedNewHistories);
             }
-            Yii::info('actionHistory stopped. addedNewHistories=' . $addedNewHistories);
+
+            $this->saveScriptStatus('timeTracker/verizon/history', 'success', $date);
+
+            echo "Successful added Vehicles History : " . count($groups) . "\n";
+            return ExitCode::OK;
+
+        } catch (\Exception $e) {
+            $this->saveScriptStatus('timeTracker/verizon/history', 'failed', $date);
+            Yii::error("History script failed: " . $e->getMessage());
+            return ExitCode::UNSPECIFIED_ERROR;
         }
-
-
-        echo "Successful added Vehicles History : " . count($groups) . "\n";
-        return ExitCode::OK;
     }
 
 }
