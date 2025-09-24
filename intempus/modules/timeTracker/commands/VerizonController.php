@@ -35,7 +35,7 @@ class VerizonController extends Controller
             Yii::info('actionHistory start');
 
             $startdatetimeutc = (new \DateTime($date . ' 00:00:00', new \DateTimeZone('UTC')))->format('Y-m-d H:i:s');
-            $enddatetimeutc = (new \DateTime($date . ' 23:59:59', new \DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+            $enddatetimeutc = (new \DateTime($date . ' 23:59:59', new \DateTimeZone('UTC')))->modify('+12 hours')->format('Y-m-d H:i:s');
 
             echo "Processing date: $date\n";
             echo "UTC Date range: $startdatetimeutc to $enddatetimeutc\n";
