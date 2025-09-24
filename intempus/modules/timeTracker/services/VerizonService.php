@@ -92,12 +92,29 @@ class VerizonService implements ApiInterface
 
     public function requestGet($url, $queryParams = [])
     {
-        $response = $this->client->request('GET', $url, [
-            'headers' => $this->headers,
-            'query' => $queryParams
-        ]);
+        try {
+            echo "API Request: GET $url\n";
+            echo "Query params: " . print_r($queryParams, true) . "\n";
 
-        return json_decode($response->getBody()->getContents(), true);
+            $response = $this->client->request('GET', $url, [
+                'headers' => $this->headers,
+                'query' => $queryParams,
+            ]);
+
+            $statusCode = $response->getStatusCode();
+            $body = $response->getBody()->getContents();
+
+            echo "API Response: Status $statusCode\n";
+
+            return json_decode($body, true);
+
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            echo "API Request failed: " . $e->getMessage() . "\n";
+            if ($e->hasResponse()) {
+                echo "Response body: " . $e->getResponse()->getBody()->getContents() . "\n";
+            }
+            throw $e;
+        }
     }
 
     public function requestPost($url, $params = [])
