@@ -573,24 +573,21 @@ class ReportController extends BaseController
 
         $arr = [];
         foreach ($calculatedData as $key => $item){
-            $item['count'] = 0;
-            $locationsWithKeys = array_column($arr, 'locationName', null);
-            $searchKey = array_search($item['locationName'], $locationsWithKeys);
-            if ($searchKey !== false) {
-                $arr[$searchKey]['rule4'] = DateTimeHelper::addition(
-                    $arr[$searchKey]['rule4'],
+            $item['count'] = 1;
+
+            $uniqueKey = $item['locationName'] . '|' . $item['date'];
+
+            if (isset($arr[$uniqueKey])) {
+                $arr[$uniqueKey]['rule4'] = DateTimeHelper::addition(
+                    $arr[$uniqueKey]['rule4'],
                     $item['rule4']
                 );
-                $arr[$searchKey]['count']++;
-                continue;
+                $arr[$uniqueKey]['count']++;
+            } else {
+                $arr[$uniqueKey] = $item;
             }
-
-            if (isset($item['locationName']) && $item['locationName'] == ''){
-
-            }
-            $arr[] = $item;
         }
-        $calculatedData = $arr;
+        $calculatedData = array_values($arr);
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $calculatedData,
