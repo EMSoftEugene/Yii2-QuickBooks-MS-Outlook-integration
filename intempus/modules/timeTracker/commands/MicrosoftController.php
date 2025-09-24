@@ -65,7 +65,7 @@ class MicrosoftController extends Controller
 
     public function actionRealGroup($date = null)
     {
-        $date = $date ?: date('Y-m-d');
+        $date = $date ?: (new \DateTime($date))->modify('-1 days')->format('Y-m-d');
 
         try {
             $dateTimeStart = (new \DateTime($date))->format('Y-m-d');
@@ -79,6 +79,7 @@ class MicrosoftController extends Controller
             return ExitCode::OK;
 
         } catch (\Exception $e) {
+            print_r($e->getMessage());
             $this->saveScriptStatus('timeTracker/microsoft/real-group', 'failed', $date);
             Yii::error("Real-group script failed: " . $e->getMessage());
             return ExitCode::UNSPECIFIED_ERROR;

@@ -26,7 +26,7 @@ class VerizonController extends Controller
 
     public function actionHistory($date = null)
     {
-        $date = $date ?: date('Y-m-d');
+        $date = $date ?: (new \DateTime($date))->modify('-1 days')->format('Y-m-d');
 
         try {
             Yii::info('actionHistory start');
@@ -52,6 +52,7 @@ class VerizonController extends Controller
 
         } catch (\Exception $e) {
             $this->saveScriptStatus('timeTracker/verizon/history', 'failed', $date);
+            print_r($e->getMessage());
             Yii::error("History script failed: " . $e->getMessage());
             return ExitCode::UNSPECIFIED_ERROR;
         }

@@ -43,7 +43,7 @@ class TimeTrackerController extends Controller
 
     public function actionV2($date = null)
     {
-        $date = $date ?: date('Y-m-d');
+        $date = $date ?: (new \DateTime($date))->modify('-1 days')->format('Y-m-d');
 
         try {
             $previousScripts = [
@@ -66,6 +66,7 @@ class TimeTrackerController extends Controller
             return ExitCode::OK;
 
         } catch (\Exception $e) {
+            print_r($e->getMessage());
             $this->saveScriptStatus('timeTracker/time-tracker/v2', 'failed', $date);
             Yii::error("V2 script failed: " . $e->getMessage());
             return ExitCode::UNSPECIFIED_ERROR;
