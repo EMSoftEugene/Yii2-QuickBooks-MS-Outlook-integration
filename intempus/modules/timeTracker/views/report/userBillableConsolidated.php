@@ -170,6 +170,8 @@ use yii\web\JsExpression;
                                 'groupEvenCssClass' => 'kv-grouped-row', // configure even group cell css class
                                 'groupFooter' => function ($model, $key, $index, $widget) use ($totalDay, $totalDay0, $resTotalDay
                                 ) { // Closure method
+                                    $res=  $resTotalDay[$model['date']] ?? '00:00';
+
                                     return [
 //                                    'mergeColumns' => [[1,3]], // columns to merge in summary
                                         'content' => [             // content to show in each summary cell
@@ -179,7 +181,7 @@ use yii\web\JsExpression;
 //                                            >' . $totalDay0[$model['date']] . '</div>',
                                             2 => '<div data-name="' . $model['date'] . '" class="total_date" style="cursor: pointer;"
                                             data-content-id="' . $model['date'] . 'z' . '"
-                                            >' . $resTotalDay . '</div>',
+                                            >' . $res . '</div>',
                                         ],
                                         'options' => ['class' => 'info table-info', 'style' => 'font-weight:bold;']
                                     ];
