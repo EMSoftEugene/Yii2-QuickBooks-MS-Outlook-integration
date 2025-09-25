@@ -200,7 +200,7 @@ use yii\web\JsExpression;
                                 'enableSorting' => false,
                                 'format' => 'html',
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $count = $model['count']+1;
+                                    $count = $model['count'];
                                     $icon = $model['isMicrosoftLocation'] ?
                                         '<img class="outlook-logo" src="/images/outlook3.png" />' : '';
                                     $result = $icon . ' <span>' . $model['locationName'] . '</span>';
@@ -219,7 +219,7 @@ use yii\web\JsExpression;
 
                                     // http://intempus.local/time-tracker/report/user-billable/286?TimeTrackerSearch%5Bdate_range%5D=2025-08-13+-+2025-08-13&TimeTrackerSearch%5Bdate_start%5D=2025-08-13&TimeTrackerSearch%5Bdate_end%5D=2025-08-13
 
-                                    if($count > 1){
+                                    if($count > 0){
                                         $result = $result . ' (<span style="font-style: italic;">' . $count . ' rows</span>)';
                                     }
                                     return $result;
