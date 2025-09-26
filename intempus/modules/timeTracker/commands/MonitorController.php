@@ -42,7 +42,7 @@ class MonitorController extends Controller
 
     private function restartScript($script, $date)
     {
-        $command = "/usr/bin/php /var/www/outlook/intempus/yii $script $date";
+        $command = "/usr/bin/php /var/www/outlook/intempus/yii $script";
         $output = shell_exec("$command 2>&1");
         echo "Output: $output\n";
     }
