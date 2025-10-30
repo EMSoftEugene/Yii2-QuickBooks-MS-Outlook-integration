@@ -179,10 +179,10 @@ use yii\web\JsExpression;
                                             1 => 'Total:',
                                             9 => '<div data-name="' . $model['date'] . '" class="total_date0" style="cursor: pointer;" 
                                             data-content-id="' . $model['date'] . 'z2' . '"
-                                            >' . $totalDay0[$model['date']] . '</div>',
+                                            >' . @$totalDay0[$model['date']] . '</div>',
                                             10 => '<div data-name="' . $model['date'] . '" class="total_date" style="cursor: pointer;" 
                                             data-content-id="' . $model['date'] . 'z' . '"
-                                            >' . $totalDay[$model['date']] . '</div>',
+                                            >' . @$totalDay[$model['date']] . '</div>',
                                         ],
 //                                    'contentFormats' => [      // content reformatting for each summary cell
 //                                        4 => ['format' => 'number', 'decimals' => 2],
