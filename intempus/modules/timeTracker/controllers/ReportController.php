@@ -196,6 +196,7 @@ class ReportController extends BaseController
         $totalDay = [];
         $formula = [];
         $i = 0;
+        $prevLocation = null;
         foreach ($data as $key => $item) {
             if (!$item->isMicrosoftLocation) {
                 continue;
@@ -207,60 +208,80 @@ class ReportController extends BaseController
             $itemCalc['rulex0_desc'] = '';
             $itemCalc['rulex1_desc'] = '';
             if (!isset($formula[$itemCalc['date']])) {
-                $i=1;
-                $formula[$itemCalc['date']] = [0=>null, 1=>null, 2=>null];
+                $i = 1;
+                $formula[$itemCalc['date']] = [0 => null, 1 => null, 2 => null];
             }
             $itemCalc['L'] = $i;
 
             // rule 1
             $cur = $data[$key]->clock_in;
             $roundedCur = date('h:i', round(strtotime($cur) / 60) * 60);
-            $itemCalc['rule1_desc'] = '<b>Description</b>: Allow for 15 minutes in between work orders. So if it takes 30 minutes to get to the next job, add 15 minutes to this job and if it takes 45 minutes to get there, add 30 minutes';
+            $itemCalc['rule1_desc'] = '<b>Description</b>: Roll over full drive time from previous appointment to this one. If locations repeat (e.g., lunch break), ignore drive.';
             $itemCalc['rule1_desc'] .= '<br/><b>Formula</b>:';
             $itemCalc['rule1_desc'] .= '<br/>1. Rule1 = Duration + AddValue.';
-            $itemCalc['rule1_desc'] .= '<br/>2. Diff = CurrentLocation - PrevLocation';
-            $itemCalc['rule1_desc'] .= '<br/>3. AddValue = (if Diff > 45) = 30 minutes.';
-            $itemCalc['rule1_desc'] .= '<br/>4. AddValue = (if Diff > 30 and Diff <= 45) = 15 minutes.';
+            $itemCalc['rule1_desc'] .= '<br/>2. Diff = CurrentLocation - PrevLocation (in minutes).';
+            $itemCalc['rule1_desc'] .= '<br/>3. AddValue = Diff (full drive time), if Diff >= 5 min and locations differ.';
+            // $itemCalc['rule1_desc'] .= '<br/>4. AddValue = (if Diff > 30 and Diff <= 45) = 15 minutes.';
             $itemCalc['rule1_desc'] .= '<br/><b>Calculate</b>:';
+            $addValue = 0;
             if (empty($calculatedData) || !isset($data[$key - 1])) {
+                $addValue = 15;
                 $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 15);
-
                 $itemCalc['rule1_desc'] .= '<br/>Duration= ' . $itemCalc['duration'];
-                $itemCalc['rule1_desc'] .= '<br/>PrevLocation=' . 0;
+                $itemCalc['rule1_desc'] .= '<br/>PrevLocation= none';
                 $itemCalc['rule1_desc'] .= '<br/>CurrentLocation=' . $roundedCur;
-                $itemCalc['rule1_desc'] .= '<br/>Diff=';
-                $itemCalc['rule1_desc'] .= '<br/>AddValue=15 (No PrevLocation, so always +15minutes)';
+                $itemCalc['rule1_desc'] .= '<br/>Diff= n/a';
+                $itemCalc['rule1_desc'] .= '<br/>AddValue=15 (fixed for first)';
                 $itemCalc['rule1_desc'] .= '<br/>Rule1 = ' . $itemCalc['duration'] . ' + 15';
                 $itemCalc['rule1_desc'] .= '<br/><b>Rule1 = ' . $itemCalc['rule1'] . '</b>';
             } else {
-                $prev = $data[$key - 1]->clock_out;
-                $roundedPrev = date('h:i', round(strtotime($prev) / 60) * 60);
-                $diff = DateTimeHelper::diff($roundedCur, $roundedPrev, true);
-                $addValue = 0;
-                if ($diff > 45) {
-                    $addValue = 30;
-                    $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 30);
-                } elseif ($diff >= 30 && $diff < 45) {
+                $prev = null;
+                for ($j = $key - 1; $j >= 0; $j--) {
+                    if ($data[$j]->isMicrosoftLocation) {
+                        $prev = $data[$j]->clock_out;
+                        break;
+                    }
+                }
+                if ($prev) {
+                    // $prev = $data[$key - 1]->clock_out;
+                    $roundedPrev = date('h:i', round(strtotime($prev) / 60) * 60);
+                    $diff = DateTimeHelper::diff($roundedCur, $roundedPrev, true);
+                    if ($diff >= 5 && $itemCalc['locationName'] !== $prevLocation) {
+                        $addValue = $diff;
+                    }
+                    // $addValue = 0;
+                    // if ($diff > 45) {
+                    //     $addValue = 30;
+                    //     $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 30);
+                    // } elseif ($diff >= 30 && $diff < 45) {
+                    //     $addValue = 15;
+                    //     $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 15);
+                    // } else {
+                    //     $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 0);
+                    // }
+                    $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], $addValue);
+                    $itemCalc['rule1_desc'] .= '<br/>Duration= ' . $itemCalc['duration'];
+                    $itemCalc['rule1_desc'] .= '<br/>PrevLocation=' . $roundedPrev . ' (' . $prevLocation . ')';
+                    $itemCalc['rule1_desc'] .= '<br/>CurrentLocation=' . $roundedCur . ' (' . $itemCalc['locationName'] . ')';
+                    $itemCalc['rule1_desc'] .= '<br/>Diff=' . $diff;
+                    $itemCalc['rule1_desc'] .= '<br/>AddValue=' . $addValue . ' (full drive if valid)';
+                    $itemCalc['rule1_desc'] .= '<br/>Rule1 = ' . $itemCalc['duration'] . ' + ' . $addValue;
+                    $itemCalc['rule1_desc'] .= '<br/><b>Rule1 = ' . $itemCalc['rule1'] . '</b>';
+                } else {
                     $addValue = 15;
                     $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 15);
-                } else {
-                    $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 0);
+                    $itemCalc['rule1_desc'] .= '<br/>PrevLocation= none (no previous MS address)';
+                    $itemCalc['rule1_desc'] .= '<br/>AddValue=15 (default)';
                 }
-
-                $itemCalc['rule1_desc'] .= '<br/>Duration= ' . $itemCalc['duration'];
-                $itemCalc['rule1_desc'] .= '<br/>PrevLocation=' . $roundedPrev;
-                $itemCalc['rule1_desc'] .= '<br/>CurrentLocation=' . $roundedCur;
-                $itemCalc['rule1_desc'] .= '<br/>Diff=' . $diff;
-                $itemCalc['rule1_desc'] .= '<br/>AddValue=' . $addValue;
-                $itemCalc['rule1_desc'] .= '<br/>Rule1 = ' . $itemCalc['duration'] . ' + ' . $addValue;
-                $itemCalc['rule1_desc'] .= '<br/><b>Rule1 = ' . $itemCalc['rule1'] . '</b>';
             }
+
+            $prevLocation = $itemCalc['locationName'];
 
             $itemCalc['rulex1_desc'] .= '<b>L' . $i . '(</b>';
             $itemCalc['rulex1_desc'] .=  DateTimeHelper::formatHM($itemCalc['duration']) . '#stop';
             if ($itemCalc['rule1'] != $itemCalc['duration']) {
                 $dd = DateTimeHelper::diff($itemCalc['rule1'], $itemCalc['duration']);
-                $itemCalc['rulex1_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '#extra';
+                $itemCalc['rulex1_desc'] .= ' + ' . DateTimeHelper::formatHM($dd) . 'L' . $i . '#drive';
             }
 
             // rule 2
@@ -314,8 +335,7 @@ class ReportController extends BaseController
             $itemCalc['rulex1_desc'] .= '<b>)</b> ';
 
             // clear value if not found
-            if (!isset($item->locationNameVerizon) || !$item->locationNameVerizon){
-
+            if (!isset($item->locationNameVerizon) || !$item->locationNameVerizon) {
             } else {
                 $totalDay[$itemCalc['date']] = DateTimeHelper::addition(
                     $totalDay[$itemCalc['date']] ?? '00:00',
@@ -329,15 +349,14 @@ class ReportController extends BaseController
                     $itemCalc['rulex1_desc'] : ' + ' . $itemCalc['rulex1_desc'];
                 $formula[$itemCalc['date']][2] .= empty($formula[$itemCalc['date']][2]) ?
                     $itemCalc['rulex1_desc'] : ' + ' . $itemCalc['rulex1_desc'];
-
             }
 
             $calculatedData[] = $itemCalc;
         }
 
         $totalDay0 = $totalDay;
-        foreach ($totalDay as $key => &$item){
-            $extraMinutes = DateTimeHelper::diff($item, '08:00', true );
+        foreach ($totalDay as $key => &$item) {
+            $extraMinutes = DateTimeHelper::diff($item, '08:00', true);
             if ($extraMinutes < 0) {
                 continue;
             }
@@ -345,7 +364,7 @@ class ReportController extends BaseController
             $extraHours = $extraMinutes / 60;
             $extraValue = $extraHours * 0.5;
 
-            if ($extraValue > 0){
+            if ($extraValue > 0) {
                 $extraMinutesValue = $extraValue * 60;
 
                 $hours = floor($extraMinutesValue / 60);
@@ -359,7 +378,7 @@ class ReportController extends BaseController
                     $item ?? '00:00',
                     $extraValueFormatted
                 );
-                $formula[$key][1] .= ' + ' .$extraValueDesc . '#overtime';
+                $formula[$key][1] .= ' + ' . $extraValueDesc . '#overtime';
             }
         }
 
@@ -397,6 +416,7 @@ class ReportController extends BaseController
         $totalDay = [];
         $formula = [];
         $i = 0;
+        $prevLocation = null;
         foreach ($data as $key => $item) {
             if (!$item->isMicrosoftLocation) {
                 continue;
@@ -408,54 +428,74 @@ class ReportController extends BaseController
             $itemCalc['rulex0_desc'] = '';
             $itemCalc['rulex1_desc'] = '';
             if (!isset($formula[$itemCalc['date']])) {
-                $i=1;
-                $formula[$itemCalc['date']] = [0=>null, 1=>null, 2=>null];
+                $i = 1;
+                $formula[$itemCalc['date']] = [0 => null, 1 => null, 2 => null];
             }
             $itemCalc['L'] = $i;
 
             // rule 1
             $cur = $data[$key]->clock_in;
             $roundedCur = date('h:i', round(strtotime($cur) / 60) * 60);
-            $itemCalc['rule1_desc'] = '<b>Description</b>: Allow for 15 minutes in between work orders. So if it takes 30 minutes to get to the next job, add 15 minutes to this job and if it takes 45 minutes to get there, add 30 minutes';
+            $itemCalc['rule1_desc'] = '<b>Description</b>: Roll over full drive time from previous appointment to this one. If locations repeat (e.g., lunch break), ignore drive.';
             $itemCalc['rule1_desc'] .= '<br/><b>Formula</b>:';
             $itemCalc['rule1_desc'] .= '<br/>1. Rule1 = Duration + AddValue.';
-            $itemCalc['rule1_desc'] .= '<br/>2. Diff = CurrentLocation - PrevLocation';
-            $itemCalc['rule1_desc'] .= '<br/>3. AddValue = (if Diff > 45) = 30 minutes.';
-            $itemCalc['rule1_desc'] .= '<br/>4. AddValue = (if Diff > 30 and Diff <= 45) = 15 minutes.';
+            $itemCalc['rule1_desc'] .= '<br/>2. Diff = CurrentLocation - PrevLocation (in minutes).';
+            $itemCalc['rule1_desc'] .= '<br/>3. AddValue = Diff (full drive time), if Diff >= 5 min and locations differ.';
+            // $itemCalc['rule1_desc'] .= '<br/>4. AddValue = (if Diff > 30 and Diff <= 45) = 15 minutes.';
             $itemCalc['rule1_desc'] .= '<br/><b>Calculate</b>:';
+            $addValue = 0;
             if (empty($calculatedData) || !isset($data[$key - 1])) {
+                $addValue = 15;
                 $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 15);
-
                 $itemCalc['rule1_desc'] .= '<br/>Duration= ' . $itemCalc['duration'];
-                $itemCalc['rule1_desc'] .= '<br/>PrevLocation=' . 0;
+                $itemCalc['rule1_desc'] .= '<br/>PrevLocation= none';
                 $itemCalc['rule1_desc'] .= '<br/>CurrentLocation=' . $roundedCur;
-                $itemCalc['rule1_desc'] .= '<br/>Diff=';
-                $itemCalc['rule1_desc'] .= '<br/>AddValue=15 (No PrevLocation, so always +15minutes)';
+                $itemCalc['rule1_desc'] .= '<br/>Diff= n/a';
+                $itemCalc['rule1_desc'] .= '<br/>AddValue=15 (fixed for first)';
                 $itemCalc['rule1_desc'] .= '<br/>Rule1 = ' . $itemCalc['duration'] . ' + 15';
                 $itemCalc['rule1_desc'] .= '<br/><b>Rule1 = ' . $itemCalc['rule1'] . '</b>';
             } else {
-                $prev = $data[$key - 1]->clock_out;
-                $roundedPrev = date('h:i', round(strtotime($prev) / 60) * 60);
-                $diff = DateTimeHelper::diff($roundedCur, $roundedPrev, true);
-                $addValue = 0;
-                if ($diff > 45) {
-                    $addValue = 30;
-                    $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 30);
-                } elseif ($diff >= 30 && $diff < 45) {
+                $prev = null;
+                for ($j = $key - 1; $j >= 0; $j--) {
+                    if ($data[$j]->isMicrosoftLocation) {
+                        $prev = $data[$j]->clock_out;
+                        break;
+                    }
+                }
+                if ($prev) {
+                    // $prev = $data[$key - 1]->clock_out;
+                    $roundedPrev = date('h:i', round(strtotime($prev) / 60) * 60);
+                    $diff = DateTimeHelper::diff($roundedCur, $roundedPrev, true);
+                    if ($diff >= 5 && $itemCalc['locationName'] !== $prevLocation) {
+                        $addValue = $diff;
+                    }
+                    // $addValue = 0;
+                    // if ($diff > 45) {
+                    //     $addValue = 30;
+                    //     $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 30);
+                    // } elseif ($diff >= 30 && $diff < 45) {
+                    //     $addValue = 15;
+                    //     $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 15);
+                    // } else {
+                    //     $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 0);
+                    // }
+                    $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], $addValue);
+                    $itemCalc['rule1_desc'] .= '<br/>Duration= ' . $itemCalc['duration'];
+                    $itemCalc['rule1_desc'] .= '<br/>PrevLocation=' . $roundedPrev . ' (' . $prevLocation . ')';
+                    $itemCalc['rule1_desc'] .= '<br/>CurrentLocation=' . $roundedCur . ' (' . $itemCalc['locationName'] . ')';
+                    $itemCalc['rule1_desc'] .= '<br/>Diff=' . $diff;
+                    $itemCalc['rule1_desc'] .= '<br/>AddValue=' . $addValue . ' (full drive if valid)';
+                    $itemCalc['rule1_desc'] .= '<br/>Rule1 = ' . $itemCalc['duration'] . ' + ' . $addValue;
+                    $itemCalc['rule1_desc'] .= '<br/><b>Rule1 = ' . $itemCalc['rule1'] . '</b>';
+                } else {
                     $addValue = 15;
                     $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 15);
-                } else {
-                    $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], 0);
+                    $itemCalc['rule1_desc'] .= '<br/>PrevLocation= none (no previous MS address)';
+                    $itemCalc['rule1_desc'] .= '<br/>AddValue=15 (default)';
                 }
-
-                $itemCalc['rule1_desc'] .= '<br/>Duration= ' . $itemCalc['duration'];
-                $itemCalc['rule1_desc'] .= '<br/>PrevLocation=' . $roundedPrev;
-                $itemCalc['rule1_desc'] .= '<br/>CurrentLocation=' . $roundedCur;
-                $itemCalc['rule1_desc'] .= '<br/>Diff=' . $diff;
-                $itemCalc['rule1_desc'] .= '<br/>AddValue=' . $addValue;
-                $itemCalc['rule1_desc'] .= '<br/>Rule1 = ' . $itemCalc['duration'] . ' + ' . $addValue;
-                $itemCalc['rule1_desc'] .= '<br/><b>Rule1 = ' . $itemCalc['rule1'] . '</b>';
             }
+
+            $prevLocation = $itemCalc['locationName'];
 
             $itemCalc['rulex1_desc'] .= '<b>L' . $i . '(</b>';
             $itemCalc['rulex1_desc'] .=  DateTimeHelper::formatHM($itemCalc['duration']) . '#stop';
@@ -515,10 +555,10 @@ class ReportController extends BaseController
             $itemCalc['rulex1_desc'] .= '<b>)</b> ';
 
             // clear value if not found
-            if (!isset($item->locationNameVerizon) || !$item->locationNameVerizon){
+            if (!isset($item->locationNameVerizon) || !$item->locationNameVerizon) {
                 $totalDay[$itemCalc['date']] = DateTimeHelper::addition(
                     $totalDay[$itemCalc['date']] ?? '00:00',
-                        '00:00'
+                    '00:00'
                 );
             } else {
                 $totalDay[$itemCalc['date']] = DateTimeHelper::addition(
@@ -533,15 +573,14 @@ class ReportController extends BaseController
                     $itemCalc['rulex1_desc'] : ' + ' . $itemCalc['rulex1_desc'];
                 $formula[$itemCalc['date']][2] .= empty($formula[$itemCalc['date']][2]) ?
                     $itemCalc['rulex1_desc'] : ' + ' . $itemCalc['rulex1_desc'];
-
             }
 
             $calculatedData[] = $itemCalc;
         }
 
         $totalDay0 = $totalDay;
-        foreach ($totalDay as $key => &$item){
-            $extraMinutes = DateTimeHelper::diff($item, '08:00', true );
+        foreach ($totalDay as $key => &$item) {
+            $extraMinutes = DateTimeHelper::diff($item, '08:00', true);
             if ($extraMinutes < 0) {
                 continue;
             }
@@ -549,7 +588,7 @@ class ReportController extends BaseController
             $extraHours = $extraMinutes / 60;
             $extraValue = $extraHours * 0.5;
 
-            if ($extraValue > 0){
+            if ($extraValue > 0) {
                 $extraMinutesValue = $extraValue * 60;
 
                 $hours = floor($extraMinutesValue / 60);
@@ -563,16 +602,16 @@ class ReportController extends BaseController
                     $item ?? '00:00',
                     $extraValueFormatted
                 );
-                $formula[$key][1] .= ' + ' .$extraValueDesc . '#overtime';
+                $formula[$key][1] .= ' + ' . $extraValueDesc . '#overtime';
             }
         }
 
-        foreach ($totalDay as $key => $item){
+        foreach ($totalDay as $key => $item) {
             $resTotalDay[$key] = (string)$item;
         }
 
         $arr = [];
-        foreach ($calculatedData as $key => $item){
+        foreach ($calculatedData as $key => $item) {
             $item['count'] = 1;
 
             $uniqueKey = $item['locationName'] . '|' . $item['date'];
@@ -606,5 +645,4 @@ class ReportController extends BaseController
             'formula' => $formula,
         ]);
     }
-
 }
