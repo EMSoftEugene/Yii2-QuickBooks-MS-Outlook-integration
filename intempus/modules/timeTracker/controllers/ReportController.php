@@ -238,14 +238,13 @@ class ReportController extends BaseController
                 $prev = null;
                 for ($j = $key - 1; $j >= 0; $j--) {
                     if ($data[$j]->isMicrosoftLocation) {
-                        $prev = $data[$j]->clock_out;
+                        $prev = $data[$j];
                         break;
                     }
                 }
                 if ($prev) {
-                    // проверяем, что предыдущая запись из того же дня
-                    $curDate = date('Y-m-d', strtotime($item->clock_in));
-                    $prevDate = date('Y-m-d', strtotime($prev->clock_out));
+                    $curDate = date('Y-m-d', strtotime($item->date));
+                    $prevDate = date('Y-m-d', strtotime($prev->date));
 
                     if ($curDate === $prevDate) {
                         $prevClockOut = $prev->clock_out;
@@ -458,14 +457,13 @@ class ReportController extends BaseController
                 $prev = null;
                 for ($j = $key - 1; $j >= 0; $j--) {
                     if ($data[$j]->isMicrosoftLocation) {
-                        $prev = $data[$j]->clock_out;
+                        $prev = $data[$j];
                         break;
                     }
                 }
                 if ($prev) {
-                    // проверяем, что предыдущая запись из того же дня
-                    $curDate = date('Y-m-d', strtotime($item->clock_in));
-                    $prevDate = date('Y-m-d', strtotime($prev->clock_out));
+                    $curDate = date('Y-m-d', strtotime($item->date));
+                    $prevDate = date('Y-m-d', strtotime($prev->date));
 
                     if ($curDate === $prevDate) {
                         $prevClockOut = $prev->clock_out;
