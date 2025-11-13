@@ -171,7 +171,7 @@ use yii\web\JsExpression;
                                 'groupFooter' => function ($model, $key, $index, $widget) use ($totalDay, $totalDay0, $resTotalDay
                                 ) { // Closure method
                                     $res=  $resTotalDay[$model['date']] ?? '00:00';
-
+                                    $res=  isset($totalDay0[$model['date']]) ? $totalDay0[$model['date']] : '00:00';
                                     return [
 //                                    'mergeColumns' => [[1,3]], // columns to merge in summary
                                         'content' => [             // content to show in each summary cell
