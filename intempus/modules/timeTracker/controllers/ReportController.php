@@ -485,7 +485,7 @@ class ReportController extends BaseController
                         $itemCalc['rule1'] = DateTimeHelper::addMinutes($itemCalc['rule1'], $addValue);
 
                         $itemCalc['rule1_desc'] .= '<br/>Prev=' . $roundedPrev . ' (' . $prev->locationName . ')';
-                        $iemCalc['rule1_desc'] .= '<br/>Cur=' . $roundedCur . ' (' . $itemCalc['locationName'] . ')';
+                        $itemCalc['rule1_desc'] .= '<br/>Cur=' . $roundedCur . ' (' . $itemCalc['locationName'] . ')';
                         $itemCalc['rule1_desc'] .= '<br/>Diff=' . $diff;
                         $itemCalc['rule1_desc'] .= '<br/>AddValue=' . $addValue;
                         $itemCalc['rule1_desc'] .= '<br/><b>Rule1 = ' . $itemCalc['rule1'] . '</b>';
