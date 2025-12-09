@@ -41,23 +41,23 @@ class DateTimeHelper
     public static function complexRounding($time): string
     {
         list($hours, $minutes) = explode(":", $time);
-        $newMinutes = 0;
-        if ($minutes < 15) {
+        $minutes = intval($minutes);
+        $hours = intval($hours);
+
+        if ($minutes <= 5) {
             $newMinutes = 0;
-        } elseif ($minutes > 15 && $minutes < 45) {
+        } elseif ($minutes >= 6 && $minutes <= 35) {
             $newMinutes = 30;
-        } elseif ($minutes >= 45) {
-            $newMinutes = 60;
+        } else {
+            $newMinutes = 0;
+            $hours += 1;
         }
 
-        $total_minutes = $hours * 60 + $newMinutes;
-        $new_minutes = $total_minutes % 60;
-        $new_hours = floor($total_minutes / 60);
-        $new_hours = $new_hours % 24;
+        $new_hours = $hours % 24;
         $new_hours = str_pad($new_hours, 2, '0', STR_PAD_LEFT);
-        $new_minutes = str_pad($new_minutes, 2, '0', STR_PAD_LEFT);
-        $new_time = "$new_hours:$new_minutes";
-        return $new_time;
+        $new_minutes = str_pad($newMinutes, 2, '0', STR_PAD_LEFT);
+
+        return "$new_hours:$new_minutes";
     }
 
     public static function diff($time1, $time2, $returnMinutes = false, $returnHours = false): string
