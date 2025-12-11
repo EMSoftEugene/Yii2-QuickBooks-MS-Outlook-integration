@@ -180,6 +180,88 @@ class ReportController extends BaseController
     }
 
     /**
+     * @param array $data
+     * @return array
+     */
+    private function mergeConsecutiveMicrosoftLocations($data)
+    {
+        $mergedData = [];
+        $currentGroup = null;
+        $groupCount = 0;
+
+        foreach ($data as $index => $item) {
+
+            if ($item->isMicrosoftLocation) {
+                if ($currentGroup === null) {
+                    $currentGroup = [
+                        'items' => [$item],
+                        'locationName' => $item->locationName,
+                        'clock_in' => $item->clock_in,
+                        'clock_out' => $item->clock_out,
+                        'date' => $item->date,
+                        'isMicrosoftLocation' => true,
+                    ];
+                } elseif ($currentGroup['locationName'] === $item->locationName) {
+                    $currentGroup['items'][] = $item;
+                    $currentGroup['clock_out'] = $item->clock_out;
+                    $groupCount++;
+                } else {
+                    $mergedItem = $this->createMergedItem($currentGroup);
+                    $mergedData[] = $mergedItem;
+
+                    $currentGroup = [
+                        'items' => [$item],
+                        'locationName' => $item->locationName,
+                        'clock_in' => $item->clock_in,
+                        'clock_out' => $item->clock_out,
+                        'date' => $item->date,
+                        'isMicrosoftLocation' => true,
+                    ];
+                }
+            } else {
+                if ($currentGroup === null) {
+                    $mergedData[] = $item;
+                } else {
+                    continue;
+                }
+            }
+        }
+
+        if ($currentGroup !== null) {
+            $mergedItem = $this->createMergedItem($currentGroup);
+            $mergedData[] = $mergedItem;
+        }
+
+        usort($mergedData, function($a, $b) {
+            $dateCompare = strcmp($a->date, $b->date);
+            if ($dateCompare !== 0) {
+                return $dateCompare;
+            }
+            return strcmp($a->clock_in, $b->clock_in);
+        });
+
+        return $mergedData;
+    }
+
+    /**
+     * @param array $group
+     * @return TimeTracker
+     */
+    private function createMergedItem($group)
+    {
+        $firstItem = $group['items'][0];
+        $mergedItem = clone $firstItem;
+
+        $mergedItem->clock_in = $group['clock_in'];
+        $mergedItem->clock_out = $group['clock_out'];
+
+        $duration = DateTimeHelper::diff($group['clock_out'], $group['clock_in']);
+        $mergedItem->duration = $duration;
+
+        return $mergedItem;
+    }
+
+    /**
      *
      * @return string
      */
@@ -192,6 +274,9 @@ class ReportController extends BaseController
         $dataProvider = $filterModel->search($getParams);
         $dataProvider->pagination->pageSize = 1000;
         $data = $dataProvider->models;
+
+        $data = $this->mergeConsecutiveMicrosoftLocations($data);
+
         $calculatedData = [];
         $totalDay = [];
         $formula = [];
@@ -309,7 +394,7 @@ class ReportController extends BaseController
             }
 
             // rule 4
-            $itemCalc['rule4_desc'] = '<b>Description</b>: Round up when billing, Example: If a job takes 1 hour and five minutes we will bill one hour, but if it takes 1 hour and 6 or more minutes, we will bill 1.5 hours. If a job takes 1 hour and 35 minutes we will bill 1.5 hours. If the job takes 1 hours and 36 or more minutes we will bill 2 hours.';
+            $itemCalc['rule4_desc'] = '<b>Description</b>: Round up when billing, Example: If a job takes 1 hour and five minutes we will bill one hour, but if it takes 1 hour and 6 or more minutes we will bill 1.5 hours. If a job takes 1 hour and 35 minutes we will bill 1.5 hours. If the job takes 1 hours and 36 or more minutes we will bill 2 hours.';
             $itemCalc['rule4_desc'] .= '<br/><b>Formula</b>:';
             $itemCalc['rule4_desc'] .= '<br/>1. Rule4 = roundUp(Rule3)';
             $itemCalc['rule4_desc'] .= '<br/><b>Calculate</b>:';
@@ -401,6 +486,9 @@ class ReportController extends BaseController
         $dataProvider = $filterModel->search($getParams);
         $dataProvider->pagination->pageSize = 1000;
         $data = $dataProvider->models;
+
+        $data = $this->mergeConsecutiveMicrosoftLocations($data);
+
         $calculatedData = [];
         $totalDay = [];
         $formula = [];
@@ -524,7 +612,7 @@ class ReportController extends BaseController
             }
 
             // rule 4
-            $itemCalc['rule4_desc'] = '<b>Description</b>: Round up when billing, Example: If a job takes 1 hour and five minutes we will bill one hour, but if it takes 1 hour and 6 or more minutes, we will bill 1.5 hours. If a job takes 1 hour and 35 minutes we will bill 1.5 hours. If the job takes 1 hours and 36 or more minutes we will bill 2 hours.';
+            $itemCalc['rule4_desc'] = '<b>Description</b>: Round up when billing, Example: If a job takes 1 hour and five minutes we will bill one hour, but if it takes 1 hour and 6 or more minutes we will bill 1.5 hours. If a job takes 1 hour and 35 minutes we will bill 1.5 hours. If the job takes 1 hours and 36 or more minutes we will bill 2 hours.';
             $itemCalc['rule4_desc'] .= '<br/><b>Formula</b>:';
             $itemCalc['rule4_desc'] .= '<br/>1. Rule4 = roundUp(Rule3)';
             $itemCalc['rule4_desc'] .= '<br/><b>Calculate</b>:';

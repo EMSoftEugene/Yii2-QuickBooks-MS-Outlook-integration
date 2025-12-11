@@ -133,13 +133,13 @@ use yii\web\JsExpression;
                     'toolbar' => [
                         [
                             'content' =>
+//                            <a class="btn btn-outline-primary"
+//                                    href="/time-tracker/report/user-billable-consolidated/' . $id . '?' .
+//                                'TimeTrackerSearch%5Bdate_range%5D=' . $filter->date_start. '+-+' . $filter->date_end .
+//                                '&TimeTrackerSearch%5Bdate_start%5D=' . $filter->date_start . '&TimeTrackerSearch%5Bdate_end%5D=' . $filter->date_end .'">
+//                                    Billable Total Report
+//                                    </a>
                                 '<div style="float: left;">
-                                <a class="btn btn-outline-primary" 
-                                    href="/time-tracker/report/user-billable-consolidated/' . $id . '?' .
-                                'TimeTrackerSearch%5Bdate_range%5D=' . $filter->date_start. '+-+' . $filter->date_end .
-                                '&TimeTrackerSearch%5Bdate_start%5D=' . $filter->date_start . '&TimeTrackerSearch%5Bdate_end%5D=' . $filter->date_end .'">
-                                    Billable Total Report
-                                    </a>
                                     
                                     <a class="btn btn-outline-primary" 
                                     href="/time-tracker/report/user-billable/' . $id . '?' .
