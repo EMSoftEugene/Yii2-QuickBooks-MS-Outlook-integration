@@ -46,12 +46,42 @@ trait CoordinateTrait
     public function getCodeByLocationv2(string $name)
     {
         sleep(1); // 429 Too Many Requests
+
         $module = \Yii::$app->getModule('timeTracker');
         $client = new Client();
-        $url = 'https://api.geoapify.com/v1/geocode/search?text=' . urlencode($name) . '&apiKey='.$module->params['geocode_apiKey'];
+
+        $url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' .
+            urlencode($name) . '&key=' . $module->params['google_geocode_apiKey'];
+
         $response = $client->request('GET', $url);
         $response = json_decode($response->getBody()->getContents(), true);
-        return $response;
+
+        $result = [
+            'lat' => null,
+            'lng' => null,
+            'success' => false,
+            'error' => null
+        ];
+
+        if ($response['status'] === 'OK' && !empty($response['results'])) {
+            $location = $response['results'][0]['geometry']['location'];
+
+            $result['lat'] = $location['lat'] ?? null;
+            $result['lng'] = $location['lng'] ?? null;
+            $result['success'] = true;
+        } else {
+            $result['error'] = $response['status'] ?? 'Unknown error';
+        }
+
+        return $result;
+
+//        sleep(1); // 429 Too Many Requests
+//        $module = \Yii::$app->getModule('timeTracker');
+//        $client = new Client();
+//        $url = 'https://api.geoapify.com/v1/geocode/search?text=' . urlencode($name) . '&apiKey='.$module->params['google_geocode_apiKey'];
+//        $response = $client->request('GET', $url);
+//        $response = json_decode($response->getBody()->getContents(), true);
+//        return $response;
 
 
 //        $url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' .

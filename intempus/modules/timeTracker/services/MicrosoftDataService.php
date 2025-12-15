@@ -218,10 +218,9 @@ class MicrosoftDataService
         if (!$location->lat || !$location->lon) {
             $response = $this->getCodeByLocationv2($location->displayName);
             sleep(2);
-//            $location->lat = $response['lat'] ?? null;
-//            $location->lon = $response['lng'] ?? null;
-            $location->lat = $response['features'][0]['properties']['lat'] ?? null;
-            $location->lon = $response['features'][0]['properties']['lon'] ?? null;
+
+            $location->lat = $response['lat'] ?? null;
+            $location->lon = $response['lng'] ?? null;
         }
         return $location;
     }
