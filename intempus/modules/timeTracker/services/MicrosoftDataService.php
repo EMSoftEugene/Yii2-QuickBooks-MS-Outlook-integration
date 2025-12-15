@@ -113,10 +113,10 @@ class MicrosoftDataService
         foreach ($locations as $location) {
             sleep(2);
             try {
-                $response = $this->getCodeByLocation($location['displayName']);
+                $response = $this->getCodeByLocationv2($location['displayName']);
 
-                $lat = $response[0]['lat'] ?? null;
-                $lon = $response[0]['lon'] ?? null;
+                $lat = $response['lat'] ?? null;
+                $lon = $response['lng'] ?? null;
 
                 if ($lat && $lon) {
                     $location->lat = $lat;

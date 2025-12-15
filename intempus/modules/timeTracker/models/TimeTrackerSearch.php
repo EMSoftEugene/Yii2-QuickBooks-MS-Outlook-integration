@@ -96,12 +96,28 @@ class TimeTrackerSearch extends TimeTracker
 
     public function searchIndex($params)
     {
-        $query = self::find();
-        $query->groupBy('locationName');
+        $subQuery = self::find()
+            ->select([
+                'id' => 'MIN(id)',
+                'locationName',
+                'isMicrosoftLocation' => 'MAX(isMicrosoftLocation)',
+                'lastDate' => 'MAX(date)',
+            ])
+            ->groupBy(['locationName']);
+
+        $query = self::find()
+            ->from(['sub' => $subQuery]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['date' => SORT_DESC, 'locationName' => SORT_ASC]],
+            'sort'=> [
+                'defaultOrder' => ['lastDate' => SORT_DESC, 'locationName' => SORT_ASC],
+                'attributes' => [
+                    'locationName',
+                    'lastDate',
+                    'isMicrosoftLocation',
+                ],
+            ],
         ]);
 
         // load the search form data and validate
