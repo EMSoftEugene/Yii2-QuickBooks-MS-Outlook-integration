@@ -29,6 +29,18 @@ class TimeTrackerV2Service
         $this->params = $module->params;
     }
 
+    private function log($message, $data = null)
+    {
+        $logFile = \Yii::getAlias('@runtime/logs/timetracker_v2_debug.log');
+        $timestamp = date('Y-m-d H:i:s');
+        $logMessage = "[$timestamp] $message";
+        if ($data !== null) {
+            $logMessage .= "\n" . print_r($data, true);
+        }
+        $logMessage .= "\n" . str_repeat('-', 80) . "\n";
+        file_put_contents($logFile, $logMessage, FILE_APPEND);
+    }
+
     public function create($date): int
     {
         $fullDate = $date;
@@ -141,6 +153,8 @@ class TimeTrackerV2Service
             }
         }
 
+        $this->log("GPS-Matched Microsoft Locations", array_keys($allMicrosoftLocations));
+
         $ext = [];
         $locations = MicrosoftLocation::find()
             ->where(['>=', 'date_time', $date])
@@ -150,10 +164,21 @@ class TimeTrackerV2Service
             ->asArray()
             ->all();
 
+        $this->log("Total Microsoft Calendar appointments", array_map(function($l) {
+            return [
+                'displayName' => $l['displayName'],
+                'date_time' => $l['date_time'],
+                'has_coords' => ($l['lat'] && $l['lon']) ? 'YES' : 'NO'
+            ];
+        }, $locations));
+
         foreach ($locations as $key => $location) {
             if (!isset($allMicrosoftLocations[$location['displayName']])) {
                 $location['key'] = $key;
                 $ext[] = $location;
+                $this->log("- MISSING GPS for appointment: {$location['displayName']} at {$location['date_time']}");
+            } else {
+                $this->log("+ GPS MATCHED appointment: {$location['displayName']} at {$location['date_time']}");
             }
         }
 
@@ -216,6 +241,7 @@ class TimeTrackerV2Service
                                 'clock_out' => $clock_in,
                                 'duration' => '00:10',
                                 'isMicrosoftLocation' => true,
+                                'locationNameVerizon' => '',
                                 'haul_away' => $item['haul_away'],
                                 'user_id' => $microsoftUser->microsoft_id,
                                 'user' => $microsoftUser->name,
@@ -302,8 +328,23 @@ class TimeTrackerV2Service
         $dateNext = (new \DateTime($place['UpdateUtc']))->modify('+1 day')->format('Y-m-d');
         $isMicrosoftLocation = false;
         $haul_away = false;
-        $locationName = $place['location'];
+        
+        // Build locationNameVerizon from available address data
         $locationNameVerizon = $place['location'];
+        if (empty($locationNameVerizon)) {
+            $addressParts = array_filter([
+                $place['AddressLine1'] ?? '',
+                $place['AddressLine2'] ?? '',
+                $place['Locality'] ?? '',
+                $place['AdministrativeArea'] ?? '',
+                $place['PostalCode'] ?? ''
+            ]);
+            $locationNameVerizon = !empty($addressParts) 
+                ? implode(', ', $addressParts) 
+                : 'GPS: ' . $place['Latitude'] . ', ' . $place['Longitude'];
+        }
+        
+        $locationName = $locationNameVerizon;
 
         $locations = MicrosoftLocation::find()
             ->where(['>=', 'date_time', $date])
@@ -311,19 +352,64 @@ class TimeTrackerV2Service
             ->andWhere(['microsoft_id' => $microsoftUser->microsoft_id])
             ->all();
 
+        // Find CLOSEST Microsoft location within threshold
+        $bestMatch = null;
+        $bestDistance = PHP_FLOAT_MAX;
+        $closestOverall = null;
+        $closestOverallDistance = PHP_FLOAT_MAX;
+
         foreach ($locations as $location) {
             /** @var MicrosoftLocation $location */
+            
+            if (!$location->lat || !$location->lon) {
+                $this->log("! Skipping location (no coords): {$location->displayName}");
+                continue;
+            }
+            
             $distance = $this->getDistance(
                 (float)$location->lat,
                 (float)$location->lon,
                 $place['Latitude'],
                 $place['Longitude']
             );
-            if ($distance < $this->params['distance']) {
-                $isMicrosoftLocation = true;
-                $locationName = $location->displayName;
-                $haul_away = $location->haul_away;
-                break;
+
+            $this->log("Distance check", [
+                'verizon_location' => $locationNameVerizon,
+                'gps_coords' => $place['Latitude'] . ', ' . $place['Longitude'],
+                'gps_time' => $place['UpdateUtc'],
+                'microsoft_location' => $location->displayName,
+                'microsoft_coords' => $location->lat . ', ' . $location->lon,
+                'microsoft_time' => $location->date_time,
+                'distance_meters' => round($distance, 2),
+                'threshold_meters' => $this->params['distance'],
+                'match' => $distance < $this->params['distance'] ? 'YES' : 'NO'
+            ]);
+            
+            // Track closest overall (for logging)
+            if ($distance < $closestOverallDistance) {
+                $closestOverallDistance = $distance;
+                $closestOverall = $location;
+            }
+            
+            // Find closest match within threshold
+            if ($distance < $this->params['distance'] && $distance < $bestDistance) {
+                $bestDistance = $distance;
+                $bestMatch = $location;
+            }
+        }
+        
+        // Use the CLOSEST match
+        if ($bestMatch !== null) {
+            $isMicrosoftLocation = true;
+            $locationName = $bestMatch->displayName;
+            $haul_away = $bestMatch->haul_away;
+            
+            $this->log("+ GPS MATCHED to: {$locationName} (distance: " . round($bestDistance, 2) . "m)");
+        } else {
+            if ($closestOverall) {
+                $this->log("- NO MATCH - Closest was: {$closestOverall->displayName} (distance: " . round($closestOverallDistance, 2) . "m, threshold: {$this->params['distance']}m)");
+            } else {
+                $this->log("- NO MATCH - No Microsoft locations with coordinates found");
             }
         }
 
