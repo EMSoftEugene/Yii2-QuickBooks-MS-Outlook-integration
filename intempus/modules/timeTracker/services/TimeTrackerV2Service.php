@@ -362,8 +362,21 @@ class TimeTrackerV2Service
             /** @var MicrosoftLocation $location */
             
             if (!$location->lat || !$location->lon) {
-                $this->log("! Skipping location (no coords): {$location->displayName}");
-                continue;
+                sleep(1);
+                $response = $this->getCodeByLocationv2($location['displayName']);
+
+                $responseLat = $response['lat'] ?? null;
+                $responseLon = $response['lng'] ?? null;
+
+                if ($responseLat && $responseLon) {
+                    $location->lat = $responseLat;
+                    $location->lon = $responseLon;
+                    $location->save();
+                }
+                if (!$location->lat || !$location->lon) {
+                    $this->log("! Skipping location (no coords): {$location->displayName}");
+                    continue;
+                }
             }
             
             $distance = $this->getDistance(
