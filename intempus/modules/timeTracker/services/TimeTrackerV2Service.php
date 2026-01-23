@@ -42,9 +42,6 @@ class TimeTrackerV2Service
             ->column();
 
         foreach ($userIds as $userId) {
-            if (in_array($userId, ['7', 'Anthony'])) {
-                continue;
-            }
             $places = [];
             $placeIndex = -1;
             $microsoftUser = MicrosoftGroup::find()->where(['verizon_id' => $userId])->one();
