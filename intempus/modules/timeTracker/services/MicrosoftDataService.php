@@ -133,15 +133,22 @@ class MicrosoftDataService
     /**
      * @throws Exception
      */
-    public function groupsByNameAndDate($dateTimeStart, $dateTimeEnd): ?array
+    public function groupsByNameAndDate($dateTimeStart): ?array
     {
+        $utcTimeZone = new \DateTimeZone('UTC');
+        $pacificTimeZone = new \DateTimeZone('America/Los_Angeles');
+
         $newLocations = [];
         $groups = MicrosoftGroup::getAvailable();
+
+        $extendedStart = (new \DateTime($dateTimeStart))->modify('-1 day')->format('Y-m-d');
+        $extendedEnd = (new \DateTime($dateTimeStart))->modify('+2 days')->format('Y-m-d');
+
         foreach ($groups as $group) {
             $queryParams = [
                 '$select' => 'id,subject,bodyPreview,location, start, end, createdDateTime',
                 '$top' => '200',
-                '$filter' => "start/dateTime ge '" . $dateTimeStart . "' and start/dateTime lt '" . $dateTimeEnd . "'",
+                '$filter' => "start/dateTime ge '" . $extendedStart . "' and start/dateTime lt '" . $extendedEnd . "'",
             ];
 
             $response = $this->apiService->requestGet(
@@ -150,11 +157,6 @@ class MicrosoftDataService
             );
 
             $locations = $response['value'] ?? null;
-
-//            if (isset($response['value']) && $response['value']){
-//                print_r($response);
-//                die;
-//            }
 
             foreach ($locations as $location) {
                 $bodyPreview = $location['bodyPreview'] ?? null;
@@ -176,13 +178,24 @@ class MicrosoftDataService
                         $displayName
                     ) ? $newDisplayName : $displayName;
                 }
+
                 $fullTime = $location['start']['dateTime'] ?? null;
-                $fullTime = $fullTime ? (new \DateTime($fullTime))->format('Y-m-d H:i:s') : $dateTimeStart;
+                if ($fullTime) {
+                    $eventDate = new \DateTime($fullTime, $utcTimeZone);
+                    $eventDate->setTimezone($pacificTimeZone);
+                    $fullTime = $eventDate->format('Y-m-d H:i:s');
+                } else {
+                    $fullTime = $dateTimeStart;
+                }
+
                 $exists = MicrosoftLocation::find()->where(['displayName' => $displayName])->one();
                 $object = $exists ?: new MicrosoftLocation();
                 $newLocations[] = $this->saveLocation($object, $displayName, $isHaulAway, $fullTime, $group['microsoft_id']);
             }
         }
+
+//        print_r($newLocations);
+//        die;
 
         return $newLocations;
     }

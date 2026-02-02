@@ -42,6 +42,9 @@ class TimeTrackerV2Service
             ->column();
 
         foreach ($userIds as $userId) {
+//            if ($userId != 'AXD34DF'){
+//                continue;
+//            }
             $places = [];
             $placeIndex = -1;
             $microsoftUser = MicrosoftGroup::find()->where(['verizon_id' => $userId])->one();
@@ -587,12 +590,18 @@ class TimeTrackerV2Service
 
         $ext = [];
         $locations = MicrosoftLocation::find()
-            ->where(['>=', 'date_time', $date])
+            ->where(['>=', 'date_time', $date . ' 00:00:00'])
+            ->andWhere(['<', 'date_time', $date . ' 23:59:59'])
             ->andWhere(['microsoft_id' => $microsoftUser->microsoft_id])
-            ->andWhere(['<', 'date_time', $dateNext])
             ->orderBy('date_time', SORT_ASC)
             ->asArray()
             ->all();
+
+
+//        print_r($date);
+//        print_r($allMicrosoftLocations);
+//        print_r($locations);
+//        die;
 
         foreach ($locations as $key => $location) {
             if (!isset($allMicrosoftLocations[$location['displayName']])) {

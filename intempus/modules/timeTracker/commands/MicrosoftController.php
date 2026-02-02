@@ -69,9 +69,8 @@ class MicrosoftController extends Controller
 
         try {
             $dateTimeStart = (new \DateTime($date))->format('Y-m-d');
-            $dateTimeEnd = (new \DateTime($date))->modify('+1 days')->format('Y-m-d');
 
-            $groups = $this->apiDataService->groupsByNameAndDate($dateTimeStart, $dateTimeEnd);
+            $groups = $this->apiDataService->groupsByNameAndDate($dateTimeStart);
 
             $this->saveScriptStatus('timeTracker/microsoft/real-group', 'success', $date);
 
