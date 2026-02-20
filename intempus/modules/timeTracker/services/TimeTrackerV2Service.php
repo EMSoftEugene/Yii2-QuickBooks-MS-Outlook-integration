@@ -138,13 +138,100 @@ class TimeTrackerV2Service
 //                file_put_contents('timeTracker.json', json_encode($places, JSON_PRETTY_PRINT));
                 $places = $this->calculatedPlaceFix($places);
 //                file_put_contents('timeTracker2.json', json_encode($places, JSON_PRETTY_PRINT));
-//                die;
+
+                $places = $this->markDuplicateMicrosoftAddresses($places, $microsoftUser, $date);
+
                 $places = $this->fixToRealMicrosoftLocations($places, $date, $dateNext, $microsoftUser);
                 $count += count($places);
                 $this->saveTimeTracker($places);
             }
         }
         return $count;
+    }
+
+    private function markDuplicateMicrosoftAddresses(array $places, $microsoftUser, $date): array
+    {
+        if (count($places) < 2) {
+            return $places;
+        }
+
+        $dateStart = $date . ' 00:00:00';
+        $dateEnd = $date . ' 23:59:59';
+
+        $dbLocations = MicrosoftLocation::find()
+            ->where(['>=', 'date_time', $dateStart])
+            ->andWhere(['<', 'date_time', $dateEnd])
+            ->andWhere(['microsoft_id' => $microsoftUser->microsoft_id])
+            ->all();
+
+        $processed = [];
+        $groups = [];
+
+        foreach ($dbLocations as $i => $loc1) {
+            if (in_array($i, $processed)) continue;
+
+            $group = [$loc1];
+            $processed[] = $i;
+
+            foreach ($dbLocations as $j => $loc2) {
+                if ($i === $j || in_array($j, $processed)) continue;
+
+                if (!$loc1->lat || !$loc1->lon || !$loc2->lat || !$loc2->lon) continue;
+
+                $distance = $this->getDistance(
+                    (float)$loc1->lat, (float)$loc1->lon,
+                    (float)$loc2->lat, (float)$loc2->lon
+                );
+
+                if ($distance <= $this->params['distance']) {
+                    $group[] = $loc2;
+                    $processed[] = $j;
+                }
+            }
+
+            if (count($group) > 1) {
+                $groups[] = $group;
+            }
+        }
+
+        foreach ($groups as $group) {
+            $lat = (float)$group[0]->lat;
+            $lon = (float)$group[0]->lon;
+
+            $dbNames = array_map(function($loc) {
+                return $loc->displayName;
+            }, $group);
+
+            foreach ($places as $index => $place) {
+                if (!isset($place['isMicrosoftLocation']) || !$place['isMicrosoftLocation']) {
+                    continue;
+                }
+
+                $name = $place['locationName'] ?? '';
+                $placeLat = (float)$place['start']['Latitude'];
+                $placeLon = (float)$place['start']['Longitude'];
+
+                $distance = $this->getDistance($lat, $lon, $placeLat, $placeLon);
+
+                if ($distance <= $this->params['distance']) {
+                    $otherNames = array_filter($dbNames, function($dbName) use ($name) {
+                        return stripos($dbName, $name) === false;
+                    });
+
+                    if (!empty($otherNames)) {
+                        $suffix = '<br/>(merged with ' . implode(', ', $otherNames) . ')';
+                        $newName = $name . $suffix;
+
+                        if (isset($places[$index]['locationName'])) {
+                            $places[$index]['locationName'] = $newName;
+                        }
+                        $places[$index]['isMerged'] = true;
+                    }
+                }
+            }
+        }
+
+        return $places;
     }
 
     private function calculatedPlaceFix(array $places): array
@@ -602,11 +689,62 @@ class TimeTrackerV2Service
 //        print_r($allMicrosoftLocations);
 //        print_r($locations);
 //        die;
+        ////////////// new if
+        ///
+        $dateStart = $date . ' 00:00:00';
+        $dateEnd = $date . ' 23:59:59';
+
+        $dbLocations = MicrosoftLocation::find()
+            ->where(['>=', 'date_time', $dateStart])
+            ->andWhere(['<', 'date_time', $dateEnd])
+            ->andWhere(['microsoft_id' => $microsoftUser->microsoft_id])
+            ->all();
+
+        $processed = [];
+        $groups = [];
+
+        foreach ($dbLocations as $i => $loc1) {
+            if (in_array($i, $processed)) continue;
+
+            $group = [$loc1];
+            $processed[] = $i;
+
+            foreach ($dbLocations as $j => $loc2) {
+                if ($i === $j || in_array($j, $processed)) continue;
+
+                if (!$loc1->lat || !$loc1->lon || !$loc2->lat || !$loc2->lon) continue;
+
+                $distance = $this->getDistance(
+                    (float)$loc1->lat, (float)$loc1->lon,
+                    (float)$loc2->lat, (float)$loc2->lon
+                );
+
+                if ($distance <= $this->params['distance']) {
+                    $group[] = $loc2;
+                    $processed[] = $j;
+                }
+            }
+
+            if (count($group) > 1) {
+                $groups[] = $group;
+            }
+        }
+
+        $addresses = [];
+        foreach ($groups as $item) {
+            foreach ($item as $loc) {
+                $addresses[] = $loc->displayName;
+
+            }
+        }
+        //-----------------
 
         foreach ($locations as $key => $location) {
             if (!isset($allMicrosoftLocations[$location['displayName']])) {
-                $location['key'] = $key;
-                $ext[] = $location;
+                if (!in_array($location['displayName'], $addresses)) {
+                    $location['key'] = $key;
+                    $ext[] = $location;
+                }
             }
         }
 
@@ -743,10 +881,10 @@ class TimeTrackerV2Service
             if (
                 (
                     (int)$explode[0] > 0) ||
-                    ((int)$explode[1] - self::DEFAULT_TIME > 0) && ($totalMinutes >= self::MIN_DURATION_MINUTES)) {
+                ((int)$explode[1] - self::DEFAULT_TIME > 0) && ($totalMinutes >= self::MIN_DURATION_MINUTES)) {
                 $result[] = $place;
             }
-    }
+        }
         return $result;
     }
 }
