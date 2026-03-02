@@ -159,6 +159,21 @@ class MicrosoftDataService
             $locations = $response['value'] ?? null;
 
             foreach ($locations as $location) {
+                $fullTime = $location['start']['dateTime'] ?? null;
+                if (!$fullTime) {
+                    continue;
+                }
+
+                $eventDate = new \DateTime($fullTime, $utcTimeZone);
+                $eventDate->setTimezone($pacificTimeZone);
+                $eventPacificDate = $eventDate->format('Y-m-d');
+                $eventPacificTime = $eventDate->format('Y-m-d H:i:s');
+                $targetDate = date('Y-m-d', strtotime($dateTimeStart));
+
+                if ($eventPacificDate != $targetDate) {
+                    continue;
+                }
+
                 $bodyPreview = $location['bodyPreview'] ?? null;
                 $isHaulAway = strpos($bodyPreview, 'haul away') !== false;
 
@@ -179,23 +194,11 @@ class MicrosoftDataService
                     ) ? $newDisplayName : $displayName;
                 }
 
-                $fullTime = $location['start']['dateTime'] ?? null;
-                if ($fullTime) {
-                    $eventDate = new \DateTime($fullTime, $utcTimeZone);
-                    $eventDate->setTimezone($pacificTimeZone);
-                    $fullTime = $eventDate->format('Y-m-d H:i:s');
-                } else {
-                    $fullTime = $dateTimeStart;
-                }
-
                 $exists = MicrosoftLocation::find()->where(['displayName' => $displayName])->one();
                 $object = $exists ?: new MicrosoftLocation();
-                $newLocations[] = $this->saveLocation($object, $displayName, $isHaulAway, $fullTime, $group['microsoft_id']);
+                $newLocations[] = $this->saveLocation($object, $displayName, $isHaulAway, $eventPacificTime, $group['microsoft_id']);
             }
         }
-
-//        print_r($newLocations);
-//        die;
 
         return $newLocations;
     }
