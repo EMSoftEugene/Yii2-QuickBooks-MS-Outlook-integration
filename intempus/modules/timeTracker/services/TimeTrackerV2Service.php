@@ -161,7 +161,7 @@ class TimeTrackerV2Service
         $dbLocations = MicrosoftLocation::find()
             ->where(['>=', 'date_time', $dateStart])
             ->andWhere(['<', 'date_time', $dateEnd])
-            ->andWhere(['microsoft_id' => $microsoftUser->microsoft_id])
+            ->andWhere(new \yii\db\Expression("JSON_CONTAINS(microsoft_id, '\"$microsoftUser->microsoft_id\"')"))
             ->all();
 
         $processed = [];
@@ -487,7 +487,7 @@ class TimeTrackerV2Service
         $locations = MicrosoftLocation::find()
             ->where(['>=', 'date_time', $date])
             ->andWhere(['<', 'date_time', $dateNext])
-            ->andWhere(['microsoft_id' => $microsoftUserId])
+            ->andWhere(new \yii\db\Expression("JSON_CONTAINS(microsoft_id, '\"$microsoftUserId\"')"))
             ->all();
 
         $bestMatch = null;
@@ -622,7 +622,7 @@ class TimeTrackerV2Service
         $locations = MicrosoftLocation::find()
             ->where(['>=', 'date_time', $date])
             ->andWhere(['<', 'date_time', $dateNext])
-            ->andWhere(['microsoft_id' => $microsoftUser->microsoft_id])
+            ->andWhere(new \yii\db\Expression("JSON_CONTAINS(microsoft_id, '\"$microsoftUser->microsoft_id\"')"))
             ->all();
 
         $bestMatch = null;
@@ -679,25 +679,18 @@ class TimeTrackerV2Service
         $locations = MicrosoftLocation::find()
             ->where(['>=', 'date_time', $date . ' 00:00:00'])
             ->andWhere(['<', 'date_time', $date . ' 23:59:59'])
-            ->andWhere(['microsoft_id' => $microsoftUser->microsoft_id])
+            ->andWhere(new \yii\db\Expression("JSON_CONTAINS(microsoft_id, '\"$microsoftUser->microsoft_id\"')"))
             ->orderBy('date_time', SORT_ASC)
             ->asArray()
             ->all();
 
-
-//        print_r($date);
-//        print_r($allMicrosoftLocations);
-//        print_r($locations);
-//        die;
-        ////////////// new if
-        ///
         $dateStart = $date . ' 00:00:00';
         $dateEnd = $date . ' 23:59:59';
 
         $dbLocations = MicrosoftLocation::find()
             ->where(['>=', 'date_time', $dateStart])
             ->andWhere(['<', 'date_time', $dateEnd])
-            ->andWhere(['microsoft_id' => $microsoftUser->microsoft_id])
+            ->andWhere(new \yii\db\Expression("JSON_CONTAINS(microsoft_id, '\"$microsoftUser->microsoft_id\"')"))
             ->all();
 
         $processed = [];
@@ -734,10 +727,8 @@ class TimeTrackerV2Service
         foreach ($groups as $item) {
             foreach ($item as $loc) {
                 $addresses[] = $loc->displayName;
-
             }
         }
-        //-----------------
 
         foreach ($locations as $key => $location) {
             if (!isset($allMicrosoftLocations[$location['displayName']])) {

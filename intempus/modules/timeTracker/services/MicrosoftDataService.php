@@ -1,17 +1,11 @@
 <?php
 
-
 namespace app\modules\timeTracker\services;
 
 use app\modules\timeTracker\models\MicrosoftGroup;
 use app\modules\timeTracker\models\MicrosoftLocation;
 use app\modules\timeTracker\services\interfaces\ApiInterface;
 use app\modules\timeTracker\traits\CoordinateTrait;
-use GuzzleHttp\Client;
-use Microsoft\Graph\GraphServiceClient;
-use Microsoft\Kiota\Abstractions\ApiException;
-use Microsoft\Kiota\Authentication\Oauth\ClientCredentialContext;
-use SebastianBergmann\CodeCoverage\Report\PHP;
 use yii\db\ActiveRecord;
 use yii\db\Exception;
 
@@ -100,6 +94,7 @@ class MicrosoftDataService
             if (!$exists) {
                 $microsoftLocation = new MicrosoftLocation();
                 $microsoftLocation->displayName = $location['displayName'];
+                $microsoftLocation->microsoft_id = [];
                 $microsoftLocation->save();
                 $count++;
             }
@@ -143,6 +138,12 @@ class MicrosoftDataService
 
         $extendedStart = (new \DateTime($dateTimeStart))->modify('-1 day')->format('Y-m-d');
         $extendedEnd = (new \DateTime($dateTimeStart))->modify('+2 days')->format('Y-m-d');
+
+        $targetDate = date('Y-m-d', strtotime($dateTimeStart));
+        MicrosoftLocation::updateAll(
+            ['microsoft_id' => []],
+            ['between', 'date_time', $targetDate . ' 00:00:00', $targetDate . ' 23:59:59']
+        );
 
         foreach ($groups as $group) {
             $queryParams = [
@@ -194,39 +195,32 @@ class MicrosoftDataService
                     ) ? $newDisplayName : $displayName;
                 }
 
-                $exists = MicrosoftLocation::find()->where(['displayName' => $displayName])->one();
-                $object = $exists ?: new MicrosoftLocation();
-                $newLocations[] = $this->saveLocation($object, $displayName, $isHaulAway, $eventPacificTime, $group['microsoft_id']);
+                $exists = MicrosoftLocation::find()
+                    ->where(['displayName' => $displayName])
+                    ->one();
+
+                if ($exists) {
+                    $exists->addMicrosoftId($group['microsoft_id']);
+                    $exists->haul_away = $exists->haul_away || $isHaulAway;
+                    if (!$exists->lat || !$exists->lon) {
+                        $exists = $this->geoCodeItem($exists);
+                    }
+                    $exists->save();
+                    $newLocations[] = $exists->toArray();
+                } else {
+                    $object = new MicrosoftLocation();
+                    $object->displayName = $displayName;
+                    $object->haul_away = $isHaulAway;
+                    $object->date_time = $eventPacificTime;
+                    $object->addMicrosoftId($group['microsoft_id']);
+                    $object = $this->geoCodeItem($object);
+                    $object->save();
+                    $newLocations[] = $object->toArray();
+                }
             }
         }
 
         return $newLocations;
-    }
-
-    /**
-     * @param MicrosoftLocation|ActiveRecord $microsoftLocation
-     * @param string $displayName
-     * @param bool $isHaulAway
-     * @param string $dateTimeStart
-     * @return array
-     * @throws Exception
-     */
-    private function saveLocation(
-        MicrosoftLocation $microsoftLocation,
-        string $displayName,
-        bool $isHaulAway,
-        string $dateTimeStart,
-        string $microsoft_id = ''
-    ): array {
-        $microsoftLocation->lat = 0;
-        $microsoftLocation->lon = 0;
-        $microsoftLocation->displayName = $displayName;
-        $microsoftLocation->haul_away = $isHaulAway;
-        $microsoftLocation->date_time = $dateTimeStart;
-        $microsoftLocation->microsoft_id = $microsoft_id;
-        $microsoftLocation = $this->geoCodeItem($microsoftLocation);
-        $microsoftLocation->save();
-        return MicrosoftLocation::find()->where(['displayName' => $displayName])->one()->toArray();
     }
 
     private function geoCodeItem(MicrosoftLocation $location): MicrosoftLocation
