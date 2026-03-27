@@ -142,7 +142,6 @@ class MicrosoftDataService
         $targetDate = date('Y-m-d', strtotime($dateTimeStart));
         MicrosoftLocation::updateAll(
             ['microsoft_id' => []],
-            ['between', 'date_time', $targetDate . ' 00:00:00', $targetDate . ' 23:59:59']
         );
 
         foreach ($groups as $group) {
