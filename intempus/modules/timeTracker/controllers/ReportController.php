@@ -187,10 +187,8 @@ class ReportController extends BaseController
     {
         $mergedData = [];
         $currentGroup = null;
-        $groupCount = 0;
 
         foreach ($data as $index => $item) {
-
             if ($item->isMicrosoftLocation) {
                 if ($currentGroup === null) {
                     $currentGroup = [
@@ -201,10 +199,9 @@ class ReportController extends BaseController
                         'date' => $item->date,
                         'isMicrosoftLocation' => true,
                     ];
-                } elseif ($currentGroup['locationName'] === $item->locationName) {
+                } elseif ($currentGroup['locationName'] === $item->locationName && $currentGroup['date'] === $item->date) {
                     $currentGroup['items'][] = $item;
                     $currentGroup['clock_out'] = $item->clock_out;
-                    $groupCount++;
                 } else {
                     $mergedItem = $this->createMergedItem($currentGroup);
                     $mergedData[] = $mergedItem;
@@ -219,11 +216,12 @@ class ReportController extends BaseController
                     ];
                 }
             } else {
-                if ($currentGroup === null) {
-                    $mergedData[] = $item;
-                } else {
-                    continue;
+                if ($currentGroup !== null) {
+                    $mergedItem = $this->createMergedItem($currentGroup);
+                    $mergedData[] = $mergedItem;
+                    $currentGroup = null;
                 }
+                $mergedData[] = $item;
             }
         }
 
