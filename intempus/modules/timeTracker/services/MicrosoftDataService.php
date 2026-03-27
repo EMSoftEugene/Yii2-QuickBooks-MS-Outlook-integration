@@ -202,16 +202,11 @@ class MicrosoftDataService
                 $microsoftLocation = $exists ?: new MicrosoftLocation();
                 $microsoftLocation->date_time = $eventPacificTime;
                 $microsoftLocation->addMicrosoftId($group['microsoft_id']);
+                $microsoftLocation->displayName = $microsoftLocation->displayName ?: $displayName;
                 if (!$microsoftLocation->lat || !$microsoftLocation->lon) {
                     $microsoftLocation = $this->geoCodeItem($microsoftLocation);
                 }
-
-                if ($exists) {
-                    $microsoftLocation->haul_away = $microsoftLocation->haul_away || $isHaulAway;
-                } else {
-                    $microsoftLocation->displayName = $displayName;
-                    $microsoftLocation->haul_away = $isHaulAway;
-                }
+                $microsoftLocation->haul_away = $isHaulAway;
                 $microsoftLocation->save();
                 $newLocations[] = $microsoftLocation->toArray();
             }
