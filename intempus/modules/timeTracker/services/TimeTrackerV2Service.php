@@ -168,19 +168,27 @@ class TimeTrackerV2Service
         $groups = [];
 
         foreach ($dbLocations as $i => $loc1) {
-            if (in_array($i, $processed)) continue;
+            if (in_array($i, $processed)) {
+                continue;
+            }
 
             $group = [$loc1];
             $processed[] = $i;
 
             foreach ($dbLocations as $j => $loc2) {
-                if ($i === $j || in_array($j, $processed)) continue;
+                if ($i === $j || in_array($j, $processed)) {
+                    continue;
+                }
 
-                if (!$loc1->lat || !$loc1->lon || !$loc2->lat || !$loc2->lon) continue;
+                if (!$loc1->lat || !$loc1->lon || !$loc2->lat || !$loc2->lon) {
+                    continue;
+                }
 
                 $distance = $this->getDistance(
-                    (float)$loc1->lat, (float)$loc1->lon,
-                    (float)$loc2->lat, (float)$loc2->lon
+                    (float)$loc1->lat,
+                    (float)$loc1->lon,
+                    (float)$loc2->lat,
+                    (float)$loc2->lon
                 );
 
                 if ($distance <= $this->params['distance']) {
@@ -198,7 +206,7 @@ class TimeTrackerV2Service
             $lat = (float)$group[0]->lat;
             $lon = (float)$group[0]->lon;
 
-            $dbNames = array_map(function($loc) {
+            $dbNames = array_map(function ($loc) {
                 return $loc->displayName;
             }, $group);
 
@@ -214,7 +222,7 @@ class TimeTrackerV2Service
                 $distance = $this->getDistance($lat, $lon, $placeLat, $placeLon);
 
                 if ($distance <= $this->params['distance']) {
-                    $otherNames = array_filter($dbNames, function($dbName) use ($name) {
+                    $otherNames = array_filter($dbNames, function ($dbName) use ($name) {
                         return stripos($dbName, $name) === false;
                     });
 
@@ -697,19 +705,27 @@ class TimeTrackerV2Service
         $groups = [];
 
         foreach ($dbLocations as $i => $loc1) {
-            if (in_array($i, $processed)) continue;
+            if (in_array($i, $processed)) {
+                continue;
+            }
 
             $group = [$loc1];
             $processed[] = $i;
 
             foreach ($dbLocations as $j => $loc2) {
-                if ($i === $j || in_array($j, $processed)) continue;
+                if ($i === $j || in_array($j, $processed)) {
+                    continue;
+                }
 
-                if (!$loc1->lat || !$loc1->lon || !$loc2->lat || !$loc2->lon) continue;
+                if (!$loc1->lat || !$loc1->lon || !$loc2->lat || !$loc2->lon) {
+                    continue;
+                }
 
                 $distance = $this->getDistance(
-                    (float)$loc1->lat, (float)$loc1->lon,
-                    (float)$loc2->lat, (float)$loc2->lon
+                    (float)$loc1->lat,
+                    (float)$loc1->lon,
+                    (float)$loc2->lat,
+                    (float)$loc2->lon
                 );
 
                 if ($distance <= $this->params['distance']) {

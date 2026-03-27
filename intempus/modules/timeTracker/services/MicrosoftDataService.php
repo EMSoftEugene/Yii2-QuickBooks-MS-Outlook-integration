@@ -199,24 +199,21 @@ class MicrosoftDataService
                     ->where(['displayName' => $displayName])
                     ->one();
 
-                if ($exists) {
-                    $exists->addMicrosoftId($group['microsoft_id']);
-                    $exists->haul_away = $exists->haul_away || $isHaulAway;
-                    if (!$exists->lat || !$exists->lon) {
-                        $exists = $this->geoCodeItem($exists);
-                    }
-                    $exists->save();
-                    $newLocations[] = $exists->toArray();
-                } else {
-                    $object = new MicrosoftLocation();
-                    $object->displayName = $displayName;
-                    $object->haul_away = $isHaulAway;
-                    $object->date_time = $eventPacificTime;
-                    $object->addMicrosoftId($group['microsoft_id']);
-                    $object = $this->geoCodeItem($object);
-                    $object->save();
-                    $newLocations[] = $object->toArray();
+                $microsoftLocation = $exists ?: new MicrosoftLocation();
+                $microsoftLocation->date_time = $eventPacificTime;
+                $microsoftLocation->addMicrosoftId($group['microsoft_id']);
+                if (!$microsoftLocation->lat || !$microsoftLocation->lon) {
+                    $microsoftLocation = $this->geoCodeItem($microsoftLocation);
                 }
+
+                if ($exists) {
+                    $microsoftLocation->haul_away = $microsoftLocation->haul_away || $isHaulAway;
+                } else {
+                    $microsoftLocation->displayName = $displayName;
+                    $microsoftLocation->haul_away = $isHaulAway;
+                }
+                $microsoftLocation->save();
+                $newLocations[] = $microsoftLocation->toArray();
             }
         }
 
