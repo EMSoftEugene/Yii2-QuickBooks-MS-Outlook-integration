@@ -188,46 +188,26 @@ class ReportController extends BaseController
         $mergedData = [];
         $currentGroup = null;
 
-        foreach ($data as $index => $item) {
+        foreach ($data as $item) {
             if ($item->isMicrosoftLocation) {
                 if ($currentGroup === null) {
-                    $currentGroup = [
-                        'items' => [$item],
-                        'locationName' => $item->locationName,
-                        'clock_in' => $item->clock_in,
-                        'clock_out' => $item->clock_out,
-                        'date' => $item->date,
-                        'isMicrosoftLocation' => true,
-                    ];
-                } elseif ($currentGroup['locationName'] === $item->locationName && $currentGroup['date'] === $item->date) {
-                    $currentGroup['items'][] = $item;
-                    $currentGroup['clock_out'] = $item->clock_out;
+                    $currentGroup = clone $item;
+                } elseif ($currentGroup->locationName === $item->locationName && $currentGroup->date === $item->date) {
+                    if (strtotime($item->clock_out) > strtotime($currentGroup->clock_out)) {
+                        $currentGroup->clock_out = $item->clock_out;
+                    }
+                    $currentGroup->duration = DateTimeHelper::diff($currentGroup->clock_out, $currentGroup->clock_in);
                 } else {
-                    $mergedItem = $this->createMergedItem($currentGroup);
-                    $mergedData[] = $mergedItem;
-
-                    $currentGroup = [
-                        'items' => [$item],
-                        'locationName' => $item->locationName,
-                        'clock_in' => $item->clock_in,
-                        'clock_out' => $item->clock_out,
-                        'date' => $item->date,
-                        'isMicrosoftLocation' => true,
-                    ];
+                    $mergedData[] = $currentGroup;
+                    $currentGroup = clone $item;
                 }
             } else {
-                if ($currentGroup !== null) {
-                    $mergedItem = $this->createMergedItem($currentGroup);
-                    $mergedData[] = $mergedItem;
-                    $currentGroup = null;
-                }
                 $mergedData[] = $item;
             }
         }
 
         if ($currentGroup !== null) {
-            $mergedItem = $this->createMergedItem($currentGroup);
-            $mergedData[] = $mergedItem;
+            $mergedData[] = $currentGroup;
         }
 
         usort($mergedData, function($a, $b) {
